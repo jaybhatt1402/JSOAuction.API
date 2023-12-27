@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Audit.EntityFramework.Core" Version="22.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JSOAuction.Domain.Entities\JSOAuction.Domain.Entities.csproj" />
+    <ProjectReference Include="..\JSOAuction.Services.Entities\JSOAuction.Services.Entities.csproj" />
+    <ProjectReference Include="..\JSOAuction.Utility\JSOAuction.Utility.csproj" />
+  </ItemGroup>
+
+</Project>
