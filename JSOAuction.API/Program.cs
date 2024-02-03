@@ -114,6 +114,17 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = false
     };
 });
+
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("CorsPolicy",
+		builder => builder
+			.AllowAnyOrigin()
+			.AllowAnyMethod()
+			.AllowAnyHeader()
+			.WithExposedHeaders("Content-Disposition"));
+});
+
 builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers().AddJsonOptions(x =>
@@ -123,7 +134,10 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseCors("JsoAuctionCors");
+//app.UseCors("JsoAuctionCors");
+
+app.UseCors("CorsPolicy");
+
 
 app.UseRouting();
 

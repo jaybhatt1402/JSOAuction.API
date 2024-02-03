@@ -65,9 +65,11 @@ namespace JSOAuction.API.Infrastructure.Extensions
                     .AllowAnyMethod()
                     .AllowAnyOrigin()
                     .AllowCredentials()
-                    .WithOrigins("https://localhost:4000")
-                    .SetIsOriginAllowed((host) => true);
-                });
+                    .WithOrigins("http://localhost:3000")
+                    .SetIsOriginAllowed((host) => true)
+                    .WithExposedHeaders("Content-Disposition");
+
+				});
             });
         }
     }
