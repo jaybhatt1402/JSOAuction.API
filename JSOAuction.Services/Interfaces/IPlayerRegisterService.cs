@@ -1,4 +1,6 @@
-﻿using JSOAuction.Services.Entities.PlayerRegister;
+﻿using JSOAuction.Domain.Entities.PlayerRegister;
+using JSOAuction.Domain.Entities.TeamRegister;
+using JSOAuction.Services.Entities.PlayerRegister;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +12,6 @@ namespace JSOAuction.Services.Interfaces
     public interface IPlayerRegisterService
     {
         Task<Guid> SavePlayerRegister(SavePlayerRegisterDto request);
+        Task<List<PlayerRegister>> GetAllPlayerDetails();
     }
 }

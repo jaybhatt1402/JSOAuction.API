@@ -5,11 +5,6 @@ using JSOAuction.Domain.Entities.PlayerRegister;
 using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Interfaces;
 using JSOAuction.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JSOAuction.Services.Services
 {
@@ -62,6 +57,20 @@ namespace JSOAuction.Services.Services
             await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
             await _readWriteUnitOfWork.CommitAsync();
             return savePlayerRegister.PlayerRegisterId;
+        }
+        public async Task<List<PlayerRegister>> GetAllPlayerDetails()
+        {
+            IEnumerable<PlayerRegister> players = new List<PlayerRegister>();
+            _readWriteUnitOfWorkSP.LoadStoredProc("GetAllPlayerDetails")
+                .ExecuteStoredProc((handler) =>
+                {
+                    players = handler.ReadToList<PlayerRegister>();
+                });
+            if (players == null || !players.Any())
+            {
+                throw new Exception("No Players found");
+            }
+            return players.ToList();
         }
     }
 }

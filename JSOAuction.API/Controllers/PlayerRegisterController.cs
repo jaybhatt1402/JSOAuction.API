@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using JSOAuction.API.Request.PlayerRegister;
+using JSOAuction.Domain.Entities.PlayerRegister;
+using JSOAuction.Domain.Entities.TeamRegister;
 using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Interfaces;
+using JSOAuction.Services.Services;
 using JSOAuction.Utility;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +27,13 @@ namespace JSOAuction.API.Controllers
             var savePlayerRegisterDto = _mapper.Map<SavePlayerRegisterRequest, SavePlayerRegisterDto>(request);
             var result = await _playerRegisterService.SavePlayerRegister(savePlayerRegisterDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+
+        [HttpPost("GetAllPlayerDetails")]
+        public async Task<ActionResult<List<PlayerRegister>>> GetAllPlayerDetails()
+        {
+            var result = await _playerRegisterService.GetAllPlayerDetails();
+            return Ok(result);
         }
     }
 }

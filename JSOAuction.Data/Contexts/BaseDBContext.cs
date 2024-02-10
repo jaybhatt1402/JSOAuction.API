@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.AspNetCore.Http;
 using JSOAuction.Domain.Entities.PlayerRegister;
+using JSOAuction.Domain.Entities.TeamRegister;
+using JSOAuction.Domain.Entities.AuctionRegister;
 
 namespace JSOAuction.Data.Contexts
 {
@@ -96,7 +98,10 @@ namespace JSOAuction.Data.Contexts
 
         public DbSet<RefreshToken> RefreshToken { get; set; }
         public DbSet<PlayerRegister> PlayerRegister { get; set; }
-        
+        public DbSet<TeamRegister> TeamRegister { get; set; }
+        public DbSet<AuctionRegister> AuctionRegister { get; set; }
+
+
 
     }
 

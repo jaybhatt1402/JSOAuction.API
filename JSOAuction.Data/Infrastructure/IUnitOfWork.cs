@@ -12,7 +12,9 @@ namespace JSOAuction.Data.Infrastructure
     {
         IAccountsRepository<TContext> AccountsRepository { get; }
         IPlayerRegisterRepository<TContext> PlayerRegisterRepository { get; }
-        IRefreshTokenRepository<TContext> RefreshTokenRepository { get; }    
+        IRefreshTokenRepository<TContext> RefreshTokenRepository { get; }
+        ITeamRegisterRepository<TContext> TeamRegisterRepository { get; }
+        IAuctionRegisterRepository<TContext> AuctionRegisterRepository { get; }
         Task<int> CommitAsync();
 
     }
@@ -22,19 +24,24 @@ namespace JSOAuction.Data.Infrastructure
         public IAccountsRepository<TContext> AccountsRepository { get; }
         public IPlayerRegisterRepository<TContext> PlayerRegisterRepository { get; }
         public IRefreshTokenRepository<TContext> RefreshTokenRepository { get; }
-      
+        public ITeamRegisterRepository<TContext> TeamRegisterRepository { get; }
+        public IAuctionRegisterRepository<TContext> AuctionRegisterRepository { get; }
 
 
 
         public UnitOfWork(TContext context, IAccountsRepository<TContext> accountsRepository,        
             IRefreshTokenRepository<TContext> refreshTokenRepository,
-            IPlayerRegisterRepository<TContext> playerRegisterRepository      
+            IPlayerRegisterRepository<TContext> playerRegisterRepository,
+            ITeamRegisterRepository<TContext> teamRegisterRepository,
+            IAuctionRegisterRepository<TContext> auctionRegisterRepository
             )
         {
             this.Context = context;
             this.AccountsRepository = accountsRepository;        
             this.RefreshTokenRepository = refreshTokenRepository;
-            this.PlayerRegisterRepository = playerRegisterRepository;   
+            this.PlayerRegisterRepository = playerRegisterRepository;
+            this.TeamRegisterRepository = teamRegisterRepository;
+            this.AuctionRegisterRepository = auctionRegisterRepository;
         }
         public async Task<int> CommitAsync()
         {
