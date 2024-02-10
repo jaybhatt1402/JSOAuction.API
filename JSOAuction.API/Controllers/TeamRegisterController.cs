@@ -19,7 +19,7 @@ namespace JSOAuction.API.Controllers
             _mapper = mapper;
             _teamRegisterService = teamRegisterService;
         }
-        [HttpPost("GetAllTeamDetails")]
+        [HttpGet("GetAllTeamDetails")]
         public async Task<ActionResult<List<TeamRegister>>> GetAllTeamDetails()
         {
             var result = await _teamRegisterService.GetAllTeamDetails();

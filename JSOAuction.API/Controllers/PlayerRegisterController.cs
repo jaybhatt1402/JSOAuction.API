@@ -29,7 +29,7 @@ namespace JSOAuction.API.Controllers
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
 
-        [HttpPost("GetAllPlayerDetails")]
+        [HttpGet("GetAllPlayerDetails")]
         public async Task<ActionResult<List<PlayerRegister>>> GetAllPlayerDetails()
         {
             var result = await _playerRegisterService.GetAllPlayerDetails();
