@@ -12,7 +12,7 @@ namespace JSOAuction.Domain.Entities.PlayerRegister
     public class PlayerRegister
     {
         [Key]
-        public Guid PlayerRegisterId { get; set; }
+        public int PlayerRegisterId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Gender { get; set; }

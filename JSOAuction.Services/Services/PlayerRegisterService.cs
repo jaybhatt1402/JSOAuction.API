@@ -26,13 +26,12 @@ namespace JSOAuction.Services.Services
             _mapper = mapper;
             _readWriteUnitOfWorkSP = readWriteUnitOfWorkSP;
         }
-        public async Task<Guid> SavePlayerRegister(SavePlayerRegisterDto request)
+        public async Task<int> SavePlayerRegister(SavePlayerRegisterDto request)
         {
             //Save Data in UserRegister Table.
             var hashPassword = GenericMethods.GetHash(request.Password);
             var savePlayerRegister = new PlayerRegister()
             {
-                PlayerRegisterId = Guid.NewGuid(),
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Gender = request.Gender,

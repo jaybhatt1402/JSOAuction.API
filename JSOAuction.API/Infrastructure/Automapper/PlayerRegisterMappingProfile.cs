@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using JSOAuction.API.Request.PlayerRegister;
+using JSOAuction.Domain.Entities.Bids;
 using JSOAuction.Domain.Entities.PlayerRegister;
+using JSOAuction.Services.Entities.Bids;
 using JSOAuction.Services.Entities.PlayerRegister;
 
 namespace JSOAuction.API.Infrastructure.Automapper
@@ -15,11 +17,14 @@ namespace JSOAuction.API.Infrastructure.Automapper
             CreateMap<SavePlayerRegisterRequest, SavePlayerRegisterDto>();
             CreateMap<PlayerRegister, SavePlayerRegisterDto>().ReverseMap();
 
-          //  CreateMap<UpdateUserRegisterRequest, UpdateUserRegisterDto>();
-          //  CreateMap<UserRegister, UpdateUserRegisterDto>().ReverseMap();
+            CreateMap<SaveBidsRequest, SaveBidsDto>();
+            CreateMap<Bids, SaveBidsDto>().ReverseMap();
 
-          //  CreateMap<DeleteUserRegisterRequest, DeleteUserRegisterDto>();
-          //  CreateMap<UserRegister, DeleteUserRegisterDto>().ReverseMap();
+            //  CreateMap<UpdateUserRegisterRequest, UpdateUserRegisterDto>();
+            //  CreateMap<UserRegister, UpdateUserRegisterDto>().ReverseMap();
+
+            //  CreateMap<DeleteUserRegisterRequest, DeleteUserRegisterDto>();
+            //  CreateMap<UserRegister, DeleteUserRegisterDto>().ReverseMap();
         }
     }
 }

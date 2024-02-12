@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using JSOAuction.Domain.Entities.PlayerRegister;
 using JSOAuction.Domain.Entities.TeamRegister;
 using JSOAuction.Domain.Entities.AuctionRegister;
+using JSOAuction.Domain.Entities.Bids;
 
 namespace JSOAuction.Data.Contexts
 {
@@ -100,6 +101,8 @@ namespace JSOAuction.Data.Contexts
         public DbSet<PlayerRegister> PlayerRegister { get; set; }
         public DbSet<TeamRegister> TeamRegister { get; set; }
         public DbSet<AuctionRegister> AuctionRegister { get; set; }
+        public DbSet<Bids> Bids { get; set; }
+        public DbSet<UndoBids> UndoBids { get; set; }
 
 
 

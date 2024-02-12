@@ -1,5 +1,6 @@
 ﻿using JSOAuction.Domain.Entities.PlayerRegister;
 using JSOAuction.Domain.Entities.TeamRegister;
+using JSOAuction.Services.Entities.Bids;
 using JSOAuction.Services.Entities.PlayerRegister;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace JSOAuction.Services.Interfaces
 {
-    public interface IPlayerRegisterService
+    public interface IBidsService
     {
-        Task<int> SavePlayerRegister(SavePlayerRegisterDto request);
-        Task<List<PlayerRegister>> GetAllPlayerDetails();
+        Task<bool> SaveBids(SaveBidsDto request);
+        Task<bool> UndoBids(string bidId);
     }
 }

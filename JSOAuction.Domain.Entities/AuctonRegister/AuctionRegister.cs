@@ -12,7 +12,7 @@ namespace JSOAuction.Domain.Entities.AuctionRegister
     public class AuctionRegister
     {
         [Key]
-        public Guid AuctionId { get; set; }
+        public int AuctionId { get; set; }
         public int? Year { get; set; }
         public string? Location { get; set; }
         public DateTime? StartDate { get; set; }
