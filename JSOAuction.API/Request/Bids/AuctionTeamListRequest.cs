@@ -2,11 +2,9 @@
 
 namespace JSOAuction.API.Request.Bids
 {
-    public class SaveBidsRequest
+    public class AuctionTeamListRequest
     {
         public int? PlayerId { get; set; }
-        public int? TeamId { get; set; }
         public int? AuctionId { get; set; }
-        public decimal? BidAmount { get; set; }
     }
 }

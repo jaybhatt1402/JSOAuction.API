@@ -64,5 +64,20 @@ namespace JSOAuction.Services.Services
 
             return false;
         }
+
+        public async Task<List<AuctionTeamListResponseModel>> GetAuctionTeamList(AuctionTeamListDto auctionTeamListRequest)
+        {
+            IEnumerable<AuctionTeamListResponseModel> auctionTeams = new List<AuctionTeamListResponseModel>();
+            _readWriteUnitOfWorkSP.LoadStoredProc("GetAuctionTeamsList")
+                .WithSqlParam("@PlayerId", auctionTeamListRequest.PlayerId)
+                .WithSqlParam("@AuctionId", auctionTeamListRequest.AuctionId)
+                .ExecuteStoredProc((handler) =>
+                {
+                    auctionTeams = handler.ReadToList<AuctionTeamListResponseModel>();
+                });
+
+            return auctionTeams.ToList();
+
+        }
     }
 }

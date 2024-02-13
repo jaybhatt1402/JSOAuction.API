@@ -14,5 +14,6 @@ namespace JSOAuction.Services.Interfaces
     {
         Task<bool> SaveBids(SaveBidsDto request);
         Task<bool> UndoBids(string bidId);
+        Task<List<AuctionTeamListResponseModel>> GetAuctionTeamList(AuctionTeamListDto auctionTeamListRequest);
     }
 }

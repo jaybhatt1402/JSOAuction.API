@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using JSOAuction.API.Request.PlayerRegister;
-using JSOAuction.Domain.Entities.TeamRegister;
+using JSOAuction.API.Request.Bids;
 using JSOAuction.Services.Entities.Bids;
-using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Interfaces;
 using JSOAuction.Utility;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +24,14 @@ namespace JSOAuction.API.Controllers
         {
             var saveBidsDto = _mapper.Map<SaveBidsRequest, SaveBidsDto>(request);
             var result = await _bidsService.SaveBids(saveBidsDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+
+        [HttpPost("GetAuctionTeamsList")]
+        public async Task<Dictionary<string, object>> GetAuctionTeamsList([FromBody] AuctionTeamListRequest request)
+        {
+            var auctionTeamListDto = _mapper.Map<AuctionTeamListRequest, AuctionTeamListDto>(request);
+            var result = await _bidsService.GetAuctionTeamList(auctionTeamListDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
     }
