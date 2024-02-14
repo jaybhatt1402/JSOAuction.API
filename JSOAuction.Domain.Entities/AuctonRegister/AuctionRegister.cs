@@ -18,7 +18,6 @@ namespace JSOAuction.Domain.Entities.AuctionRegister
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string? AuctionName { get; set; }
-        public decimal? RemainingBalance { get; set; }
         public bool? IsActive { get; set; }
         public bool? IsDeleted { get; set; }
         public DateTime? UpdatedOn { get; set; }

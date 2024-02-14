@@ -18,7 +18,7 @@ namespace JSOAuction.Domain.Entities.TeamRegister
         public string? CoachName { get; set; }
         public int? FoundedYear { get; set; }
         public int? TeamSize { get; set; }
-        public decimal? RemainingBalance { get; set; }
+        public decimal? TotalBalance { get; set; }
         public decimal? MaximumBid { get; set; }
         public string? TeamLogo { get; set; }
         public string? Owner { get; set; }
