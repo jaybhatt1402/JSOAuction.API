@@ -13,7 +13,8 @@ namespace JSOAuction.Services.Interfaces
     public interface IBidsService
     {
         Task<bool> SaveBids(SaveBidsDto request);
-        Task<bool> UndoBids(string bidId);
+        Task<bool> UndoAuctionBid(UndoBidsDto request);
         Task<List<AuctionTeamListResponseModel>> GetAuctionTeamList(AuctionTeamListDto auctionTeamListRequest);
+        Task<List<OngoingBidDetailsResponseModel>> GetOngoingBidDetails(OngoingBidsDto request);
     }
 }

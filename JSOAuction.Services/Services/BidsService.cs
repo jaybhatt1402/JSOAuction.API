@@ -59,24 +59,66 @@ namespace JSOAuction.Services.Services
 
         }
 
-        public async Task<bool> UndoBids(string bidId)
+        public async Task<bool> UndoAuctionBid(UndoBidsDto request)
         {
+            int isuccess = 1;
+            _readWriteUnitOfWorkSP.LoadStoredProc("UndoAuctionBid")
+                .WithSqlParam("@AuctionId", request.AuctionId)
+                .WithSqlParam("@BidId", request.BidId)
+                .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
+                .ExecuteStoredProc((handler) =>
+                {
+                    //bidId = handler.GetValue("@BidIdOut").ToString();
+                    isuccess = Convert.ToInt32(handler.GetValue("@Success"));
+                });
 
+            if (isuccess > 0)
+            {
+                return true;
+            }
             return false;
         }
 
         public async Task<List<AuctionTeamListResponseModel>> GetAuctionTeamList(AuctionTeamListDto auctionTeamListRequest)
         {
             IEnumerable<AuctionTeamListResponseModel> auctionTeams = new List<AuctionTeamListResponseModel>();
-            _readWriteUnitOfWorkSP.LoadStoredProc("GetAuctionTeamsList")
-                .WithSqlParam("@PlayerId", auctionTeamListRequest.PlayerId)
-                .WithSqlParam("@AuctionId", auctionTeamListRequest.AuctionId)
-                .ExecuteStoredProc((handler) =>
-                {
-                    auctionTeams = handler.ReadToList<AuctionTeamListResponseModel>();
-                });
+            try
+            {
+                _readWriteUnitOfWorkSP.LoadStoredProc("GetAuctionTeamsList")
+                    .WithSqlParam("@PlayerId", auctionTeamListRequest.PlayerId)
+                    .WithSqlParam("@AuctionId", auctionTeamListRequest.AuctionId)
+                    .ExecuteStoredProc((handler) =>
+                    {
+                        auctionTeams = handler.ReadToList<AuctionTeamListResponseModel>();
+                    });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to retrieve auction teams", ex);
+            }
 
             return auctionTeams.ToList();
+
+        }
+        public async Task<List<OngoingBidDetailsResponseModel>> GetOngoingBidDetails(OngoingBidsDto request)
+        {
+            IEnumerable<OngoingBidDetailsResponseModel> ongoingBids = new List<OngoingBidDetailsResponseModel>();
+            try
+            {
+                _readWriteUnitOfWorkSP.LoadStoredProc("GetOngoingBidsDetails")
+                    .WithSqlParam("@PlayerId", request.PlayerId)
+                    .WithSqlParam("@AuctionId", request.AuctionId)
+                    .ExecuteStoredProc((handler) =>
+                    {
+                        ongoingBids = handler.ReadToList<OngoingBidDetailsResponseModel>();
+                    });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to retrieve ongoing bid details", ex);
+            }
+
+            return ongoingBids.ToList();
 
         }
     }

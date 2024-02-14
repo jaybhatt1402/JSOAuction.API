@@ -34,5 +34,21 @@ namespace JSOAuction.API.Controllers
             var result = await _bidsService.GetAuctionTeamList(auctionTeamListDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
+
+        [HttpPost("GetOngoingBidDetails")]
+        public async Task<Dictionary<string, object>> GetOngoingBidDetails([FromBody] OngoingBidsRequest request)
+        {
+            var ongoingBidsDto = _mapper.Map<OngoingBidsRequest, OngoingBidsDto>(request);
+            var result = await _bidsService.GetOngoingBidDetails(ongoingBidsDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+
+        [HttpPost("UndoBids")]
+        public async Task<Dictionary<string, object>> UndoBids([FromBody] UndoBidsRequest request)
+        {
+            var undoBidsDto = _mapper.Map<UndoBidsRequest, UndoBidsDto>(request);
+            var result = await _bidsService.UndoAuctionBid(undoBidsDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
     }
 }
