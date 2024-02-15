@@ -27,6 +27,12 @@ namespace JSOAuction.API.Infrastructure.Automapper
 
             CreateMap<UndoBidsRequest, UndoBidsDto>().ReverseMap();
 
+            CreateMap<AuctionPlayerRequest, AuctionPlayerDto>().ReverseMap();
+            
+            CreateMap<UpdatePlayerStatusRequest, UpdatePlayerStatusDto>().ReverseMap();
+
+            CreateMap<SoldPlayerRequest, SoldPlayerDto>().ReverseMap();
+
             //  CreateMap<UpdateUserRegisterRequest, UpdateUserRegisterDto>();
             //  CreateMap<UserRegister, UpdateUserRegisterDto>().ReverseMap();
 

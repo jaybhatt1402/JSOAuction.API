@@ -2,9 +2,11 @@
 using JSOAuction.Data.Contexts;
 using JSOAuction.Data.Infrastructure;
 using JSOAuction.Domain.Entities.PlayerRegister;
+using JSOAuction.Services.Entities.Bids;
 using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Interfaces;
 using JSOAuction.Utility;
+using System.Data;
 
 namespace JSOAuction.Services.Services
 {
@@ -70,6 +72,72 @@ namespace JSOAuction.Services.Services
                 throw new Exception("No Players found");
             }
             return players.ToList();
+        }
+
+        public async Task<List<AuctionPlayerDetailsResponseModel>> GetAuctionPlayerDetails(AuctionPlayerDto request)
+        {
+            string errorMsgValue = string.Empty;
+            IEnumerable<AuctionPlayerDetailsResponseModel> auctionPlayer = new List<AuctionPlayerDetailsResponseModel>();
+            try
+            {
+                _readWriteUnitOfWorkSP.LoadStoredProc("GetAuctionPlayerDetails")
+                    .WithSqlParam("@ScreenType", request.ScreenType)
+                    .WithSqlParam("@AuctionId", request.AuctionId)
+                    .ExecuteStoredProc((handler) =>
+                    {
+                        auctionPlayer = handler.ReadToList<AuctionPlayerDetailsResponseModel>();
+                    });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Invalid ScreenType provided. ScreenType must be either ''Admin'' or ''User''.", ex);
+            }
+            return auctionPlayer.ToList();
+        }
+
+        public async Task<bool> UpdatePlayerStatus(UpdatePlayerStatusDto request)
+        {
+            int isuccess = 1;
+            _readWriteUnitOfWorkSP.LoadStoredProc("UpdatePlayerStatus")
+                    .WithSqlParam("@AuctionId", request.AuctionId)
+                    .WithSqlParam("@PlayerId", request.PlayerId)
+                    .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
+                    .ExecuteStoredProc((handler) =>
+                    {
+                        isuccess = Convert.ToInt32(handler.GetValue("@Success"));
+                    });
+
+            if (isuccess > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public async Task<bool> SoldPlayer(SoldPlayerDto request)
+        {
+            int isuccess = 1;
+            _readWriteUnitOfWorkSP.LoadStoredProc("SoldAuctionPlayer")
+                    .WithSqlParam("@AuctionId", request.AuctionId)
+                    .WithSqlParam("@PlayerId", request.PlayerId)
+                    .WithSqlParam("@TeamId", request.TeamId)
+                    .WithSqlParam("@BidId", request.BidId)
+                    .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
+                    .ExecuteStoredProc((handler) =>
+                    {
+                        isuccess = Convert.ToInt32(handler.GetValue("@Success"));
+                    });
+
+            if (isuccess > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

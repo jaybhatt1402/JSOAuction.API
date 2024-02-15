@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using JSOAuction.API.Request.Bids;
 using JSOAuction.API.Request.PlayerRegister;
 using JSOAuction.Domain.Entities.PlayerRegister;
 using JSOAuction.Domain.Entities.TeamRegister;
+using JSOAuction.Services.Entities.Bids;
 using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Interfaces;
 using JSOAuction.Services.Services;
@@ -34,6 +36,30 @@ namespace JSOAuction.API.Controllers
         {
             var result = await _playerRegisterService.GetAllPlayerDetails();
             return Ok(result);
+        }
+
+        [HttpPost("GetAuctionPlayer")]
+        public async Task<Dictionary<string, object>> GetAuctionPlayer([FromBody] AuctionPlayerRequest request)
+        {
+            var auctionPlayerDto = _mapper.Map<AuctionPlayerRequest, AuctionPlayerDto>(request);
+            var result = await _playerRegisterService.GetAuctionPlayerDetails(auctionPlayerDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+
+        [HttpPost("UpdatePlayerStatus")]
+        public async Task<Dictionary<string, object>> UpdatePlayerStatus([FromBody] UpdatePlayerStatusRequest request)
+        {
+            var updatePlayerStatusDto = _mapper.Map<UpdatePlayerStatusRequest, UpdatePlayerStatusDto>(request);
+            var result = await _playerRegisterService.UpdatePlayerStatus(updatePlayerStatusDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+
+        [HttpPost("SoldPlayer")]
+        public async Task<Dictionary<string, object>> SoldPlayer([FromBody] SoldPlayerRequest request)
+        {
+            var soldPlayerDto = _mapper.Map<SoldPlayerRequest, SoldPlayerDto>(request);
+            var result = await _playerRegisterService.SoldPlayer(soldPlayerDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
     }
 }

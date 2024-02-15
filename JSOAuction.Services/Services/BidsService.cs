@@ -32,7 +32,7 @@ namespace JSOAuction.Services.Services
         public async Task<bool> SaveBids(SaveBidsDto request)
         {
             string errorMsgValue = string.Empty;
-            bool isuccess = true;
+            bool isuccess = false;
 
             //Save Data in UserRegister Table.
             _readWriteUnitOfWorkSP.LoadStoredProc("BidSave")
@@ -48,7 +48,7 @@ namespace JSOAuction.Services.Services
                     errorMsgValue = handler.GetValue("@ErrorMessage").ToString();
                 });
 
-            if (errorMsgValue != string.Empty)
+            if (errorMsgValue == string.Empty)
             {
                 return isuccess = true;
             }

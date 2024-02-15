@@ -21,7 +21,7 @@ namespace JSOAuction.API.Request.PlayerRegister
         public bool? BattingAllRounder { get; set; } 
         [DefaultValue(false)]
         public bool? BowlingAllRounder { get; set; } 
-        public Guid? PreviousTeamId { get; set; }
+        public int? PreviousTeamId { get; set; }
         public DateTime? LastPlayedYear { get; set; }
         public string? ProfilePicture { get; set; }
         public string? Password { get; set; }

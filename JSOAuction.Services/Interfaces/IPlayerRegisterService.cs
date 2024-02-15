@@ -1,5 +1,6 @@
 ﻿using JSOAuction.Domain.Entities.PlayerRegister;
 using JSOAuction.Domain.Entities.TeamRegister;
+using JSOAuction.Services.Entities.Bids;
 using JSOAuction.Services.Entities.PlayerRegister;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,8 @@ namespace JSOAuction.Services.Interfaces
     {
         Task<int> SavePlayerRegister(SavePlayerRegisterDto request);
         Task<List<PlayerRegister>> GetAllPlayerDetails();
+        Task<List<AuctionPlayerDetailsResponseModel>> GetAuctionPlayerDetails(AuctionPlayerDto request);
+        Task<bool> UpdatePlayerStatus(UpdatePlayerStatusDto request);
+        Task<bool> SoldPlayer(SoldPlayerDto request);
     }
 }
