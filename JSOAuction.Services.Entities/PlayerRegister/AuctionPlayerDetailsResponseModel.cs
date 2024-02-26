@@ -26,5 +26,9 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public string? ProfilePicture { get; set; }
         public decimal? BasePrice { get; set; }
         public string? TeamName { get; set; }
+        public decimal? BidAmount { get; set; }
+        public int? TeamSize { get; set; }
+        public decimal? RemainingBalance { get; set; }
+        public decimal? MaximumBid { get; set; }
     }
 }
