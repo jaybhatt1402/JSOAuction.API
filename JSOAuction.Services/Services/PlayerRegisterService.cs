@@ -122,8 +122,9 @@ namespace JSOAuction.Services.Services
             _readWriteUnitOfWorkSP.LoadStoredProc("SoldAuctionPlayer")
                     .WithSqlParam("@AuctionId", request.AuctionId)
                     .WithSqlParam("@PlayerId", request.PlayerId)
-                    .WithSqlParam("@TeamId", request.TeamId)
-                    .WithSqlParam("@BidId", request.BidId)
+                    .WithSqlParam("@TeamId", request.TeamId != null ? request.TeamId : DBNull.Value, DbType.Int32)
+                    .WithSqlParam("@BidId", request.BidId != null ? request.BidId : DBNull.Value, DbType.Int32)
+                    .WithSqlParam("@Status", request.Status)
                     .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
                     .ExecuteStoredProc((handler) =>
                     {

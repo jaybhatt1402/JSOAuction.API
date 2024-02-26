@@ -30,5 +30,8 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public int? TeamSize { get; set; }
         public decimal? RemainingBalance { get; set; }
         public decimal? MaximumBid { get; set; }
+        public string? PlayerStatus { get; set; }
+        public int? UnsoldCount { get; set; }
+        public string? TeamLogo { get; set; }
     }
 }
