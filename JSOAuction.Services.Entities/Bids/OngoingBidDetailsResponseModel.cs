@@ -11,5 +11,7 @@ namespace JSOAuction.Services.Entities.Bids
         public int? BidId { get; set; }
         public decimal? BidAmount { get; set; }
         public string? TeamName { get; set; }
+
+        public int? TeamId { get; set; }
     }
 }
