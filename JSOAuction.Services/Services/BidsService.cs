@@ -118,7 +118,7 @@ namespace JSOAuction.Services.Services
                 throw new Exception("Failed to retrieve ongoing bid details", ex);
             }
 
-            return ongoingBids.ToList();
+            return ongoingBids.OrderByDescending(x => x.BidId).ToList();
 
         }
     }
