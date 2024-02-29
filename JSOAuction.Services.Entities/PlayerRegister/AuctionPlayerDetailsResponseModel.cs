@@ -33,5 +33,7 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public string? PlayerStatus { get; set; }
         public int? UnsoldCount { get; set; }
         public string? TeamLogo { get; set; }
+        public bool IsVideoAvailable { get; set; }
+        public bool ShowSoldPopup { get; set; }
     }
 }
