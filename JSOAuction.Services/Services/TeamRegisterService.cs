@@ -2,6 +2,7 @@
 using JSOAuction.Data.Contexts;
 using JSOAuction.Data.Infrastructure;
 using JSOAuction.Domain.Entities.TeamRegister;
+using JSOAuction.Services.Entities.PlayersDetailsByTeam;
 using JSOAuction.Services.Interfaces;
 
 namespace JSOAuction.Services.Services
@@ -38,6 +39,34 @@ namespace JSOAuction.Services.Services
                 throw new Exception("No teams found");
             }
             return teams.ToList();
+        }
+
+        public async Task<List<PlayersDetailsByTeamResponseModel>> GetPlayerDetailsByTeam(PlayerDetailsTeamWiseDto request)
+        {
+            IEnumerable<PlayersDetailsTeamWiseModel> playerDetails = new List<PlayersDetailsTeamWiseModel>();
+            _readWriteUnitOfWorkSP.LoadStoredProc("GetPlayersDetailsByTeam")
+                .WithSqlParam("@AuctionId", request.AuctionId)
+                .ExecuteStoredProc((handler) =>
+                {
+                    playerDetails = handler.ReadToList<PlayersDetailsTeamWiseModel>();
+                });
+
+            var teamWisePlayerDetails = new List<PlayersDetailsByTeamResponseModel>();
+
+            foreach (var teamGroup in playerDetails.GroupBy(pd => new { pd.TeamId, pd.TeamName, pd.TeamLogo }))
+            {
+                var teamModel = new PlayersDetailsByTeamResponseModel
+                {
+                    TeamId = teamGroup.Key.TeamId,
+                    TeamName = teamGroup.Key.TeamName,
+                    TeamLogo = teamGroup.Key.TeamLogo,
+                    PlayerDetails = teamGroup.ToList()
+                };
+
+                teamWisePlayerDetails.Add(teamModel);
+            }
+            return teamWisePlayerDetails;
+
         }
     }
 }

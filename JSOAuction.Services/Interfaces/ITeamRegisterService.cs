@@ -1,5 +1,6 @@
 ﻿using JSOAuction.Domain.Entities.TeamRegister;
 using JSOAuction.Services.Entities.PlayerRegister;
+using JSOAuction.Services.Entities.PlayersDetailsByTeam;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace JSOAuction.Services.Interfaces
     public interface ITeamRegisterService
     {
         Task<List<TeamRegister>> GetAllTeamDetails();
+        Task<List<PlayersDetailsByTeamResponseModel>> GetPlayerDetailsByTeam(PlayerDetailsTeamWiseDto request);
     }
 }

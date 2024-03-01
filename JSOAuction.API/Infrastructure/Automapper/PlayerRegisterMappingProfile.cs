@@ -5,6 +5,7 @@ using JSOAuction.Domain.Entities.Bids;
 using JSOAuction.Domain.Entities.PlayerRegister;
 using JSOAuction.Services.Entities.Bids;
 using JSOAuction.Services.Entities.PlayerRegister;
+using JSOAuction.Services.Entities.PlayersDetailsByTeam;
 
 namespace JSOAuction.API.Infrastructure.Automapper
 {
@@ -32,6 +33,8 @@ namespace JSOAuction.API.Infrastructure.Automapper
             CreateMap<UpdatePlayerStatusRequest, UpdatePlayerStatusDto>().ReverseMap();
 
             CreateMap<SoldPlayerRequest, SoldPlayerDto>().ReverseMap();
+
+            CreateMap<GetPlayersDetailsByTeamRequest, PlayerDetailsTeamWiseDto>().ReverseMap();
 
             //  CreateMap<UpdateUserRegisterRequest, UpdateUserRegisterDto>();
             //  CreateMap<UserRegister, UpdateUserRegisterDto>().ReverseMap();
