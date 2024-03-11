@@ -1,7 +1,10 @@
-﻿using System.ComponentModel;
+﻿using JSOAuction.API.Helpers;
+using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 
 namespace JSOAuction.API.Request.PlayerRegister
 {
+    [ModelBinder(typeof(JsonWithFilesFormDataModelBinder), Name = "json")]
     public class SavePlayerRegisterRequest
     {
         public string? FirstName { get; set; }
@@ -12,7 +15,7 @@ namespace JSOAuction.API.Request.PlayerRegister
         public string? Email { get; set; }
         public DateTime? DOB { get; set; }
         [DefaultValue(false)]
-        public bool? Batsmen { get; set; } 
+        public bool? Batsman { get; set; } 
         [DefaultValue(false)]
         public bool? Bowler { get; set; }
         [DefaultValue(false)]

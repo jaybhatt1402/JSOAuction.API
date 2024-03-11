@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public string? AlternativePhoneNo { get; set; }
         public string? Email { get; set; }
         public DateTime? DOB { get; set; }
-        public bool? Batsmen { get; set; } 
+        public bool? Batsman { get; set; } 
         public bool? Bowler { get; set; }
         public bool? WicketKeeper { get; set; }
         public bool? BattingAllRounder { get; set; } 
@@ -24,5 +25,6 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public DateTime? LastPlayedYear { get; set; }
         public string? ProfilePicture { get; set; }
         public string? Password { get; set; }
+        public IFormFile UploadFile { get; set; }
     }
 }

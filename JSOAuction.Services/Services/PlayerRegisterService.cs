@@ -41,7 +41,7 @@ namespace JSOAuction.Services.Services
                 AlternativePhoneNo = request.AlternativePhoneNo,
                 Email = request.Email,
                 DOB = request.DOB,
-                Batsmen = request.Batsmen,
+                Batsman = request.Batsman,
                 Bowler = request.Bowler,
                 WicketKeeper = request.WicketKeeper,
                 BattingAllRounder = request.BattingAllRounder,
@@ -139,6 +139,38 @@ namespace JSOAuction.Services.Services
             {
                 return false;
             }
+        }
+
+        public async Task<int> SavePlayer(SavePlayerRegisterDto request)
+        {
+            //Save Data in UserRegister Table.
+            var hashPassword = GenericMethods.GetHash(request.Password);
+            var savePlayerRegister = new PlayerRegister()
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Gender = request.Gender,
+                MobileNo = request.MobileNo,
+                AlternativePhoneNo = request.AlternativePhoneNo,
+                Email = request.Email,
+                DOB = request.DOB,
+                Batsman = request.Batsman,
+                Bowler = request.Bowler,
+                WicketKeeper = request.WicketKeeper,
+                BattingAllRounder = request.BattingAllRounder,
+                BowlingAllRounder = request.BowlingAllRounder,
+                PreviousTeamId = request.PreviousTeamId,
+                LastPlayedYear = request.LastPlayedYear,
+                ProfilePicture = request.ProfilePicture,
+                Password = hashPassword,
+                CreatedOn = DateTime.UtcNow,
+                IsDeleted = false,
+                IsActive = true,
+
+            };
+            await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
+            await _readWriteUnitOfWork.CommitAsync();
+            return savePlayerRegister.PlayerRegisterId;
         }
     }
 }

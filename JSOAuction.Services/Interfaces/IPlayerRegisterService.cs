@@ -17,5 +17,6 @@ namespace JSOAuction.Services.Interfaces
         Task<List<AuctionPlayerDetailsResponseModel>> GetAuctionPlayerDetails(AuctionPlayerDto request);
         Task<bool> UpdatePlayerStatus(UpdatePlayerStatusDto request);
         Task<bool> SoldPlayer(SoldPlayerDto request);
+        Task<int> SavePlayer(SavePlayerRegisterDto request);
     }
 }

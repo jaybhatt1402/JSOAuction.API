@@ -61,5 +61,19 @@ namespace JSOAuction.API.Controllers
             var result = await _playerRegisterService.SoldPlayer(soldPlayerDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
+
+        [HttpPost("SavePlayer")]
+        public async Task<Dictionary<string, object>> SavePlayer([FromBody] SavePlayerRegisterRequest request)
+        {
+            var savePlayerRegisterDto = _mapper.Map<SavePlayerRegisterRequest, SavePlayerRegisterDto>(request);
+            IFormFile uploadFile = null;
+            if (Request.Form.Files.Count > 0)
+            {
+                uploadFile = Request.Form.Files[0];
+            }
+            savePlayerRegisterDto.UploadFile = uploadFile;
+            var result = await _playerRegisterService.SavePlayer(savePlayerRegisterDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
     }
 }
