@@ -31,6 +31,7 @@ namespace JSOAuction.API.Infrastructure.Extensions
             services.AddTransient(typeof(ITeamRegisterRepository<>), typeof(TeamRegisterRepository<>));
             services.AddTransient(typeof(IAuctionRegisterRepository<>), typeof(AuctionRegisterRepository<>));
             services.AddTransient(typeof(IBidsRepository<>), typeof(BidsRepository<>));
+            services.AddTransient(typeof(IAuctionPlayerMappingRepository<>), typeof(AuctionPlayerMappingRepository<>));
 
         }
 

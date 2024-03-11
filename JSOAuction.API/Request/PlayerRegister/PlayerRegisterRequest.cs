@@ -28,5 +28,6 @@ namespace JSOAuction.API.Request.PlayerRegister
         public DateTime? LastPlayedYear { get; set; }
         public string? ProfilePicture { get; set; }
         public string? Password { get; set; }
+        public int? AuctionId { get; set; }
     }
 }

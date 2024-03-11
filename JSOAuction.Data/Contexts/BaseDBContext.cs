@@ -103,7 +103,7 @@ namespace JSOAuction.Data.Contexts
         public DbSet<AuctionRegister> AuctionRegister { get; set; }
         public DbSet<Bids> Bids { get; set; }
         public DbSet<UndoBids> UndoBids { get; set; }
-
+        public DbSet<AuctionPlayerMapping> AuctionPlayerMapping { get; set; }
 
 
     }

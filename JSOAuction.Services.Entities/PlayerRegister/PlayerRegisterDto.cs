@@ -26,5 +26,6 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public string? ProfilePicture { get; set; }
         public string? Password { get; set; }
         public IFormFile UploadFile { get; set; }
+        public int? AuctionId { get; set; }
     }
 }

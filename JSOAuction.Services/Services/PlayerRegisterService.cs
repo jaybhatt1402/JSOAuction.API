@@ -180,6 +180,18 @@ namespace JSOAuction.Services.Services
             };
             await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
             await _readWriteUnitOfWork.CommitAsync();
+
+            var auctionPlayerMapping = new AuctionPlayerMapping()
+            {
+                PlayerId = savePlayerRegister.PlayerRegisterId,
+                AuctionId = request.AuctionId,
+                PlayerStatus = "notdisclosed",
+                CreatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b"),
+                CreatedOn = DateTime.UtcNow
+            };
+            await _readWriteUnitOfWork.AuctionPlayerMappingRepository.AddAsync(auctionPlayerMapping);
+            await _readWriteUnitOfWork.CommitAsync();
+
             return savePlayerRegister.PlayerRegisterId;
         }
 
