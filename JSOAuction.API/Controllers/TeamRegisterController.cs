@@ -34,5 +34,13 @@ namespace JSOAuction.API.Controllers
             var result = await _teamRegisterService.GetPlayerDetailsByTeam(playerDetailsTeamWiseDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
+
+        [HttpPost("GetTeamIdNameModel")]
+        public async Task<Dictionary<string, object>> GetTeamIdNameModel([FromBody] GetTeamIdNameModel request)
+        {
+            var teamIdNameDto = _mapper.Map<GetTeamIdNameModel, TeamIdNameDto>(request);
+            var result = await _teamRegisterService.GetTeamIdNameModel(teamIdNameDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
     }
 }

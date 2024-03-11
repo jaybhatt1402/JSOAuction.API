@@ -13,4 +13,10 @@ namespace JSOAuction.Services.Entities.PlayersDetailsByTeam
         public string TeamLogo { get; set; }
         public List<PlayersDetailsTeamWiseModel> PlayerDetails { get; set; }
     }
+
+    public class TeamIdNameResponseModel
+    {
+        public int TeamId { get; set; }
+        public string TeamName { get; set; }
+    }
 }

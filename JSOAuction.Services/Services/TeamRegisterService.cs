@@ -68,5 +68,22 @@ namespace JSOAuction.Services.Services
             return teamWisePlayerDetails;
 
         }
+
+        public async Task<List<TeamIdNameResponseModel>> GetTeamIdNameModel(TeamIdNameDto request)
+        {
+            IEnumerable<TeamIdNameResponseModel> teamDetails = new List<TeamIdNameResponseModel>();
+            _readWriteUnitOfWorkSP.LoadStoredProc("GetTeamIdNameDetails")
+                .WithSqlParam("@AuctionId", request.AuctionId)
+                .ExecuteStoredProc((handler) =>
+                {
+                    teamDetails = handler.ReadToList<TeamIdNameResponseModel>();
+                });
+
+            if (teamDetails == null || !teamDetails.Any())
+            {
+                throw new Exception("No teams found");
+            }
+            return teamDetails.ToList();
+        }
     }
 }

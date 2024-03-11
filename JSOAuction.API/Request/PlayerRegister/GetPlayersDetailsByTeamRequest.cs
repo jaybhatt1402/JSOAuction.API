@@ -6,4 +6,9 @@ namespace JSOAuction.API.Request.PlayerRegister
     {
         public int? AuctionId { get; set; }
     }
+
+    public class GetTeamIdNameModel
+    {
+        public int? AuctionId { get; set; }
+    }
 }
