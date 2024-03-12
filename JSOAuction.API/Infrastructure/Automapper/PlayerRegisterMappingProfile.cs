@@ -13,10 +13,11 @@ namespace JSOAuction.API.Infrastructure.Automapper
     {
         public PlayerRegisterMappingProfile()
         {
-           // CreateMap<GetUserRegisterRequest, GetUserRegisterDto>();
-          //  CreateMap<UserRegister, GetUserRegisterDto>().ReverseMap();
+            // CreateMap<GetUserRegisterRequest, GetUserRegisterDto>();
+            //  CreateMap<UserRegister, GetUserRegisterDto>().ReverseMap();
 
-            CreateMap<SavePlayerRegisterRequest, SavePlayerRegisterDto>();
+            CreateMap<SavePlayerRegisterRequest, SavePlayerRegisterDto>()
+                .ForMember(dest => dest.LastPlayedYear, opt => opt.Ignore());
             CreateMap<PlayerRegister, SavePlayerRegisterDto>().ReverseMap();
 
             CreateMap<SaveBidsRequest, SaveBidsDto>();

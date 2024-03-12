@@ -25,9 +25,10 @@ namespace JSOAuction.API.Request.PlayerRegister
         [DefaultValue(false)]
         public bool? BowlingAllRounder { get; set; } 
         public int? PreviousTeamId { get; set; }
-        public DateTime? LastPlayedYear { get; set; }
+        public string? LastPlayedYear { get; set; }
         public string? ProfilePicture { get; set; }
         public string? Password { get; set; }
         public int? AuctionId { get; set; }
+        public string? City { get; set; }
     }
 }

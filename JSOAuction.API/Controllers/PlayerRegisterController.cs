@@ -9,6 +9,7 @@ using JSOAuction.Services.Interfaces;
 using JSOAuction.Services.Services;
 using JSOAuction.Utility;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JSOAuction.API.Controllers
 {
@@ -67,6 +68,10 @@ namespace JSOAuction.API.Controllers
         {
             var savePlayerRegisterDto = _mapper.Map<SavePlayerRegisterRequest, SavePlayerRegisterDto>(request);
             IFormFile uploadFile = null;
+            if (!string.IsNullOrEmpty(request.LastPlayedYear))
+            {
+                savePlayerRegisterDto.LastPlayedYear = new DateTime(Convert.ToInt32(request.LastPlayedYear), 1, 1);
+            }
             if (Request.Form.Files.Count > 0)
             {
                 uploadFile = Request.Form.Files[0];

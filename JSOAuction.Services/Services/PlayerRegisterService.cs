@@ -176,6 +176,7 @@ namespace JSOAuction.Services.Services
                 CreatedOn = DateTime.UtcNow,
                 IsDeleted = false,
                 IsActive = true,
+                City = request.City
 
             };
             await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
