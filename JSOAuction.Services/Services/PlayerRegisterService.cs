@@ -65,10 +65,11 @@ namespace JSOAuction.Services.Services
             await _readWriteUnitOfWork.CommitAsync();
             return savePlayerRegister.PlayerRegisterId;
         }
-        public async Task<List<PlayerRegister>> GetAllPlayerDetails()
+        public async Task<List<PlayerRegister>> GetAllPlayerDetails(int? AuctionId)
         {
             IEnumerable<PlayerRegister> players = new List<PlayerRegister>();
             _readWriteUnitOfWorkSP.LoadStoredProc("GetAllPlayerDetails")
+                .WithSqlParam("@AuctionId", AuctionId)
                 .ExecuteStoredProc((handler) =>
                 {
                     players = handler.ReadToList<PlayerRegister>();
@@ -150,7 +151,19 @@ namespace JSOAuction.Services.Services
         public async Task<int> SavePlayer(SavePlayerRegisterDto request)
         {
             string uploadId = "";
+            //TODO
+            //if (request.UploadFile == null)
+            //{
+            //    throw new Exception("Please Upload File.");
+            //}
+
             DriveUploadBasic(request.UploadFile, ref uploadId);
+            //TODO
+            //if (string.IsNullOrEmpty(uploadId))
+            //{
+            //    throw new Exception("File upload failed.");
+            //}
+
             string webViewLink = "https://drive.google.com/thumbnail?id=" + uploadId + "&sz=w1000";
 
             //Save Data in UserRegister Table.

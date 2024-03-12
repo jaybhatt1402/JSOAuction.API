@@ -32,10 +32,10 @@ namespace JSOAuction.API.Controllers
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
 
-        [HttpGet("GetAllPlayerDetails")]
-        public async Task<ActionResult<List<PlayerRegister>>> GetAllPlayerDetails()
+        [HttpGet("GetAllPlayerDetails/{AuctionId}")]
+        public async Task<ActionResult<List<PlayerRegister>>> GetAllPlayerDetails(int AuctionId)
         {
-            var result = await _playerRegisterService.GetAllPlayerDetails();
+            var result = await _playerRegisterService.GetAllPlayerDetails(AuctionId);
             return Ok(result);
         }
 
@@ -71,6 +71,18 @@ namespace JSOAuction.API.Controllers
             if (!string.IsNullOrEmpty(request.LastPlayedYear))
             {
                 savePlayerRegisterDto.LastPlayedYear = new DateTime(Convert.ToInt32(request.LastPlayedYear), 1, 1);
+            }
+            if (!string.IsNullOrEmpty(request.FirstName))
+            {
+                request.FirstName = char.ToUpper(request.FirstName[0]) + request.FirstName.Substring(1).ToLower();
+            }
+            if (!string.IsNullOrEmpty(request.LastName))
+            {
+                request.LastName = char.ToUpper(request.LastName[0]) + request.LastName.Substring(1).ToLower();
+            }
+            if (!string.IsNullOrEmpty(request.City))
+            {
+                request.City = char.ToUpper(request.City[0]) + request.City.Substring(1).ToLower();
             }
             if (Request.Form.Files.Count > 0)
             {

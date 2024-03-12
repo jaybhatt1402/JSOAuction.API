@@ -13,7 +13,7 @@ namespace JSOAuction.Services.Interfaces
     public interface IPlayerRegisterService
     {
         Task<int> SavePlayerRegister(SavePlayerRegisterDto request);
-        Task<List<PlayerRegister>> GetAllPlayerDetails();
+        Task<List<PlayerRegister>> GetAllPlayerDetails(int? AuctionId);
         Task<List<AuctionPlayerDetailsResponseModel>> GetAuctionPlayerDetails(AuctionPlayerDto request);
         Task<bool> UpdatePlayerStatus(UpdatePlayerStatusDto request);
         Task<bool> SoldPlayer(SoldPlayerDto request);
