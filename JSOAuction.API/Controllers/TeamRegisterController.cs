@@ -21,11 +21,12 @@ namespace JSOAuction.API.Controllers
             _mapper = mapper;
             _teamRegisterService = teamRegisterService;
         }
-        [HttpGet("GetAllTeamDetails")]
-        public async Task<ActionResult<List<TeamRegister>>> GetAllTeamDetails()
+        [HttpPost("GetAllTeamDetails")]
+        public async Task<Dictionary<string, object>> GetAllTeamDetails([FromBody] GetTeamIdNameModel request)
         {
-            var result = await _teamRegisterService.GetAllTeamDetails();
-            return Ok(result);
+            var teamIdNameDto = _mapper.Map<GetTeamIdNameModel, TeamIdNameDto>(request);
+            var result = await _teamRegisterService.GetAllTeamDetails(teamIdNameDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
         [HttpPost("GetPlayerDetailsByTeam")]
         public async Task<Dictionary<string, object>> GetPlayerDetailsByTeam([FromBody] GetPlayersDetailsByTeamRequest request)

@@ -26,10 +26,11 @@ namespace JSOAuction.Services.Services
             _readWriteUnitOfWorkSP = readWriteUnitOfWorkSP;
         }
 
-        public async Task<List<TeamRegister>> GetAllTeamDetails()
+        public async Task<List<TeamRegister>> GetAllTeamDetails(TeamIdNameDto teamIdNameDto)
         {
             IEnumerable<TeamRegister> teams = new List<TeamRegister>();
             _readWriteUnitOfWorkSP.LoadStoredProc("GetAllRegisteredTeams")
+                .WithSqlParam("@AuctionId", teamIdNameDto.AuctionId)
                 .ExecuteStoredProc((handler) =>
                 {
                     teams = handler.ReadToList<TeamRegister>();

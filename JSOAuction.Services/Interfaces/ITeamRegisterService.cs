@@ -11,7 +11,7 @@ namespace JSOAuction.Services.Interfaces
 {
     public interface ITeamRegisterService
     {
-        Task<List<TeamRegister>> GetAllTeamDetails();
+        Task<List<TeamRegister>> GetAllTeamDetails(TeamIdNameDto teamIdNameDto);
         Task<List<PlayersDetailsByTeamResponseModel>> GetPlayerDetailsByTeam(PlayerDetailsTeamWiseDto request);
         Task<List<TeamIdNameResponseModel>> GetTeamIdNameModel(TeamIdNameDto request);
     }
