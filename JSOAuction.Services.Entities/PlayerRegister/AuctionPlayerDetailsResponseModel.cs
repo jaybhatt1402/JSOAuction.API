@@ -37,5 +37,7 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public bool IsVideoAvailable { get; set; }
         public string? ShowSoldPopup { get; set; }
         public string? OldTeamName { get; set; }
+        public string? PlayerCategory { get;set; }
+        public int? PlayerNo { get; set; }
     }
 }

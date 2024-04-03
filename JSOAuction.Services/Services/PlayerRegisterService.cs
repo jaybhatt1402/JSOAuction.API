@@ -90,6 +90,8 @@ namespace JSOAuction.Services.Services
                 _readWriteUnitOfWorkSP.LoadStoredProc("GetAuctionPlayerDetails")
                     .WithSqlParam("@ScreenType", request.ScreenType)
                     .WithSqlParam("@AuctionId", request.AuctionId)
+                    .WithSqlParam("@PlayerNo", request.PlayerNo)
+                    .WithSqlParam("@PlayerCategory", request.PlayerCategory)
                     .ExecuteStoredProc((handler) =>
                     {
                         auctionPlayer = handler.ReadToList<AuctionPlayerDetailsResponseModel>();
