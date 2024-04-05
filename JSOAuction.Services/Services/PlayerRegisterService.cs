@@ -81,17 +81,18 @@ namespace JSOAuction.Services.Services
             return players.ToList();
         }
 
-        public async Task<List<AuctionPlayerDetailsResponseModel>> GetAuctionPlayerDetails(AuctionPlayerDto request)
+        public async Task<object> GetAuctionPlayerDetails(AuctionPlayerDto request)
         {
-            string errorMsgValue = string.Empty;
             IEnumerable<AuctionPlayerDetailsResponseModel> auctionPlayer = new List<AuctionPlayerDetailsResponseModel>();
+            int errorMsgValue = 0;
             try
             {
-                _readWriteUnitOfWorkSP.LoadStoredProc("GetAuctionPlayerDetails")
+                errorMsgValue = _readWriteUnitOfWorkSP.LoadStoredProc("GetAuctionPlayerDetails")
                     .WithSqlParam("@ScreenType", request.ScreenType)
                     .WithSqlParam("@AuctionId", request.AuctionId)
                     .WithSqlParam("@PlayerNo", request.PlayerNo)
                     .WithSqlParam("@PlayerCategory", request.PlayerCategory)
+                    .WithSqlParam("@ReturnValue", 0, DbType.Int32, ParameterDirection.ReturnValue)
                     .ExecuteStoredProc((handler) =>
                     {
                         auctionPlayer = handler.ReadToList<AuctionPlayerDetailsResponseModel>();
@@ -101,7 +102,15 @@ namespace JSOAuction.Services.Services
             {
                 throw new Exception("Invalid ScreenType provided. ScreenType must be either ''Admin'' or ''User''.", ex);
             }
-            return auctionPlayer.ToList();
+
+            if (errorMsgValue > 0)
+            {
+                return "All players have been sold in this auction.";
+            }
+            else
+            {
+                return auctionPlayer.ToList();
+            }
         }
 
         public async Task<bool> UpdatePlayerStatus(UpdatePlayerStatusDto request)
