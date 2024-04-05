@@ -13,5 +13,6 @@ namespace JSOAuction.Services.Entities.Bids
         public decimal? RemainingAmount { get; set; }
         public string? TeamLogo {  get; set; }
         public bool IsBiddable { get; set; }
+        public decimal? MaximumBid { get; set; }
     }
 }
