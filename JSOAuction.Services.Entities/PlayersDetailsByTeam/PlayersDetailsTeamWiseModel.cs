@@ -21,5 +21,6 @@ namespace JSOAuction.Services.Entities.PlayersDetailsByTeam
         public string? TeamLogo { get; set; }
         public bool WicketKeeper { get; set; }
         public string? PlayerCategory { get; set; }
+        public int? PlayerNo { get; set; }
     }
 }
