@@ -25,7 +25,18 @@ namespace JSOAuction.API.Controllers
         [HttpPost("SaveTournament")]
         public async Task<Dictionary<string, object>> SaveTournament([FromBody] TournamentRegisterRequest request)
         {
+
             var saveTournamentDto = _mapper.Map<TournamentRegisterRequest, TournamentRegisterDto>(request);
+            IFormFile uploadBannerFile = null;
+            IFormFile uploadLogoFile = null;
+
+            if (Request.Form.Files.Count > 0)
+            {
+                uploadBannerFile = Request.Form.Files[0];
+                uploadLogoFile = Request.Form.Files[1];
+            }
+            saveTournamentDto.UploadBannerFile = uploadBannerFile;
+            saveTournamentDto.UploadLogoFile = uploadLogoFile;
             var result = await _tournamentRegisterService.SaveTournament(saveTournamentDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }

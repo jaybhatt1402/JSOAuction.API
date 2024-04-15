@@ -1,7 +1,11 @@
-﻿using System.ComponentModel;
+﻿using JSOAuction.API.Helpers;
+using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 
 namespace JSOAuction.API.Request.Tournament
 {
+
+    [ModelBinder(typeof(JsonWithFilesFormDataModelBinder), Name = "json")]
     public class TournamentRegisterRequest
     {
         public string? TournamentName { get; set; }

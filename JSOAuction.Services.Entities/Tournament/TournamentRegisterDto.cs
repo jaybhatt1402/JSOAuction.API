@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,5 +44,7 @@ namespace JSOAuction.Services.Entities.Tournament
         public DateTime CreatedOn { get; set; }
         public bool? IsActive { get; set; }
         public bool? IsDeleted { get; set; }
+        public IFormFile UploadBannerFile { get; set; }
+        public IFormFile UploadLogoFile { get; set; }
     }
 }
