@@ -1,5 +1,6 @@
 ﻿using JSOAuction.Domain.Entities.TeamRegister;
 using JSOAuction.Domain.Entities.Tournament;
+using JSOAuction.Services.Entities.Bids;
 using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Entities.PlayersDetailsByTeam;
 using JSOAuction.Services.Entities.Tournament;
@@ -15,5 +16,7 @@ namespace JSOAuction.Services.Interfaces
     {
         Task<int> SaveTournament(TournamentRegisterDto request);
         Task<List<TournamentRegister>> GetAllTournamentDetails();
+        Task<bool> DeleteTournament(DeleteTournamentDto request);
+        Task<string> UpdateTournament(UpdateTournamentRegisterDto request);
     }
 }

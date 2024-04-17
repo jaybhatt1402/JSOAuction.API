@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using JSOAuction.API.Request.Bids;
 using JSOAuction.API.Request.PlayerRegister;
 using JSOAuction.API.Request.Tournament;
+using JSOAuction.Services.Entities.Bids;
 using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Entities.PlayersDetailsByTeam;
 using JSOAuction.Services.Entities.Tournament;
@@ -44,6 +46,32 @@ namespace JSOAuction.API.Controllers
         public async Task<Dictionary<string, object>> GetAllTournamentDetails()
         {
             var result = await _tournamentRegisterService.GetAllTournamentDetails();
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+
+        [HttpPost("DeleteTournament")]
+        public async Task<Dictionary<string, object>> DeleteTournament([FromBody] DeleteTournamentRequest request)
+        {
+            var deleteTournamentDto = _mapper.Map<DeleteTournamentRequest, DeleteTournamentDto>(request);
+            var result = await _tournamentRegisterService.DeleteTournament(deleteTournamentDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+        [HttpPost("UpdateTournament")]
+        public async Task<Dictionary<string, object>> UpdateTournament([FromBody] UpdateTournamentRegisterRequest request)
+        {
+
+            var saveTournamentDto = _mapper.Map<UpdateTournamentRegisterRequest, UpdateTournamentRegisterDto>(request);
+            IFormFile uploadBannerFile = null;
+            IFormFile uploadLogoFile = null;
+
+            if (Request.Form.Files.Count > 0)
+            {
+                uploadBannerFile = Request.Form.Files[0];
+                uploadLogoFile = Request.Form.Files[1];
+            }
+            saveTournamentDto.UploadBannerFile = uploadBannerFile;
+            saveTournamentDto.UploadLogoFile = uploadLogoFile;
+            var result = await _tournamentRegisterService.UpdateTournament(saveTournamentDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
     }

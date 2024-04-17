@@ -9,7 +9,9 @@ using JSOAuction.Domain.Entities.Tournament;
 using JSOAuction.Services.Entities.Tournament;
 using JSOAuction.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System.Data;
 using System.Diagnostics;
+using System.Transactions;
 
 namespace JSOAuction.Services.Services
 {
@@ -100,7 +102,7 @@ namespace JSOAuction.Services.Services
                 IsActive = true,
                 IsDeleted = false
             };
-             await _readWriteUnitOfWork.TournamentRegisterRepository.AddAsync(saveTournament);
+            await _readWriteUnitOfWork.TournamentRegisterRepository.AddAsync(saveTournament);
             await _readWriteUnitOfWork.CommitAsync();
             return saveTournament.TournamentId;
         }
@@ -168,6 +170,84 @@ namespace JSOAuction.Services.Services
             //return null;
         }
 
+        public async Task<bool> DeleteTournament(DeleteTournamentDto request)
+        {
+            int isuccess = 1;
+            _readWriteUnitOfWorkSP.LoadStoredProc("DeleteTournament")
+                .WithSqlParam("@TournamentId", request.TournamentId)
+                .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
+                .ExecuteStoredProc((handler) =>
+                {
+                    isuccess = Convert.ToInt32(handler.GetValue("@Success"));
+                });
 
+            if (isuccess > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<string> UpdateTournament(UpdateTournamentRegisterDto request)
+        {
+            int isuccess = 1;
+
+            string success = null;
+
+            string uploadBannerId = "";
+
+            string uploadLogoId = "";
+
+            DriveUploadBasic(request.UploadBannerFile, ref uploadBannerId);
+
+            string webViewLinkBanner = "https://drive.google.com/thumbnail?id=" + uploadBannerId + "&sz=w1000";
+
+            DriveUploadBasic(request.UploadLogoFile, ref uploadLogoId);
+
+            string webViewLinkLogo = "https://drive.google.com/thumbnail?id=" + uploadLogoId + "&sz=w1000";
+
+            var saveTournament = new TournamentRegister()
+            {
+                TournamentId = request.TournamentId,
+                TournamentName = request.TournamentName,
+                Description = request.Description,
+                OrganizerName = request.OrganizerName,
+                OrganizerContact = request.OrganizerContact,
+                OrganizerEmail = request.OrganizerEmail,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                DueDate = request.DueDate,
+                DueTime = request.DueTime,
+                GroundAddress = request.GroundAddress,
+                City = request.City,
+                State = request.State,
+                Country = request.Country,
+                ZipCode = request.ZipCode,
+                UploadBanner = webViewLinkBanner,
+                UploadLogo = webViewLinkLogo,
+                Open = request.Open,
+                Corporate = request.Corporate,
+                Community = request.Community,
+                School = request.School,
+                BoxCricket = request.BoxCricket,
+                Series = request.Series,
+                Other = request.Other,
+                BallType = request.BallType,
+                Overs = request.Overs,
+                Format = request.Format,
+                MaxTeams = request.MaxTeams,
+                Gender = request.Gender,
+                MinPlayer = request.MinPlayer,
+                MaxPlayer = request.MaxPlayer,
+                PaymentTerms = request.PaymentTerms,
+                Amount = request.Amount,
+                CreatedOn = DateTime.UtcNow,
+                IsActive = true,
+                IsDeleted = false
+            };
+            _readWriteUnitOfWork.TournamentRegisterRepository.Update(saveTournament);
+            await _readWriteUnitOfWork.CommitAsync();
+            return saveTournament.TournamentName;
+        }
     }
 }
