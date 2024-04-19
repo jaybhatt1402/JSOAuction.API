@@ -249,5 +249,21 @@ namespace JSOAuction.Services.Services
             await _readWriteUnitOfWork.CommitAsync();
             return saveTournament.TournamentName;
         }
+
+        public async Task<List<TournamentRegister>> GetTournamentById(GetByTournamentIdDto request)
+        {
+            IEnumerable<TournamentRegister> tournament = new List<TournamentRegister>();
+            _readWriteUnitOfWorkSP.LoadStoredProc("GetTournamentById")
+                .WithSqlParam("@Id", request.TournamentId)
+                .ExecuteStoredProc((handler) =>
+                {
+                    tournament = handler.ReadToList<TournamentRegister>();
+                });
+            if (tournament == null || !tournament.Any())
+            {
+                throw new Exception("No tournament found");
+            }
+            return tournament.ToList();
+        }
     }
 }

@@ -48,4 +48,8 @@ namespace JSOAuction.API.Request.Tournament
         public string? PaymentTerms { get; set; }
         public decimal? Amount { get; set; }
     }
-}
+    public class GetByTournamentIdRequest
+    {
+        public int TournamentId { get; set; }
+    }
+    }

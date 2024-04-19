@@ -47,4 +47,8 @@ namespace JSOAuction.Services.Entities.Tournament
         public IFormFile UploadBannerFile { get; set; }
         public IFormFile UploadLogoFile { get; set; }
     }
-}
+    public class GetByTournamentIdDto
+    {
+        public int TournamentId { get; set; }
+    }
+    }
