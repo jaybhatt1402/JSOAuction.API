@@ -285,11 +285,12 @@ namespace JSOAuction.Services.Services
                 data.State = request.State;
                 data.Country = request.Country;
                 data.ZipCode = request.ZipCode;
-                if (webViewLinkBanner != null)
+                if (!string.IsNullOrEmpty(webViewLinkBanner))
                 {
                     data.UploadBanner = webViewLinkBanner;
                 }
-                if (webViewLinkLogo != null)
+
+                if (!string.IsNullOrEmpty(webViewLinkLogo))
                 {
                     data.UploadLogo = webViewLinkLogo;
                 }
