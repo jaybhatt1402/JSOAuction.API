@@ -285,8 +285,14 @@ namespace JSOAuction.Services.Services
                 data.State = request.State;
                 data.Country = request.Country;
                 data.ZipCode = request.ZipCode;
-                data.UploadBanner = webViewLinkBanner;
-                data.UploadLogo = webViewLinkLogo;
+                if (webViewLinkBanner != null)
+                {
+                    data.UploadBanner = webViewLinkBanner;
+                }
+                if (webViewLinkLogo != null)
+                {
+                    data.UploadLogo = webViewLinkLogo;
+                }
                 data.Open = request.Open;
                 data.Corporate = request.Corporate;
                 data.Community = request.Community;
