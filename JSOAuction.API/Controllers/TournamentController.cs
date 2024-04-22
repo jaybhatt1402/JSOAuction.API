@@ -34,8 +34,18 @@ namespace JSOAuction.API.Controllers
 
             if (Request.Form.Files.Count > 0)
             {
-                uploadBannerFile = Request.Form.Files[0];
-                uploadLogoFile = Request.Form.Files[1];
+                for (int i = 0; i < Request.Form.Files.Count; i++)
+                {
+                    var file = Request.Form.Files[i];
+                    if (file.Name.Contains("_banner"))
+                    {
+                        uploadBannerFile = file;
+                    }
+                    else
+                    {
+                        uploadLogoFile = file;
+                    }
+                }
             }
             saveTournamentDto.UploadBannerFile = uploadBannerFile;
             saveTournamentDto.UploadLogoFile = uploadLogoFile;
@@ -66,9 +76,20 @@ namespace JSOAuction.API.Controllers
 
             if (Request.Form.Files.Count > 0)
             {
-                uploadBannerFile = Request.Form.Files[0];
-                uploadLogoFile = Request.Form.Files[1];
+                for (int i = 0; i < Request.Form.Files.Count; i++)
+                {
+                    var file = Request.Form.Files[i];
+                    if (file.Name.Contains("_banner"))
+                    {
+                        uploadBannerFile = file;
+                    }
+                    else
+                    {
+                        uploadLogoFile = file;
+                    }
+                }
             }
+
             saveTournamentDto.UploadBannerFile = uploadBannerFile;
             saveTournamentDto.UploadLogoFile = uploadLogoFile;
             var result = await _tournamentRegisterService.UpdateTournament(saveTournamentDto);

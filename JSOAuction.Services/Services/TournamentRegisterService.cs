@@ -9,8 +9,13 @@ using JSOAuction.Domain.Entities.Tournament;
 using JSOAuction.Services.Entities.Tournament;
 using JSOAuction.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient.Server;
+using Microsoft.VisualBasic;
+using System;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
+using System.Reflection.Emit;
 using System.Transactions;
 
 namespace JSOAuction.Services.Services
@@ -55,14 +60,23 @@ namespace JSOAuction.Services.Services
             string uploadBannerId = "";
 
             string uploadLogoId = "";
+            string webViewLinkLogo = string.Empty;
+            string webViewLinkBanner = string.Empty;
 
-            DriveUploadBasic(request.UploadBannerFile, ref uploadBannerId);
+            if (request.UploadBannerFile != null)
+            {
+                DriveUploadBasic(request.UploadBannerFile, ref uploadBannerId);
 
-            string webViewLinkBanner = "https://drive.google.com/thumbnail?id=" + uploadBannerId + "&sz=w1000";
+                webViewLinkBanner = "https://drive.google.com/thumbnail?id=" + uploadBannerId + "&sz=w1000";
 
-            DriveUploadBasic(request.UploadLogoFile, ref uploadLogoId);
+            }
 
-            string webViewLinkLogo = "https://drive.google.com/thumbnail?id=" + uploadLogoId + "&sz=w1000";
+            if (request.UploadLogoFile != null)
+            {
+                DriveUploadBasic(request.UploadLogoFile, ref uploadLogoId);
+
+                webViewLinkLogo = "https://drive.google.com/thumbnail?id=" + uploadLogoId + "&sz=w1000";
+            }
 
             var saveTournament = new TournamentRegister()
             {
@@ -197,57 +211,103 @@ namespace JSOAuction.Services.Services
             string uploadBannerId = "";
 
             string uploadLogoId = "";
-
-            DriveUploadBasic(request.UploadBannerFile, ref uploadBannerId);
-
-            string webViewLinkBanner = "https://drive.google.com/thumbnail?id=" + uploadBannerId + "&sz=w1000";
-
-            DriveUploadBasic(request.UploadLogoFile, ref uploadLogoId);
-
-            string webViewLinkLogo = "https://drive.google.com/thumbnail?id=" + uploadLogoId + "&sz=w1000";
-
-            var saveTournament = new TournamentRegister()
+            string webViewLinkLogo = string.Empty;
+            string webViewLinkBanner = string.Empty;
+            if (request.UploadBannerFile != null)
             {
-                TournamentId = request.TournamentId,
-                TournamentName = request.TournamentName,
-                Description = request.Description,
-                OrganizerName = request.OrganizerName,
-                OrganizerContact = request.OrganizerContact,
-                OrganizerEmail = request.OrganizerEmail,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
-                DueDate = request.DueDate,
-                DueTime = request.DueTime,
-                GroundAddress = request.GroundAddress,
-                City = request.City,
-                State = request.State,
-                Country = request.Country,
-                ZipCode = request.ZipCode,
-                UploadBanner = webViewLinkBanner,
-                UploadLogo = webViewLinkLogo,
-                Open = request.Open,
-                Corporate = request.Corporate,
-                Community = request.Community,
-                School = request.School,
-                BoxCricket = request.BoxCricket,
-                Series = request.Series,
-                Other = request.Other,
-                BallType = request.BallType,
-                Overs = request.Overs,
-                Format = request.Format,
-                MaxTeams = request.MaxTeams,
-                Gender = request.Gender,
-                MinPlayer = request.MinPlayer,
-                MaxPlayer = request.MaxPlayer,
-                PaymentTerms = request.PaymentTerms,
-                Amount = request.Amount,
-                CreatedOn = DateTime.UtcNow,
-                IsActive = true,
-                IsDeleted = false
-            };
-            _readWriteUnitOfWork.TournamentRegisterRepository.Update(saveTournament);
-            await _readWriteUnitOfWork.CommitAsync();
-            return saveTournament.TournamentName;
+                DriveUploadBasic(request.UploadBannerFile, ref uploadBannerId);
+
+                 webViewLinkBanner = "https://drive.google.com/thumbnail?id=" + uploadBannerId + "&sz=w1000";
+
+            }
+
+            if(request.UploadLogoFile != null) {
+                DriveUploadBasic(request.UploadLogoFile, ref uploadLogoId);
+
+                 webViewLinkLogo = "https://drive.google.com/thumbnail?id=" + uploadLogoId + "&sz=w1000";
+            }
+
+            //var saveTournament = new TournamentRegister()
+            //{
+            //    TournamentId = request.TournamentId,
+            //    TournamentName = request.TournamentName,
+            //    Description = request.Description,
+            //    OrganizerName = request.OrganizerName,
+            //    OrganizerContact = request.OrganizerContact,
+            //    OrganizerEmail = request.OrganizerEmail,
+            //    StartDate = request.StartDate,
+            //    EndDate = request.EndDate,
+            //    DueDate = request.DueDate,
+            //    DueTime = request.DueTime,
+            //    GroundAddress = request.GroundAddress,
+            //    City = request.City,
+            //    State = request.State,
+            //    Country = request.Country,
+            //    ZipCode = request.ZipCode,
+            //    UploadBanner = webViewLinkBanner,
+            //    UploadLogo = webViewLinkLogo,
+            //    Open = request.Open,
+            //    Corporate = request.Corporate,
+            //    Community = request.Community,
+            //    School = request.School,
+            //    BoxCricket = request.BoxCricket,
+            //    Series = request.Series,
+            //    Other = request.Other,
+            //    BallType = request.BallType,
+            //    Overs = request.Overs,
+            //    Format = request.Format,
+            //    MaxTeams = request.MaxTeams,
+            //    Gender = request.Gender,
+            //    MinPlayer = request.MinPlayer,
+            //    MaxPlayer = request.MaxPlayer,
+            //    PaymentTerms = request.PaymentTerms,
+            //    Amount = request.Amount,
+            //    CreatedOn = DateTime.UtcNow,
+            //    IsActive = true,
+            //    IsDeleted = false
+            //};
+            //_readWriteUnitOfWork.TournamentRegisterRepository.Update(saveTournament);
+            //await _readWriteUnitOfWork.CommitAsync();
+            var data = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
+            if (data != null)
+            {
+                data.TournamentName = request.TournamentName;
+                data.Description = request.Description;
+                data.OrganizerName = request.OrganizerName;
+                data.OrganizerContact = request.OrganizerContact;
+                data.OrganizerEmail = request.OrganizerEmail;
+                data.StartDate = request.StartDate;
+                data.EndDate = request.EndDate;
+                data.DueDate = request.DueDate;
+                data.DueTime = request.DueTime;
+                data.GroundAddress = request.GroundAddress;
+                data.City = request.City;
+                data.State = request.State;
+                data.Country = request.Country;
+                data.ZipCode = request.ZipCode;
+                data.UploadBanner = webViewLinkBanner;
+                data.UploadLogo = webViewLinkLogo;
+                data.Open = request.Open;
+                data.Corporate = request.Corporate;
+                data.Community = request.Community;
+                data.School = request.School;
+                data.BoxCricket = request.BoxCricket;
+                data.Series = request.Series;
+                data.Other = request.Other;
+                data.BallType = request.BallType;
+                data.Overs = request.Overs;
+                data.Format = request.Format;
+                data.MaxTeams = request.MaxTeams;
+                data.Gender = request.Gender;
+                data.MinPlayer = request.MinPlayer;
+                data.MaxPlayer = request.MaxPlayer;
+                data.PaymentTerms = request.PaymentTerms;
+                data.Amount = request.Amount;
+                data.UpdatedOn = DateTime.UtcNow;
+                await _readWriteUnitOfWork.CommitAsync();
+                return data.TournamentName; 
+            }
+            return null;
         }
 
         public async Task<List<TournamentRegister>> GetTournamentById(GetByTournamentIdDto request)
