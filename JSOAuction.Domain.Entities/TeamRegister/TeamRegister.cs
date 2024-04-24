@@ -28,5 +28,7 @@ namespace JSOAuction.Domain.Entities.TeamRegister
         public DateTime? CreatedOn { get; set; }
         public Guid? CreatedBy { get; set; }
         public Guid? UpdatedBy { get; set; }
+        public string? MobileNumber { get; set; }
+        public string? Email { get; set; }
     }
 }

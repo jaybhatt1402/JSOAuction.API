@@ -1,6 +1,7 @@
 ﻿using JSOAuction.Domain.Entities.TeamRegister;
 using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Entities.PlayersDetailsByTeam;
+using JSOAuction.Services.Entities.Team;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace JSOAuction.Services.Interfaces
         Task<List<TeamRegister>> GetAllTeamDetails(TeamIdNameDto teamIdNameDto);
         Task<List<PlayersDetailsByTeamResponseModel>> GetPlayerDetailsByTeam(PlayerDetailsTeamWiseDto request);
         Task<List<TeamIdNameResponseModel>> GetTeamIdNameModel(TeamIdNameDto request);
+        Task<int> SaveTeam(TeamRegisterDto request);
     }
 }

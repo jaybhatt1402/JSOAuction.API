@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
 using JSOAuction.API.Request.PlayerRegister;
+using JSOAuction.API.Request.Team;
 using JSOAuction.Domain.Entities.TeamRegister;
 using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Entities.PlayersDetailsByTeam;
+using JSOAuction.Services.Entities.Team;
 using JSOAuction.Services.Interfaces;
 using JSOAuction.Services.Services;
 using JSOAuction.Utility;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace JSOAuction.API.Controllers
 {
@@ -41,6 +45,25 @@ namespace JSOAuction.API.Controllers
         {
             var teamIdNameDto = _mapper.Map<GetTeamIdNameModel, TeamIdNameDto>(request);
             var result = await _teamRegisterService.GetTeamIdNameModel(teamIdNameDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+        [HttpPost("SaveTeam")]
+        public async Task<Dictionary<string, object>> SaveTeam([FromBody] TeamRegisterRequest request)
+        {
+
+            var saveTeamDto = _mapper.Map<TeamRegisterRequest, TeamRegisterDto>(request);
+            IFormFile uploadLogoFile = null;
+
+            if (Request.Form.Files.Count > 0)
+            {
+                for (int i = 0; i < Request.Form.Files.Count; i++)
+                {
+                    var file = Request.Form.Files[i];
+                    uploadLogoFile = file;
+                }
+            }
+            saveTeamDto.UploadLogoFile = uploadLogoFile;
+            var result = await _teamRegisterService.SaveTeam(saveTeamDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
     }
