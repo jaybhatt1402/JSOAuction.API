@@ -21,6 +21,7 @@ namespace JSOAuction.API.Infrastructure.Automapper
         {
              CreateMap<TeamRegisterRequest, TeamRegisterDto>();
               CreateMap<TeamRegister, TeamRegisterDto>().ReverseMap();
+            CreateMap<DeleteTeamRequest, DeleteTeamDto>();
 
         }
     }

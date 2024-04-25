@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using JSOAuction.API.Request.PlayerRegister;
 using JSOAuction.API.Request.Team;
+using JSOAuction.API.Request.Tournament;
 using JSOAuction.Domain.Entities.TeamRegister;
 using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Entities.PlayersDetailsByTeam;
 using JSOAuction.Services.Entities.Team;
+using JSOAuction.Services.Entities.Tournament;
 using JSOAuction.Services.Interfaces;
 using JSOAuction.Services.Services;
 using JSOAuction.Utility;
@@ -64,6 +66,14 @@ namespace JSOAuction.API.Controllers
             }
             saveTeamDto.UploadLogoFile = uploadLogoFile;
             var result = await _teamRegisterService.SaveTeam(saveTeamDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+
+        [HttpPost("DeleteTeam")]
+        public async Task<Dictionary<string, object>> DeleteTeam([FromBody] DeleteTeamRequest request)
+        {
+            var deleteTournamentDto = _mapper.Map<DeleteTeamRequest, DeleteTeamDto>(request);
+            var result = await _teamRegisterService.DeleteTeam(deleteTournamentDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
     }

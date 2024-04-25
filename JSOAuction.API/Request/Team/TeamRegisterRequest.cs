@@ -15,6 +15,12 @@ namespace JSOAuction.API.Request.Team
         public int? FoundedYear { get; set; }
         public string? TeamLogo { get; set; }
         public string? Owner { get; set; }
+        public int? TournamentId { get; set; }
         
+    }
+
+    public class DeleteTeamRequest
+    {
+        public int? TeamId { get; set; }
     }
 }

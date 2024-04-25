@@ -12,6 +12,7 @@ using JSOAuction.Services.Entities.Team;
 using JSOAuction.Services.Entities.Tournament;
 using JSOAuction.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System.Data;
 using System.Diagnostics;
 
 namespace JSOAuction.Services.Services
@@ -119,7 +120,8 @@ namespace JSOAuction.Services.Services
                 FoundedYear = request.FoundedYear,
                 CreatedOn = DateTime.UtcNow,
                 IsActive = true,
-                IsDeleted = false
+                IsDeleted = false,
+                TournamentId = request.TournamentId
             };
             await _readWriteUnitOfWork.TeamRegisterRepository.AddAsync(saveTeam);
             await _readWriteUnitOfWork.CommitAsync();
@@ -186,6 +188,24 @@ namespace JSOAuction.Services.Services
             }
 
             //return null;
+        }
+
+        public async Task<bool> DeleteTeam(DeleteTeamDto request)
+        {
+            int isuccess = 1;
+            _readWriteUnitOfWorkSP.LoadStoredProc("DeleteTeam")
+                .WithSqlParam("@TournamentId", request.TeamId)
+                .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
+                .ExecuteStoredProc((handler) =>
+                {
+                    isuccess = Convert.ToInt32(handler.GetValue("@Success"));
+                });
+
+            if (isuccess > 0)
+            {
+                return true;
+            }
+            return false;
         }
 
     }

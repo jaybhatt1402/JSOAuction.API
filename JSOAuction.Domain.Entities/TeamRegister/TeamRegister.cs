@@ -30,5 +30,6 @@ namespace JSOAuction.Domain.Entities.TeamRegister
         public Guid? UpdatedBy { get; set; }
         public string? MobileNumber { get; set; }
         public string? Email { get; set; }
+        public int? TournamentId { get; set; }
     }
 }

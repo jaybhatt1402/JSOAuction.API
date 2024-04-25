@@ -21,6 +21,12 @@ namespace JSOAuction.Services.Entities.Team
         public bool? IsDeleted { get; set; }
         public DateTime? CreatedOn { get; set; }
         public IFormFile UploadLogoFile { get; set; }
+        public int? TournamentId { get; set; }
 
+    }
+
+    public class DeleteTeamDto
+    {
+        public int? TeamId { get; set; }
     }
 }
