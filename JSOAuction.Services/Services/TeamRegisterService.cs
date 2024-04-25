@@ -79,7 +79,6 @@ namespace JSOAuction.Services.Services
             return teamWisePlayerDetails;
 
         }
-
         public async Task<List<TeamIdNameResponseModel>> GetTeamIdNameModel(TeamIdNameDto request)
         {
             IEnumerable<TeamIdNameResponseModel> teamDetails = new List<TeamIdNameResponseModel>();
@@ -206,6 +205,61 @@ namespace JSOAuction.Services.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task<int> UpdateTeam(UpdateTeamDto request)
+        {
+
+            string uploadLogoId = "";
+            string webViewLinkLogo = string.Empty;
+
+            if (request.UploadLogoFile != null)
+            {
+                DriveUploadBasic(request.UploadLogoFile, ref uploadLogoId);
+
+                webViewLinkLogo = "https://drive.google.com/thumbnail?id=" + uploadLogoId + "&sz=w1000";
+            }
+
+            var data = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.TeamId == request.TeamId);
+
+            if (data != null)
+            {
+                data.TeamName = request.TeamName;
+                data.Owner = request.OwnerName;
+                data.MobileNumber = request.MobileNumber;
+                data.Email = request.Email;
+                if (!string.IsNullOrEmpty(webViewLinkLogo))
+                {
+                    data.TeamLogo = webViewLinkLogo;
+                }
+                data.CoachName = request.CoachName;
+                data.FoundedYear = request.FoundedYear;
+                data.CreatedOn = DateTime.UtcNow;
+                data.IsActive = true;
+                data.IsDeleted = false;
+                data.TournamentId = request.TournamentId;
+                await _readWriteUnitOfWork.CommitAsync();
+                return data.TournamentId.Value;
+            };
+            return 0;
+        }
+
+        public async Task<List<TeamDetailsByTournamentResponseModel>> GetTeamDetailsByTournament(GetTeamDetailsByTournamentDto request)
+        {
+            IEnumerable<TeamDetailsByTournamentResponseModel> teamDetails = new List<TeamDetailsByTournamentResponseModel>();
+            _readWriteUnitOfWorkSP.LoadStoredProc("GetTeamDetailsByTournament")
+                .WithSqlParam("@AuctionId", request.AuctionId)
+                .WithSqlParam("@TournamentId", request.TournamentId)
+                .ExecuteStoredProc((handler) =>
+                {
+                    teamDetails = handler.ReadToList<TeamDetailsByTournamentResponseModel>();
+                });
+
+            if (teamDetails == null || !teamDetails.Any())
+            {
+                throw new Exception("No teams found");
+            }
+            return teamDetails.ToList();
         }
 
     }

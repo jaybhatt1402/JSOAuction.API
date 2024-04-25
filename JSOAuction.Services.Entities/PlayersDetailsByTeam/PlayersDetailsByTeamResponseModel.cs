@@ -19,4 +19,16 @@ namespace JSOAuction.Services.Entities.PlayersDetailsByTeam
         public int TeamId { get; set; }
         public string TeamName { get; set; }
     }
+    public class TeamDetailsByTournamentResponseModel
+    {
+        public int? TeamId { get; set; }
+        public string? TeamName { get; set; }
+        public string? OwnerName { get; set; }
+        public string? CoachName { get; set; }
+        public string? MobileNumber { get; set; }
+        public string? Email { get; set; }
+        public int? FoundedYear { get; set; }
+        public string? TeamLogo { get; set; }
+        public int? TournamentId { get; set; }
+    }
 }

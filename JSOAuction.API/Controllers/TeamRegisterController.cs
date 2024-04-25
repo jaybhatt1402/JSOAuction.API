@@ -76,5 +76,35 @@ namespace JSOAuction.API.Controllers
             var result = await _teamRegisterService.DeleteTeam(deleteTournamentDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
+
+        [HttpPost("UpdateTeam")]
+        public async Task<Dictionary<string, object>> UpdateTeam([FromBody] UpdateTeamRequest request)
+        {
+
+            var updateTeamDto = _mapper.Map<UpdateTeamRequest, UpdateTeamDto>(request);
+            IFormFile uploadTeamLogo = null;
+
+
+            if (Request.Form.Files.Count > 0)
+            {
+                for (int i = 0; i < Request.Form.Files.Count; i++)
+                {
+                    var file = Request.Form.Files[i];
+                    uploadTeamLogo = file;
+                }
+            }
+            updateTeamDto.UploadLogoFile = uploadTeamLogo;
+            var result = await _teamRegisterService.UpdateTeam(updateTeamDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+
+        [HttpPost("GetTeamDetailsByTournament")]
+        public async Task<Dictionary<string, object>> GetTeamDetailsByTournament([FromBody] GetTeamDetailsByTournamentRequest request)
+        {
+            var teamDetailsTournamentWiseDto = _mapper.Map<GetTeamDetailsByTournamentRequest, GetTeamDetailsByTournamentDto>(request);
+            var result = await _teamRegisterService.GetTeamDetailsByTournament(teamDetailsTournamentWiseDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+
     }
 }
