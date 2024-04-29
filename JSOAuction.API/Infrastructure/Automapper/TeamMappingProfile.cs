@@ -24,6 +24,7 @@ namespace JSOAuction.API.Infrastructure.Automapper
             CreateMap<DeleteTeamRequest, DeleteTeamDto>();
             CreateMap<UpdateTeamRequest, UpdateTeamDto>();
             CreateMap<GetTeamDetailsByTournamentRequest, GetTeamDetailsByTournamentDto>();
+            CreateMap<GetTeamDetailsByIdRequest, GetTeamDetailsByIdDto>();
 
         }
     }

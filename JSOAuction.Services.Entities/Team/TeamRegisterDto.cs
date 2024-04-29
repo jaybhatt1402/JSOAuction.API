@@ -48,4 +48,8 @@ namespace JSOAuction.Services.Entities.Team
         public int? TournamentId { get; set; }
 
     }
+    public class GetTeamDetailsByIdDto
+    {
+        public int? TeamId { get; set; }
+    }
 }

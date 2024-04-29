@@ -19,5 +19,6 @@ namespace JSOAuction.Services.Interfaces
         Task<bool> DeleteTeam(DeleteTeamDto request);
         Task<int> UpdateTeam(UpdateTeamDto request);
         Task<List<TeamDetailsByTournamentResponseModel>> GetTeamDetailsByTournament(GetTeamDetailsByTournamentDto request);
+        Task<List<TeamRegister>> GetTeamById(GetTeamDetailsByIdDto request);
     }
 }

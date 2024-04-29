@@ -261,6 +261,21 @@ namespace JSOAuction.Services.Services
             }
             return teamDetails.ToList();
         }
+        public async Task<List<TeamRegister>> GetTeamById(GetTeamDetailsByIdDto request)
+        {
+            IEnumerable<TeamRegister> teams = new List<TeamRegister>();
+            _readWriteUnitOfWorkSP.LoadStoredProc("GetTeamById")
+                .WithSqlParam("@Id", request.TeamId)
+                .ExecuteStoredProc((handler) =>
+                {
+                    teams = handler.ReadToList<TeamRegister>();
+                });
+            if (teams == null || !teams.Any())
+            {
+                throw new Exception("No teams found");
+            }
+            return teams.ToList();
+        }
 
     }
 }
