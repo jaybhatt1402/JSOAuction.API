@@ -193,7 +193,7 @@ namespace JSOAuction.Services.Services
         {
             int isuccess = 1;
             _readWriteUnitOfWorkSP.LoadStoredProc("DeleteTeam")
-                .WithSqlParam("@TournamentId", request.TeamId)
+                .WithSqlParam("@TeamId", request.TeamId)
                 .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
                 .ExecuteStoredProc((handler) =>
                 {
