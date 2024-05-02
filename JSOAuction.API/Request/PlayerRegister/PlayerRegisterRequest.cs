@@ -30,5 +30,6 @@ namespace JSOAuction.API.Request.PlayerRegister
         public string? Password { get; set; }
         public int? AuctionId { get; set; }
         public string? City { get; set; }
+        public int? TournamentId { get; set; }
     }
 }

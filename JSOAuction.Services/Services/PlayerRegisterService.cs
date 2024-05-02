@@ -212,7 +212,8 @@ namespace JSOAuction.Services.Services
                 AuctionId = request.AuctionId,
                 PlayerStatus = "notdisclosed",
                 CreatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b"),
-                CreatedOn = DateTime.UtcNow
+                CreatedOn = DateTime.UtcNow,
+                TournamentId = request.TournamentId,
             };
             await _readWriteUnitOfWork.AuctionPlayerMappingRepository.AddAsync(auctionPlayerMapping);
             await _readWriteUnitOfWork.CommitAsync();

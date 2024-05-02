@@ -21,5 +21,6 @@ namespace JSOAuction.Domain.Entities.PlayerRegister
         public Guid? CreatedBy { get; set; }
         public Guid? UpdatedBy { get; set; }
         public int? TeamId { get; set; }
+        public int? TournamentId { get; set; }
     }
 }
