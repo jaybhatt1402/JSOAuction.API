@@ -13,6 +13,7 @@ using JSOAuction.Utility;
 using Microsoft.AspNetCore.Http;
 using System.Data;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 
 namespace JSOAuction.Services.Services
 {
@@ -70,6 +71,22 @@ namespace JSOAuction.Services.Services
             IEnumerable<PlayerRegister> players = new List<PlayerRegister>();
             _readWriteUnitOfWorkSP.LoadStoredProc("GetAllPlayerDetails")
                 .WithSqlParam("@AuctionId", AuctionId)
+                .ExecuteStoredProc((handler) =>
+                {
+                    players = handler.ReadToList<PlayerRegister>();
+                });
+            if (players == null || !players.Any())
+            {
+                throw new Exception("No Players found");
+            }
+            return players.ToList();
+        }
+
+        public async Task<List<PlayerRegister>> GetAllPlayerDetailsWithTournamentID(int? TournamentId)
+        {
+            IEnumerable<PlayerRegister> players = new List<PlayerRegister>();
+            _readWriteUnitOfWorkSP.LoadStoredProc("GetAllPlayerDetailsWithTournamentID")
+                .WithSqlParam("@TournamentId", TournamentId)
                 .ExecuteStoredProc((handler) =>
                 {
                     players = handler.ReadToList<PlayerRegister>();

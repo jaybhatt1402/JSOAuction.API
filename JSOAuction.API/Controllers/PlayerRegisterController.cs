@@ -39,6 +39,13 @@ namespace JSOAuction.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetAllPlayerDetailsWithTournamentID/{TournamentId}")]
+        public async Task<ActionResult<List<PlayerRegister>>> GetAllPlayerDetailsWithTournamentID(int TournamentId)
+        {
+            var result = await _playerRegisterService.GetAllPlayerDetailsWithTournamentID(TournamentId);
+            return Ok(result);
+        }
+
         [HttpPost("GetAuctionPlayer")]
         public async Task<Dictionary<string, object>> GetAuctionPlayer([FromBody] AuctionPlayerRequest request)
         {
