@@ -10,4 +10,8 @@ namespace JSOAuction.API.Request.PlayerRegister
         public int? BidId { get; set; }
         public string? Status { get; set; }
     }
+    public class DeletePlayerRequest
+    {
+        public int? PlayerRegisterId { get; set; }
+    }
 }

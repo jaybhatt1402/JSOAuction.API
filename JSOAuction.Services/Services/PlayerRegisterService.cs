@@ -300,5 +300,39 @@ namespace JSOAuction.Services.Services
 
             //return null;
         }
+
+        public async Task<bool> DeletePlayer(DeletePlayerDto request)
+        {
+            int isuccess = 1;
+            _readWriteUnitOfWorkSP.LoadStoredProc("DeletePlayer")
+                .WithSqlParam("@PlayerRegisterId", request.PlayerRegisterId)
+                .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
+                .ExecuteStoredProc((handler) =>
+                {
+                    isuccess = Convert.ToInt32(handler.GetValue("@Success"));
+                });
+
+            if (isuccess > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<List<PlayerRegister>> GetPlayerById(int? PlayerRegisterId)
+        {
+            IEnumerable<PlayerRegister> players = new List<PlayerRegister>();
+            _readWriteUnitOfWorkSP.LoadStoredProc("GetPlayerById")
+                .WithSqlParam("@Id", PlayerRegisterId)
+                .ExecuteStoredProc((handler) =>
+                {
+                    players = handler.ReadToList<PlayerRegister>();
+                });
+            if (players == null || !players.Any())
+            {
+                throw new Exception("No Players found");
+            }
+            return players.ToList();
+        }
     }
 }

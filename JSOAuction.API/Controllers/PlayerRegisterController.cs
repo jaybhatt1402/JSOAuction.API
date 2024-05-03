@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using JSOAuction.API.Request.Bids;
 using JSOAuction.API.Request.PlayerRegister;
+using JSOAuction.API.Request.Team;
 using JSOAuction.Domain.Entities.PlayerRegister;
 using JSOAuction.Domain.Entities.TeamRegister;
 using JSOAuction.Services.Entities.Bids;
 using JSOAuction.Services.Entities.PlayerRegister;
+using JSOAuction.Services.Entities.Team;
 using JSOAuction.Services.Interfaces;
 using JSOAuction.Services.Services;
 using JSOAuction.Utility;
@@ -98,6 +100,22 @@ namespace JSOAuction.API.Controllers
             savePlayerRegisterDto.UploadFile = uploadFile;
             var result = await _playerRegisterService.SavePlayer(savePlayerRegisterDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+
+
+        [HttpPost("DeletePlayer")]
+        public async Task<Dictionary<string, object>> DeletePlayer([FromBody] DeletePlayerRequest request)
+        {
+            var deletePlayerDto = _mapper.Map<DeletePlayerRequest, DeletePlayerDto>(request);
+            var result = await _playerRegisterService.DeletePlayer(deletePlayerDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+
+        [HttpGet("GetPlayerById/{PlayerRegisterId}")]
+        public async Task<ActionResult<List<PlayerRegister>>> GetPlayerById(int PlayerRegisterId)
+        {
+            var result = await _playerRegisterService.GetPlayerById(PlayerRegisterId);
+            return Ok(result);
         }
     }
 }
