@@ -2,8 +2,13 @@
 using JSOAuction.Data.Contexts;
 using JSOAuction.Data.Infrastructure;
 using JSOAuction.Domain.Entities.AuctionRegister;
+using JSOAuction.Domain.Entities.PlayerRegister;
 using JSOAuction.Domain.Entities.TeamRegister;
+using JSOAuction.Services.Entities.Auction;
+using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Interfaces;
+using System;
+using System.Data;
 
 namespace JSOAuction.Services.Services
 {
@@ -37,6 +42,97 @@ namespace JSOAuction.Services.Services
             if (auctions == null || !auctions.Any())
             {
                 throw new Exception("No auctions found");
+            }
+            return auctions.ToList();
+        }
+
+        public async Task<int> SaveAuction(SaveAuctionDto request)
+        {
+            var saveAuction = new AuctionRegister()
+            {
+                AuctionName = request.AuctionName,
+                Location = request.Location,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                CreatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b"),
+                CreatedOn = DateTime.UtcNow,
+                Year = request.Year,
+                IsDeleted = false,
+                IsActive = true,
+                TournamentId = request.TournamentId
+            };
+
+            await _readWriteUnitOfWork.AuctionRegisterRepository.AddAsync(saveAuction);
+            await _readWriteUnitOfWork.CommitAsync();
+
+            return saveAuction.AuctionId;
+        }
+
+        public async Task<int> UpdateAuction(UpdateAuctionDto request)
+        {
+            var data = await _readWriteUnitOfWork.AuctionRegisterRepository.GetFirstOrDefaultAsync(x => x.AuctionId == request.AuctionId);
+            if (data != null)
+            {
+                data.AuctionName = request.AuctionName;
+                data.Location = request.Location;
+                data.StartDate = request.StartDate;
+                data.EndDate = request.EndDate;
+                data.Year = request.Year;
+                data.UpdatedOn = DateTime.UtcNow;
+                data.UpdatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b");
+                data.TournamentId = request.TournamentId;
+                await _readWriteUnitOfWork.CommitAsync();
+            }
+
+            return data.AuctionId;
+        }
+
+        public async Task<bool> DeleteAuction(DeleteAuctionDto request)
+        {
+            int isuccess = 1;
+            _readWriteUnitOfWorkSP.LoadStoredProc("DeleteAuction")
+                .WithSqlParam("@AuctionId", request.AuctionId)
+                .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
+                .ExecuteStoredProc((handler) => 
+                {
+                    isuccess = Convert.ToInt32(handler.GetValue("@Success"));
+                });
+
+            if (isuccess > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<List<AuctionRegister>> GetAuctionById(int? AuctionId)
+        {
+            IEnumerable<AuctionRegister> auctions = new List<AuctionRegister>();
+            _readWriteUnitOfWorkSP.LoadStoredProc("GetAuctionById")
+                .WithSqlParam("@Id", AuctionId)
+                .ExecuteStoredProc((handler) =>
+                {
+                    auctions = handler.ReadToList<AuctionRegister>();
+                });
+            if (auctions == null || !auctions.Any())
+            {
+                throw new Exception("No Auction found");
+            }
+            return auctions.ToList();
+        }
+
+        public async Task<List<AuctionRegister>> GetAuctionDetailsByTournament(int? TournamentId)
+        {
+            IEnumerable<AuctionRegister> auctions = new List<AuctionRegister>();
+            _readWriteUnitOfWorkSP.LoadStoredProc("GetAuctionDetailsByTournament")
+                .WithSqlParam("@TournamentId", TournamentId)
+                .ExecuteStoredProc((handler) =>
+                {
+                    auctions = handler.ReadToList<AuctionRegister>();
+                });
+            if (auctions == null || !auctions.Any())
+            {
+                throw new Exception("No Auction found");
             }
             return auctions.ToList();
         }

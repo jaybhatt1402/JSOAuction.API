@@ -24,5 +24,6 @@ namespace JSOAuction.Domain.Entities.AuctionRegister
         public DateTime? CreatedOn { get; set; }
         public Guid? CreatedBy { get; set; }
         public Guid? UpdatedBy { get; set; }
+        public int? TournamentId { get; set; }
     }
 }
