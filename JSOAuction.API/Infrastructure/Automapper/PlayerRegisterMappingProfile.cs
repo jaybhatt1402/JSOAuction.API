@@ -39,6 +39,8 @@ namespace JSOAuction.API.Infrastructure.Automapper
 
             CreateMap<GetTeamIdNameModel, TeamIdNameDto>().ReverseMap();
 
+            CreateMap<DeletePlayerRequest, DeletePlayerDto>().ReverseMap();
+
             CreateMap<UpdatePlayerRequest, UpdatePlayerDto>()
              .ForMember(dest => dest.LastPlayedYear, opt => opt.Ignore());
             //  CreateMap<UpdateUserRegisterRequest, UpdateUserRegisterDto>();

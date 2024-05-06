@@ -2,6 +2,7 @@
 using JSOAuction.Domain.Entities.TeamRegister;
 using JSOAuction.Services.Entities.Bids;
 using JSOAuction.Services.Entities.PlayerRegister;
+using JSOAuction.Services.Entities.Team;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,9 @@ namespace JSOAuction.Services.Interfaces
         Task<bool> SoldPlayer(SoldPlayerDto request);
         Task<int> SavePlayer(SavePlayerRegisterDto request);
         Task<List<PlayerRegister>> GetAllPlayerDetailsWithTournamentID(int? TournamentId);
+        Task<bool> DeletePlayer(DeletePlayerDto request);
+        Task<List<PlayerRegister>> GetPlayerById(int? PlayerRegisterId);
+        
         Task<int> UpdatePlayer(UpdatePlayerDto request);
     }
 }
