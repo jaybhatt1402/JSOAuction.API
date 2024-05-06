@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using JSOAuction.API.Request.Bids;
 using JSOAuction.API.Request.PlayerRegister;
+using JSOAuction.API.Request.Tournament;
 using JSOAuction.Domain.Entities.PlayerRegister;
 using JSOAuction.Domain.Entities.TeamRegister;
 using JSOAuction.Services.Entities.Bids;
 using JSOAuction.Services.Entities.PlayerRegister;
+using JSOAuction.Services.Entities.Tournament;
 using JSOAuction.Services.Interfaces;
 using JSOAuction.Services.Services;
 using JSOAuction.Utility;
@@ -97,6 +99,38 @@ namespace JSOAuction.API.Controllers
             }
             savePlayerRegisterDto.UploadFile = uploadFile;
             var result = await _playerRegisterService.SavePlayer(savePlayerRegisterDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+
+        [HttpPost("UpdatePlayer")]
+        public async Task<Dictionary<string, object>> UpdatePlayer([FromBody] UpdatePlayerRequest request)
+        {
+
+            var updatePlayerDto = _mapper.Map<UpdatePlayerRequest, UpdatePlayerDto>(request);
+            IFormFile uploadFile = null;
+            if (!string.IsNullOrEmpty(request.LastPlayedYear))
+            {
+                updatePlayerDto.LastPlayedYear = new DateTime(Convert.ToInt32(request.LastPlayedYear), 1, 1);
+            }
+            if (!string.IsNullOrEmpty(request.FirstName))
+            {
+                request.FirstName = char.ToUpper(request.FirstName[0]) + request.FirstName.Substring(1).ToLower();
+            }
+            if (!string.IsNullOrEmpty(request.LastName))
+            {
+                request.LastName = char.ToUpper(request.LastName[0]) + request.LastName.Substring(1).ToLower();
+            }
+            if (!string.IsNullOrEmpty(request.City))
+            {
+                request.City = char.ToUpper(request.City[0]) + request.City.Substring(1).ToLower();
+            }
+            if (Request.Form.Files.Count > 0)
+            {
+                uploadFile = Request.Form.Files[0];
+            }
+
+            updatePlayerDto.UploadFile = uploadFile;
+            var result = await _playerRegisterService.UpdatePlayer(updatePlayerDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
     }

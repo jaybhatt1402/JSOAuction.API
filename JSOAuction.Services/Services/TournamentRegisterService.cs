@@ -227,47 +227,6 @@ namespace JSOAuction.Services.Services
                  webViewLinkLogo = "https://drive.google.com/thumbnail?id=" + uploadLogoId + "&sz=w1000";
             }
 
-            //var saveTournament = new TournamentRegister()
-            //{
-            //    TournamentId = request.TournamentId,
-            //    TournamentName = request.TournamentName,
-            //    Description = request.Description,
-            //    OrganizerName = request.OrganizerName,
-            //    OrganizerContact = request.OrganizerContact,
-            //    OrganizerEmail = request.OrganizerEmail,
-            //    StartDate = request.StartDate,
-            //    EndDate = request.EndDate,
-            //    DueDate = request.DueDate,
-            //    DueTime = request.DueTime,
-            //    GroundAddress = request.GroundAddress,
-            //    City = request.City,
-            //    State = request.State,
-            //    Country = request.Country,
-            //    ZipCode = request.ZipCode,
-            //    UploadBanner = webViewLinkBanner,
-            //    UploadLogo = webViewLinkLogo,
-            //    Open = request.Open,
-            //    Corporate = request.Corporate,
-            //    Community = request.Community,
-            //    School = request.School,
-            //    BoxCricket = request.BoxCricket,
-            //    Series = request.Series,
-            //    Other = request.Other,
-            //    BallType = request.BallType,
-            //    Overs = request.Overs,
-            //    Format = request.Format,
-            //    MaxTeams = request.MaxTeams,
-            //    Gender = request.Gender,
-            //    MinPlayer = request.MinPlayer,
-            //    MaxPlayer = request.MaxPlayer,
-            //    PaymentTerms = request.PaymentTerms,
-            //    Amount = request.Amount,
-            //    CreatedOn = DateTime.UtcNow,
-            //    IsActive = true,
-            //    IsDeleted = false
-            //};
-            //_readWriteUnitOfWork.TournamentRegisterRepository.Update(saveTournament);
-            //await _readWriteUnitOfWork.CommitAsync();
             var data = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
             if (data != null)
             {

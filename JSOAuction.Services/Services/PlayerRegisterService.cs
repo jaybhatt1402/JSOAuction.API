@@ -238,6 +238,74 @@ namespace JSOAuction.Services.Services
             return savePlayerRegister.PlayerRegisterId;
         }
 
+        public async Task<int> UpdatePlayer(UpdatePlayerDto request)
+        {
+            string uploadId = "";
+            //TODO
+            //if (request.UploadFile == null)
+            //{
+            //    throw new Exception("Please Upload File.");
+            //}
+
+            string webViewLink = string.Empty;
+
+            if (request.UploadFile != null)
+            {
+                DriveUploadBasic(request.UploadFile, ref uploadId);
+                webViewLink = "https://drive.google.com/thumbnail?id=" + uploadId + "&sz=w1000";
+            }
+            //TODO
+            //if (string.IsNullOrEmpty(uploadId))
+            //{
+            //    throw new Exception("File upload failed.");
+            //}
+
+            //Save Data in UserRegister Table.
+            var hashPassword = GenericMethods.GetHash(request.Password);
+            var data = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(x => x.PlayerRegisterId == request.PlayerRegisterId);
+            if (data != null)
+            {
+                data.FirstName = request.FirstName;
+                data.LastName = request.LastName;
+                data.Gender = request.Gender;
+                data.MobileNo = request.MobileNo;
+                data.AlternativePhoneNo = request.AlternativePhoneNo;
+                data.Email = request.Email;
+                data.DOB = request.DOB;
+                data.Batsman = request.Batsman;
+                data.Bowler = request.Bowler;
+                data.WicketKeeper = request.WicketKeeper;
+                data.BattingAllRounder = request.BattingAllRounder;
+                data.BowlingAllRounder = request.BowlingAllRounder;
+                data.PreviousTeamId = request.PreviousTeamId;
+                data.LastPlayedYear = request.LastPlayedYear;
+                if (!string.IsNullOrEmpty(webViewLink))
+                {
+                    data.ProfilePicture = webViewLink;
+                }
+                data.Password = hashPassword;
+                data.CreatedOn = DateTime.UtcNow;
+                data.IsDeleted = false;
+                data.IsActive = true;
+                data.City = request.City;
+                data.UpdatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b");
+                data.UpdatedOn = DateTime.UtcNow;
+                await _readWriteUnitOfWork.CommitAsync();
+            }
+
+            var auctionPlayerMappingData = await _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetFirstOrDefaultAsync(x => x.PlayerId == request.PlayerRegisterId);
+            if (auctionPlayerMappingData != null)
+            {
+                auctionPlayerMappingData.AuctionId = request.AuctionId;
+                auctionPlayerMappingData.UpdatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b");
+                auctionPlayerMappingData.UpdatedOn = DateTime.UtcNow;
+                auctionPlayerMappingData.TournamentId = request.TournamentId;
+                await _readWriteUnitOfWork.CommitAsync();
+            }
+
+            return data.PlayerRegisterId;
+        }
+
         public void DriveUploadBasic(IFormFile file, ref string uploadId)
         {
             string credentialsPath = "credentials.json";
