@@ -23,6 +23,7 @@ namespace JSOAuction.API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IPlayerRegisterService _playerRegisterService;
+        private const string XlsxContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         public PlayerRegisterController(IPlayerRegisterService playerRegisterService, IMapper mapper)
         {
             _mapper = mapper;
@@ -48,6 +49,13 @@ namespace JSOAuction.API.Controllers
         {
             var result = await _playerRegisterService.GetAllPlayerDetailsWithTournamentID(TournamentId);
             return Ok(result);
+        }
+
+        [HttpGet("GetPlayerDetailsFileWithTournamentID/{TournamentId}")]
+        public async Task<ActionResult<byte[]>> GetPlayerDetailsFileWithTournamentID(int TournamentId)
+        {
+            byte[] excelBytes = await _playerRegisterService.GetPlayerDetailsFileWithTournamentID(TournamentId);
+            return File(excelBytes, XlsxContentType, "PlayerDetails.xlsx"); ;
         }
 
         [HttpPost("GetAuctionPlayer")]

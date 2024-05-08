@@ -11,6 +11,7 @@ using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Interfaces;
 using JSOAuction.Utility;
 using Microsoft.AspNetCore.Http;
+using OfficeOpenXml;
 using System.Data;
 using System.Diagnostics;
 using System.Reflection.Metadata;
@@ -96,6 +97,34 @@ namespace JSOAuction.Services.Services
                 throw new Exception("No Players found");
             }
             return players.ToList();
+        }
+
+        public async Task<byte[]> GetPlayerDetailsFileWithTournamentID(int? TournamentId)
+        {
+            DataTable dataTable = new DataTable();
+            IEnumerable<PlayerRegister> players = new List<PlayerRegister>();
+            _readWriteUnitOfWorkSP.LoadStoredProc("GetAllPlayerDetailsWithTournamentID")
+                .WithSqlParam("@TournamentId", TournamentId)
+                .ExecuteStoredProc((handler) =>
+                {
+                    dataTable = handler.ReadToTable();
+                });
+
+            if (dataTable == null)
+            {
+                throw new Exception("No Players found");
+            }
+
+            ExcelPackage.LicenseContext = LicenseContext.Commercial;
+
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Players");
+                worksheet.Cells.LoadFromDataTable(dataTable, true);
+
+                byte[] excelBytes = package.GetAsByteArray();
+                return excelBytes;
+            }
         }
 
         public async Task<object> GetAuctionPlayerDetails(AuctionPlayerDto request)
