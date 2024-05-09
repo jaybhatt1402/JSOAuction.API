@@ -18,6 +18,7 @@ namespace JSOAuction.Data.Infrastructure
         IBidsRepository<TContext> BidsRepository { get; }
         IAuctionPlayerMappingRepository<TContext> AuctionPlayerMappingRepository { get; }
         ITournamentRegisterRepository<TContext>  TournamentRegisterRepository { get; }
+        IGroupsRepository<TContext> GroupsRepository { get; }
         Task<int> CommitAsync();
 
     }
@@ -32,6 +33,7 @@ namespace JSOAuction.Data.Infrastructure
         public IBidsRepository<TContext> BidsRepository { get; }
         public IAuctionPlayerMappingRepository<TContext> AuctionPlayerMappingRepository { get; }
         public ITournamentRegisterRepository<TContext> TournamentRegisterRepository { get; }
+        public IGroupsRepository<TContext> GroupsRepository { get; }
 
 
 
@@ -42,7 +44,8 @@ namespace JSOAuction.Data.Infrastructure
             IAuctionRegisterRepository<TContext> auctionRegisterRepository,
             IBidsRepository<TContext> bidsRepository,
             IAuctionPlayerMappingRepository<TContext> auctionPlayerMappingRepository,
-            ITournamentRegisterRepository<TContext> tournamentRegisterRepository
+            ITournamentRegisterRepository<TContext> tournamentRegisterRepository,
+            IGroupsRepository<TContext> groupsRepository
             )
         {
             this.Context = context;
@@ -54,6 +57,7 @@ namespace JSOAuction.Data.Infrastructure
             this.BidsRepository = bidsRepository;
             this.AuctionPlayerMappingRepository = auctionPlayerMappingRepository;
             this.TournamentRegisterRepository = tournamentRegisterRepository;
+            this.GroupsRepository = groupsRepository;
         }
         public async Task<int> CommitAsync()
         {

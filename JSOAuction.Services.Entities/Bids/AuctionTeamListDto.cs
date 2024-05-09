@@ -6,5 +6,6 @@ namespace JSOAuction.Services.Entities.Bids
     {
         public int? PlayerId { get; set; }
         public int? AuctionId { get; set; }
+        public int? TournamentId { get; set; }
     }
 }

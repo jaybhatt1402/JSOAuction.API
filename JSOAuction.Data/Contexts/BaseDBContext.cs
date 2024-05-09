@@ -18,6 +18,7 @@ using JSOAuction.Domain.Entities.TeamRegister;
 using JSOAuction.Domain.Entities.AuctionRegister;
 using JSOAuction.Domain.Entities.Bids;
 using JSOAuction.Domain.Entities.Tournament;
+using JSOAuction.Domain.Entities.Groups;
 
 namespace JSOAuction.Data.Contexts
 {
@@ -105,8 +106,8 @@ namespace JSOAuction.Data.Contexts
         public DbSet<Bids> Bids { get; set; }
         public DbSet<UndoBids> UndoBids { get; set; }
         public DbSet<AuctionPlayerMapping> AuctionPlayerMapping { get; set; }
-         public DbSet<TournamentRegister> TournamentRegister { get; set; }
-
+        public DbSet<TournamentRegister> TournamentRegister { get; set; }
+        public DbSet<Groups> Groups { get; set; }
 
     }
 
