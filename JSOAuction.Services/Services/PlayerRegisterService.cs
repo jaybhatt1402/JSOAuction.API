@@ -138,6 +138,7 @@ namespace JSOAuction.Services.Services
                     .WithSqlParam("@AuctionId", request.AuctionId)
                     .WithSqlParam("@PlayerNo", request.PlayerNo)
                     .WithSqlParam("@PlayerCategory", request.PlayerCategory)
+                    .WithSqlParam("@TournamentId", request.TournamentId)
                     .WithSqlParam("@ReturnValue", 0, DbType.Int32, ParameterDirection.ReturnValue)
                     .ExecuteStoredProc((handler) =>
                     {

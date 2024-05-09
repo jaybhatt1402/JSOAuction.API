@@ -8,5 +8,6 @@ namespace JSOAuction.API.Request.PlayerRegister
         public string? ScreenType { get; set; }
         public string? PlayerCategory { get; set; }
         public int? PlayerNo { get; set; }
+        public int? TournamentId { get; set; }
     }
 }
