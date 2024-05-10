@@ -92,10 +92,10 @@ namespace JSOAuction.Services.Services
                 {
                     players = handler.ReadToList<PlayerRegister>();
                 });
-            if (players == null || !players.Any())
-            {
-                throw new Exception("No Players found");
-            }
+            // if (players == null || !players.Any())
+            // {
+            //    return "No player found";
+            //}
             return players.ToList();
         }
 
