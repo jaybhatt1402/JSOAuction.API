@@ -92,10 +92,10 @@ namespace JSOAuction.Services.Services
                 {
                     players = handler.ReadToList<PlayerRegister>();
                 });
-            if (players == null || !players.Any())
-            {
-                throw new Exception("No Players found");
-            }
+            // if (players == null || !players.Any())
+            // {
+            //    return "No player found";
+            //}
             return players.ToList();
         }
 
@@ -138,6 +138,7 @@ namespace JSOAuction.Services.Services
                     .WithSqlParam("@AuctionId", request.AuctionId)
                     .WithSqlParam("@PlayerNo", request.PlayerNo)
                     .WithSqlParam("@PlayerCategory", request.PlayerCategory)
+                    .WithSqlParam("@TournamentId", request.TournamentId)
                     .WithSqlParam("@ReturnValue", 0, DbType.Int32, ParameterDirection.ReturnValue)
                     .ExecuteStoredProc((handler) =>
                     {
