@@ -1,0 +1,25 @@
+﻿CREATE TABLE [dbo].[TeamRegister] (
+    [TeamId]       INT              IDENTITY (1, 1) NOT NULL,
+    [TeamName]     VARCHAR (50)     NULL,
+    [AuctionId]    INT              NULL,
+    [CaptainName]  VARCHAR (50)     NULL,
+    [CoachName]    VARCHAR (50)     NULL,
+    [FoundedYear]  INT              NULL,
+    [TeamSize]     INT              NULL,
+    [TotalBalance] DECIMAL (10, 2)  NULL,
+    [MaximumBid]   DECIMAL (10, 2)  NULL,
+    [TeamLogo]     NVARCHAR (MAX)   NULL,
+    [Owner]        VARCHAR (50)     NULL,
+    [IsActive]     BIT              NULL,
+    [IsDeleted]    BIT              NULL,
+    [CreatedOn]    DATETIME         CONSTRAINT [DF_TeamRegister_CreatedOn] DEFAULT (getdate()) NULL,
+    [UpdatedOn]    DATETIME         CONSTRAINT [DF_TeamRegister_UpdatedOn] DEFAULT (getdate()) NULL,
+    [CreatedBy]    UNIQUEIDENTIFIER CONSTRAINT [DF_TeamRegister_CreatedBy] DEFAULT ('E39F47A6-1C9B-4BB7-8AB1-67D6B8BB541B') NULL,
+    [UpdatedBy]    UNIQUEIDENTIFIER CONSTRAINT [DF_TeamRegister_UpdatedBy] DEFAULT ('E39F47A6-1C9B-4BB7-8AB1-67D6B8BB541B') NULL,
+    [MobileNumber] NVARCHAR (50)    NULL,
+    [Email]        NVARCHAR (MAX)   NULL,
+    [TournamentId] INT              NULL,
+    CONSTRAINT [PK_TeamRegister_New] PRIMARY KEY CLUSTERED ([TeamId] ASC),
+    CONSTRAINT [FK_TeamRegister_Tournament] FOREIGN KEY ([TeamId]) REFERENCES [dbo].[TeamRegister] ([TeamId])
+);
+
