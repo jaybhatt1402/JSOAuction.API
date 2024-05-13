@@ -432,5 +432,35 @@ namespace JSOAuction.Services.Services
             }
             return players.ToList();
         }
+
+        public async Task<bool> AssignGroupToPlayers(List<PlayerRequestDto> request)
+        {
+            try
+            {
+                foreach (var playerDto in request)
+                {
+                    var data = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(x => x.PlayerRegisterId == playerDto.PlayerId);
+
+                    if (data != null)
+                    {
+                        data.PlayerGroupId = playerDto.GroupId;
+                        data.BasePrice = playerDto.Baseprice;
+                        data.UpdatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b");
+                        data.UpdatedOn = DateTime.UtcNow;
+
+                        await _readWriteUnitOfWork.CommitAsync();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

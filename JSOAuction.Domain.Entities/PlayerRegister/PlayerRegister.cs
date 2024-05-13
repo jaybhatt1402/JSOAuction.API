@@ -40,5 +40,6 @@ namespace JSOAuction.Domain.Entities.PlayerRegister
         public string? City { get; set; }
         public string? PlayerCategory { get; set; }
         public int? PlayerNo { get; set;}
+        public int? PlayerGroupId { get; set; }
     }
 }
