@@ -55,4 +55,11 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public string? City { get; set; }
         public int? TournamentId { get; set; }
     }
+
+    public class PlayerRequestDto
+    {
+        public int PlayerId { get; set; }
+        public int GroupId { get; set; }
+        public decimal Baseprice { get; set; }
+    }
 }

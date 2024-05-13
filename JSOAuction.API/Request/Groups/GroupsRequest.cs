@@ -6,6 +6,7 @@ namespace JSOAuction.API.Request.Groups
     {
         public string? GroupName { get; set; }
         public decimal? BasePrice { get; set; }
+        public int TournamentId { get; set; }
     }
 
     public class DeleteGroupsRequest
@@ -18,5 +19,10 @@ namespace JSOAuction.API.Request.Groups
         public int Id { get; set; }
         public string? GroupName { get; set; }
         public decimal? BasePrice { get; set; }
+        public int TournamentId { get; set; }
+    }
+    public class GroupListRequest
+    {
+        public int TournamentId { get; set; }
     }
 }

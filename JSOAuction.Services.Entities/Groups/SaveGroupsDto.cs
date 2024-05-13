@@ -11,6 +11,7 @@ namespace JSOAuction.Services.Entities.Groups
     {
         public string? GroupName { get; set; }
         public decimal? BasePrice { get; set; }
+        public int TournamentId { get; set; }
     }
 
     public class DeleteGroupsDto
@@ -22,5 +23,10 @@ namespace JSOAuction.Services.Entities.Groups
         public int Id { get; set; }
         public string? GroupName { get; set; }
         public decimal? BasePrice { get; set; }
+        public int TournamentId { get; set; }
+    }
+    public class GroupListDto
+    {
+        public int TournamentId { get; set; }
     }
 }

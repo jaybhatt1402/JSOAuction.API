@@ -20,5 +20,6 @@ namespace JSOAuction.Services.Interfaces
         Task<List<Groups>> GetAllGroupsDetails();
         Task<bool> DeleteGroup(DeleteGroupsDto request);
         Task<int> UpdateGroup(UpdateGroupsDto request);
+        Task<List<GroupDetailsResponseModel>> GetGroupListByTournamentId (GroupListDto request);
     }
 }

@@ -59,5 +59,13 @@ namespace JSOAuction.API.Controllers
             var result = await _groupsService.UpdateGroup(saveTournamentDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
+
+        [HttpPost("GetGroupListByTournamentId")]
+        public async Task<Dictionary<string, object>> GetGroupListByTournamentId([FromBody] GroupListRequest request)
+        {
+            var groupListDto = _mapper.Map<GroupListRequest, GroupListDto>(request);
+            var result = await _groupsService.GetGroupListByTournamentId(groupListDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
     }
 }

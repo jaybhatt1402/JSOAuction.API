@@ -19,8 +19,8 @@ namespace JSOAuction.API.Infrastructure.Automapper
         public GroupMappingProfile()
         {
              CreateMap<SaveGroupsRequest, SaveGroupsDto>();
-              CreateMap<DeleteGroupsRequest, DeleteGroupsDto>().ReverseMap();
-
+             CreateMap<DeleteGroupsRequest, DeleteGroupsDto>().ReverseMap();
+             CreateMap<GroupListRequest, GroupListDto>().ReverseMap();
              CreateMap<UpdateGroupsRequest, UpdateGroupsDto>();
         }
     }

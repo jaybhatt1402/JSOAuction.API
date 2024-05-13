@@ -3,6 +3,7 @@ using JSOAuction.Data.Contexts;
 using JSOAuction.Data.Infrastructure;
 using JSOAuction.Domain.Entities.Groups;
 using JSOAuction.Services.Entities.Groups;
+using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Interfaces;
 using System.Data;
 
@@ -35,7 +36,8 @@ namespace JSOAuction.Services.Services
                 IsActive = true,
                 IsDeleted = false,
                 CreatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b"),
-                CreatedOn = DateTime.UtcNow
+                CreatedOn = DateTime.UtcNow,
+                TournamentId = request.TournamentId
             };
             await _readWriteUnitOfWork.GroupsRepository.AddAsync(saveGroups);
             await _readWriteUnitOfWork.CommitAsync();
@@ -47,6 +49,7 @@ namespace JSOAuction.Services.Services
         {
             IEnumerable<Groups> groups = new List<Groups>();
             _readWriteUnitOfWorkSP.LoadStoredProc("GetAllGroupsDetails")
+
                 .ExecuteStoredProc((handler) =>
                 {
                     groups = handler.ReadToList<Groups>();
@@ -88,10 +91,33 @@ namespace JSOAuction.Services.Services
                 data.UpdatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b");
                 data.IsActive = true;
                 data.IsDeleted = false;
+                data.TournamentId = request.TournamentId;
                 await _readWriteUnitOfWork.CommitAsync();
                 return data.Id;
             };
             return 0;
+        }
+
+        public async Task<List<GroupDetailsResponseModel>> GetGroupListByTournamentId(GroupListDto request)
+        {
+            IEnumerable<GroupDetailsResponseModel> groups = new List<GroupDetailsResponseModel>();
+            try
+            {
+                _readWriteUnitOfWorkSP.LoadStoredProc("GetGroupListByTournamentId")
+                    .WithSqlParam("@TournamentId", request.TournamentId)
+                    .ExecuteStoredProc((handler) =>
+                    {
+                        groups = handler.ReadToList<GroupDetailsResponseModel>();
+                    });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Invalid TournamentId provided.", ex);
+            }
+
+            var retData = groups.ToList();
+
+            return retData;
         }
     }
 }
