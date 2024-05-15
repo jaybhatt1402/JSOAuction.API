@@ -255,10 +255,10 @@ namespace JSOAuction.Services.Services
                     teamDetails = handler.ReadToList<TeamDetailsByTournamentResponseModel>();
                 });
 
-            if (teamDetails == null || !teamDetails.Any())
-            {
-                throw new Exception("No teams found");
-            }
+            //if (teamDetails == null || !teamDetails.Any())
+            //{
+            //    throw new Exception("No teams found");
+            //}
             return teamDetails.ToList();
         }
         public async Task<List<TeamRegister>> GetTeamById(GetTeamDetailsByIdDto request)
