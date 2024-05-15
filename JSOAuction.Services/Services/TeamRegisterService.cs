@@ -84,6 +84,7 @@ namespace JSOAuction.Services.Services
             IEnumerable<TeamIdNameResponseModel> teamDetails = new List<TeamIdNameResponseModel>();
             _readWriteUnitOfWorkSP.LoadStoredProc("GetTeamIdNameDetails")
                 .WithSqlParam("@AuctionId", request.AuctionId)
+                .WithSqlParam("@TournamentId", request.TournamentId)
                 .ExecuteStoredProc((handler) =>
                 {
                     teamDetails = handler.ReadToList<TeamIdNameResponseModel>();

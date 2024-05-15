@@ -10,6 +10,8 @@ namespace JSOAuction.API.Request.PlayerRegister
     public class GetTeamIdNameModel
     {
         public int? AuctionId { get; set; }
+
+        public int? TournamentId { get; set; }
     }
 
     public class GetTeamDetailsByTournamentRequest
