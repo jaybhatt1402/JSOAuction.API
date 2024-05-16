@@ -1,6 +1,5 @@
-﻿
-CREATE PROCEDURE [dbo].[GetAllTournamentDetails] 
+﻿CREATE PROCEDURE [dbo].[GetAllTournamentDetails] 
 AS
 BEGIN
-	SELECT * from [dbo].TournamentRegister Where IsActive = 1 Order By CreatedOn Desc
+	SELECT * from [dbo].TournamentRegister Where IsDeleted = 0 and IsActive = 1 Order By CreatedOn Desc
 END
