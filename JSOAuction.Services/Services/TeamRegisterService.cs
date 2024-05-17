@@ -96,8 +96,17 @@ namespace JSOAuction.Services.Services
             }
             return teamDetails.ToList();
         }
-        public async Task<int> SaveTeam(TeamRegisterDto request)
+        public async Task<object> SaveTeam(TeamRegisterDto request)
         {
+
+            var teamData = _readWriteUnitOfWork.TeamRegisterRepository.GetAll();
+
+            var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
+
+            if (tournamentData.TotalTeamCount != null && tournamentData.TotalTeamCount > teamData.Count())
+            {
+                return "New team cannot be registered as the count exceeds the total team count of the tournament.";
+            }
 
             string uploadLogoId = "";
             string webViewLinkLogo = string.Empty;

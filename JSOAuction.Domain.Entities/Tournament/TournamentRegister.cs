@@ -51,5 +51,6 @@ namespace JSOAuction.Domain.Entities.Tournament
         public Guid? UpdatedBy { get; set; }
         public bool? IsActive { get; set; }
         public bool? IsDeleted { get; set; }
+        public int? TotalTeamCount { get; set; }
     }
 }
