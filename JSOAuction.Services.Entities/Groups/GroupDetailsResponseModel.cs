@@ -10,6 +10,6 @@ namespace JSOAuction.Services.Entities.Groups
     {
         public int Id { get; set; }
         public string? GroupName { get; set; }
-        public string? BasePrice { get; set; }
+        public decimal? BasePrice { get; set; }
     }
 }
