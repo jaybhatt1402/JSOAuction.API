@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [dbo].[TournamentRegister] (
     [TournamentId]     INT              IDENTITY (1, 1) NOT NULL,
+    [TournamentGuid]   UNIQUEIDENTIFIER NULL,
     [TournamentName]   NVARCHAR (50)    NULL,
     [Description]      NVARCHAR (MAX)   NULL,
     [OrganizerName]    VARCHAR (50)     NULL,
@@ -41,6 +42,8 @@
     [TotalTeamCount]   INT              NULL,
     CONSTRAINT [PK_TournamentRegister] PRIMARY KEY CLUSTERED ([TournamentId] ASC)
 );
+
+
 
 
 

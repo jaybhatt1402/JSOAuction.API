@@ -81,6 +81,7 @@ namespace JSOAuction.Services.Services
             var saveTournament = new TournamentRegister()
             {
                 TournamentName = request.TournamentName,
+                TournamentGuid = Guid.NewGuid(),
                 Description = request.Description,
                 OrganizerName = request.OrganizerName,
                 OrganizerContact = request.OrganizerContact,
