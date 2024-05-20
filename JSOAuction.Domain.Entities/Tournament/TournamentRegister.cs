@@ -13,6 +13,7 @@ namespace JSOAuction.Domain.Entities.Tournament
     {
         [Key]
         public int TournamentId { get; set; }
+        public Guid TournamentGuid { get; set; }
         public string? TournamentName { get; set; }
         public string? Description { get; set; }
         public string? OrganizerName { get; set; }
@@ -51,5 +52,6 @@ namespace JSOAuction.Domain.Entities.Tournament
         public Guid? UpdatedBy { get; set; }
         public bool? IsActive { get; set; }
         public bool? IsDeleted { get; set; }
+        public int? TotalTeamCount { get; set; }
     }
 }

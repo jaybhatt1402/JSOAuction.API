@@ -81,6 +81,7 @@ namespace JSOAuction.Services.Services
             var saveTournament = new TournamentRegister()
             {
                 TournamentName = request.TournamentName,
+                TournamentGuid = Guid.NewGuid(),
                 Description = request.Description,
                 OrganizerName = request.OrganizerName,
                 OrganizerContact = request.OrganizerContact,
@@ -114,7 +115,8 @@ namespace JSOAuction.Services.Services
                 Amount = request.Amount,
                 CreatedOn = DateTime.UtcNow,
                 IsActive = true,
-                IsDeleted = false
+                IsDeleted = false,
+                TotalTeamCount = request.TotalTeamCount
             };
             await _readWriteUnitOfWork.TournamentRegisterRepository.AddAsync(saveTournament);
             await _readWriteUnitOfWork.CommitAsync();

@@ -54,10 +54,10 @@ namespace JSOAuction.Services.Services
                 {
                     groups = handler.ReadToList<Groups>();
                 });
-            if (groups == null || !groups.Any())
-            {
-                throw new Exception("No groups found");
-            }
+            //if (groups == null || !groups.Any())
+            //{
+            //    throw new Exception("No groups found");
+            //}
             return groups.ToList();
         }
 

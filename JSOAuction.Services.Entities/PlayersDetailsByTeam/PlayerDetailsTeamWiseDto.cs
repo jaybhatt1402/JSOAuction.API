@@ -14,6 +14,7 @@ namespace JSOAuction.Services.Entities.PlayersDetailsByTeam
     public class TeamIdNameDto
     {
         public int? AuctionId { get; set; }
+        public int? TournamentId { get; set; }
     }
 
     public class GetTeamDetailsByTournamentDto

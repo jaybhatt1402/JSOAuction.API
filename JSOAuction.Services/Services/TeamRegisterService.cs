@@ -84,6 +84,7 @@ namespace JSOAuction.Services.Services
             IEnumerable<TeamIdNameResponseModel> teamDetails = new List<TeamIdNameResponseModel>();
             _readWriteUnitOfWorkSP.LoadStoredProc("GetTeamIdNameDetails")
                 .WithSqlParam("@AuctionId", request.AuctionId)
+                .WithSqlParam("@TournamentId", request.TournamentId)
                 .ExecuteStoredProc((handler) =>
                 {
                     teamDetails = handler.ReadToList<TeamIdNameResponseModel>();
@@ -95,8 +96,17 @@ namespace JSOAuction.Services.Services
             }
             return teamDetails.ToList();
         }
-        public async Task<int> SaveTeam(TeamRegisterDto request)
+        public async Task<object> SaveTeam(TeamRegisterDto request)
         {
+
+            var teamData = _readWriteUnitOfWork.TeamRegisterRepository.GetAll();
+
+            var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
+
+            if (tournamentData.TotalTeamCount != null && tournamentData.TotalTeamCount > teamData.Count())
+            {
+                return "New team cannot be registered as the count exceeds the total team count of the tournament.";
+            }
 
             string uploadLogoId = "";
             string webViewLinkLogo = string.Empty;
@@ -255,10 +265,10 @@ namespace JSOAuction.Services.Services
                     teamDetails = handler.ReadToList<TeamDetailsByTournamentResponseModel>();
                 });
 
-            if (teamDetails == null || !teamDetails.Any())
-            {
-                throw new Exception("No teams found");
-            }
+            //if (teamDetails == null || !teamDetails.Any())
+            //{
+            //    throw new Exception("No teams found");
+            //}
             return teamDetails.ToList();
         }
         public async Task<List<TeamRegister>> GetTeamById(GetTeamDetailsByIdDto request)

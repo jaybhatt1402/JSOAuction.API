@@ -103,5 +103,7 @@
     <Build Include="dbo\Stored Procedures\DeleteGroup.sql" />
     <Build Include="dbo\Stored Procedures\GetGroupListByTournamentId.sql" />
     <Build Include="dbo\Stored Procedures\BidSave.sql" />
+    <Build Include="dbo\Stored Procedures\GetTournamentById.sql" />
+    <Build Include="dbo\Stored Procedures\DeletePlayer.sql" />
   </ItemGroup>
 </Project>
