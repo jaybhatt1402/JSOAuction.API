@@ -48,8 +48,10 @@ namespace JSOAuction.API.Infrastructure.Automapper
 
             //  CreateMap<DeleteUserRegisterRequest, DeleteUserRegisterDto>();
             //  CreateMap<UserRegister, DeleteUserRegisterDto>().ReverseMap();
+           // CreateMap<PlayerRequest, PlayerRequestDto>()
+           //.ForMember(dest => dest.Players,  opt => opt.Ignore());
 
-            CreateMap<PlayerRequest, PlayerRequestDto>().ReverseMap();
+           // CreateMap<PlayerRequest, PlayerRequestDto>();
         }
     }
 }

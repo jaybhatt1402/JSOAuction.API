@@ -24,6 +24,6 @@ namespace JSOAuction.Services.Interfaces
         Task<bool> DeletePlayer(DeletePlayerDto request);
         Task<List<PlayerRegister>> GetPlayerById(int? PlayerRegisterId);
         Task<int> UpdatePlayer(UpdatePlayerDto request);
-        Task<bool> AssignGroupToPlayers(List<PlayerRequestDto> request);
+        Task<bool> AssignGroupToPlayers(PlayerRequestDto request);
     }
 }

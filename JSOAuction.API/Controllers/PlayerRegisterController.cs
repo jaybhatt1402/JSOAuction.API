@@ -161,10 +161,10 @@ namespace JSOAuction.API.Controllers
         }
 
         [HttpPost("AssignGroupToPlayers")]
-        public async Task<Dictionary<string, object>> AssignGroupToPlayers(List<PlayerRequest> request)
+        public async Task<Dictionary<string, object>> AssignGroupToPlayers(PlayerRequestDto request)
         {
-            var assignGroupDto = _mapper.Map<List<PlayerRequest>, List<PlayerRequestDto>>(request);
-            var result = await _playerRegisterService.AssignGroupToPlayers(assignGroupDto);
+            //var assignGroupDto = _mapper.Map<PlayerRequest, PlayerRequestDto>(request);
+            var result = await _playerRegisterService.AssignGroupToPlayers(request);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
     }

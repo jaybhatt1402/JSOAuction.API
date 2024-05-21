@@ -58,8 +58,12 @@ namespace JSOAuction.Services.Entities.PlayerRegister
 
     public class PlayerRequestDto
     {
-        public int PlayerId { get; set; }
+        public List<PlayersDto> Players { get; set; }
         public int GroupId { get; set; }
         public decimal Baseprice { get; set; }
+    }
+    public class PlayersDto
+    {
+        public int PlayerId { get; set; }
     }
 }
