@@ -47,10 +47,10 @@ namespace JSOAuction.Services.Services
                 {
                     tournament = handler.ReadToList<TournamentRegister>();
                 });
-            if (tournament == null || !tournament.Any())
-            {
-                throw new Exception("No tournament found");
-            }
+           // if (tournament == null || !tournament.Any())
+           //{
+           //     throw new Exception("No tournament found");
+           // }
             return tournament.ToList();
         }
 
