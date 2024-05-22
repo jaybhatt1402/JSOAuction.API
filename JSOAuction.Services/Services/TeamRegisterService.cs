@@ -99,11 +99,11 @@ namespace JSOAuction.Services.Services
         public async Task<object> SaveTeam(TeamRegisterDto request)
         {
 
-            var teamData = _readWriteUnitOfWork.TeamRegisterRepository.GetAll();
+            var teamData = _readWriteUnitOfWork.TeamRegisterRepository.GetAll().Where(x => x.TournamentId == request.TournamentId && x.IsDeleted == false);
 
             var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
 
-            if (tournamentData.MaxTeams != null && tournamentData.MaxTeams > teamData.Count())
+            if (tournamentData.MaxTeams != null && teamData.Count() >= tournamentData.MaxTeams)
             {
                 return "New team cannot be registered as the count exceeds the total team count of the tournament.";
             }

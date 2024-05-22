@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 using System.Data;
 using System.Diagnostics;
+using System.Numerics;
 using System.Reflection.Metadata;
 
 namespace JSOAuction.Services.Services
@@ -208,11 +209,22 @@ namespace JSOAuction.Services.Services
 
         public async Task<object> SavePlayer(SavePlayerRegisterDto request)
         {
-            var playerData = _readWriteUnitOfWork.PlayerRegisterRepository.GetAll();
+            //var playerData = _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll().Where(x => x.TournamentId == request.TournamentId);
+            var playerData = from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll() 
+                             join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll() on player.PlayerRegisterId equals mapping.PlayerId 
+                             where mapping.TournamentId == request.TournamentId && player.IsDeleted == false 
+                             select new
+                             {
+                                PlayerId = player.PlayerRegisterId,
+                                PlayerName = player.FirstName,
+                                TournamentId = mapping.TournamentId
+                             }; 
+
+            var result = playerData.ToList();
 
             var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
 
-            if (tournamentData.MaxPlayer != null && tournamentData.MaxPlayer > playerData.Count())
+            if (tournamentData.MaxPlayer != null && result.Count() >= tournamentData.MaxPlayer)
             {
                 return "New player cannot be registered as the count exceeds the total player count of the tournament.";
             }
