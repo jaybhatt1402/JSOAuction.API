@@ -103,7 +103,7 @@ namespace JSOAuction.Services.Services
 
             var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
 
-            if (tournamentData.TotalTeamCount != null && tournamentData.TotalTeamCount > teamData.Count())
+            if (tournamentData.MaxTeams != null && tournamentData.MaxTeams > teamData.Count())
             {
                 return "New team cannot be registered as the count exceeds the total team count of the tournament.";
             }

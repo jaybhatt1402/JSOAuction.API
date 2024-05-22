@@ -18,7 +18,7 @@ namespace JSOAuction.Services.Interfaces
         Task<object> GetAuctionPlayerDetails(AuctionPlayerDto request);
         Task<bool> UpdatePlayerStatus(UpdatePlayerStatusDto request);
         Task<bool> SoldPlayer(SoldPlayerDto request);
-        Task<int> SavePlayer(SavePlayerRegisterDto request);
+        Task<object> SavePlayer(SavePlayerRegisterDto request);
         Task<List<PlayerRegister>> GetAllPlayerDetailsWithTournamentID(int? TournamentId);
         Task<byte[]> GetPlayerDetailsFileWithTournamentID(int? TournamentId);
         Task<bool> DeletePlayer(DeletePlayerDto request);

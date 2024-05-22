@@ -39,9 +39,10 @@
     [UpdatedBy]        UNIQUEIDENTIFIER NULL,
     [IsActive]         BIT              NULL,
     [IsDeleted]        BIT              NULL,
-    [TotalTeamCount]   INT              NULL,
     CONSTRAINT [PK_TournamentRegister] PRIMARY KEY CLUSTERED ([TournamentId] ASC)
 );
+
+
 
 
 

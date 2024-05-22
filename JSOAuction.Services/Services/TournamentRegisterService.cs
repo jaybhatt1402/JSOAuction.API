@@ -47,10 +47,10 @@ namespace JSOAuction.Services.Services
                 {
                     tournament = handler.ReadToList<TournamentRegister>();
                 });
-           // if (tournament == null || !tournament.Any())
-           //{
-           //     throw new Exception("No tournament found");
-           // }
+            // if (tournament == null || !tournament.Any())
+            //{
+            //     throw new Exception("No tournament found");
+            // }
             return tournament.ToList();
         }
 
@@ -115,8 +115,7 @@ namespace JSOAuction.Services.Services
                 Amount = request.Amount,
                 CreatedOn = DateTime.UtcNow,
                 IsActive = true,
-                IsDeleted = false,
-                TotalTeamCount = request.TotalTeamCount
+                IsDeleted = false
             };
             await _readWriteUnitOfWork.TournamentRegisterRepository.AddAsync(saveTournament);
             await _readWriteUnitOfWork.CommitAsync();

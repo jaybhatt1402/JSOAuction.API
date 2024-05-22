@@ -47,7 +47,6 @@ namespace JSOAuction.API.Request.Tournament
         public int? MaxPlayer { get; set; }
         public string? PaymentTerms { get; set; }
         public decimal? Amount { get; set; }
-        public int? TotalTeamCount { get; set; }
     }
     public class GetByTournamentIdRequest
     {

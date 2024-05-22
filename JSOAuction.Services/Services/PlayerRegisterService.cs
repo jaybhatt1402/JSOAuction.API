@@ -206,8 +206,17 @@ namespace JSOAuction.Services.Services
             }
         }
 
-        public async Task<int> SavePlayer(SavePlayerRegisterDto request)
+        public async Task<object> SavePlayer(SavePlayerRegisterDto request)
         {
+            var playerData = _readWriteUnitOfWork.PlayerRegisterRepository.GetAll();
+
+            var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
+
+            if (tournamentData.MaxPlayer != null && tournamentData.MaxPlayer > playerData.Count())
+            {
+                return "New player cannot be registered as the count exceeds the total player count of the tournament.";
+            }
+
             string uploadId = "";
             //TODO
             //if (request.UploadFile == null)

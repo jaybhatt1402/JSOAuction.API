@@ -46,7 +46,6 @@ namespace JSOAuction.Services.Entities.Tournament
         public bool? IsDeleted { get; set; }
         public IFormFile UploadBannerFile { get; set; }
         public IFormFile UploadLogoFile { get; set; }
-        public int? TotalTeamCount { get; set; }
     }
     public class GetByTournamentIdDto
     {
