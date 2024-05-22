@@ -226,7 +226,7 @@ namespace JSOAuction.Services.Services
 
             if (tournamentData.MaxPlayer != null && result.Count() >= tournamentData.MaxPlayer)
             {
-                return "New player cannot be registered as the count exceeds the total player count of the tournament.";
+                return false;
             }
 
             string uploadId = "";
