@@ -29,5 +29,18 @@ namespace JSOAuction.Services.Infrastructure
 
             return query.Provider.CreateQuery<T>(orderBy);
         }
+
+        public static IEnumerable<T> OrderByPropertyName<T>(this IEnumerable<T> source, string propertyName, bool descending)
+        {
+            var propertyInfo = typeof(T).GetProperty(propertyName);
+            if (propertyInfo == null)
+            {
+                throw new ArgumentException($"No property '{propertyName}' on type '{typeof(T).Name}'");
+            }
+
+            return descending
+                ? source.OrderByDescending(x => propertyInfo.GetValue(x, null))
+                : source.OrderBy(x => propertyInfo.GetValue(x, null));
+        }
     }
 }

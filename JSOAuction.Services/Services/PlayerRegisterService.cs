@@ -7,10 +7,13 @@ using JSOAuction.Data.Contexts;
 using JSOAuction.Data.Infrastructure;
 using JSOAuction.Domain.Entities.PlayerRegister;
 using JSOAuction.Services.Entities.Bids;
+using JSOAuction.Services.Entities.Common;
 using JSOAuction.Services.Entities.PlayerRegister;
+using JSOAuction.Services.Infrastructure;
 using JSOAuction.Services.Interfaces;
 using JSOAuction.Utility;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using System.Data;
 using System.Diagnostics;
@@ -68,7 +71,7 @@ namespace JSOAuction.Services.Services
             await _readWriteUnitOfWork.CommitAsync();
             return savePlayerRegister.PlayerRegisterId;
         }
-        public async Task<List<PlayerRegister>> GetAllPlayerDetails(int? AuctionId)
+        public async Task<List<PlayerRegister>> GetAllPlayerDetails(int? AuctionId, PaginationDto paginationDto)
         {
             IEnumerable<PlayerRegister> players = new List<PlayerRegister>();
             _readWriteUnitOfWorkSP.LoadStoredProc("GetAllPlayerDetails")
@@ -81,10 +84,29 @@ namespace JSOAuction.Services.Services
             {
                 throw new Exception("No Players found");
             }
+            if (paginationDto != null)
+            {
+                if (!string.IsNullOrEmpty(paginationDto.GlobalSearch))
+                {
+                    players = players.Where(p => p.FirstName.Contains(paginationDto.GlobalSearch, StringComparison.OrdinalIgnoreCase));
+                }
+
+                if (!string.IsNullOrEmpty(paginationDto.OrderBy))
+                {
+                    bool descending = paginationDto.OrderDirection?.ToLower() == "desc";
+                    players = players.OrderByPropertyName(paginationDto.OrderBy, descending);
+                }
+
+                if (paginationDto.PageSize.HasValue && paginationDto.PageIndex.HasValue)
+                {
+                    int skip = (paginationDto.PageIndex.Value - 1) * paginationDto.PageSize.Value;
+                    players = players.Skip(skip).Take(paginationDto.PageSize.Value);
+                }
+            }
             return players.ToList();
         }
 
-        public async Task<List<PlayerRegister>> GetAllPlayerDetailsWithTournamentID(int? TournamentId)
+        public async Task<List<PlayerRegister>> GetAllPlayerDetailsWithTournamentID(int? TournamentId, PaginationDto paginationDto)
         {
             IEnumerable<PlayerRegister> players = new List<PlayerRegister>();
             _readWriteUnitOfWorkSP.LoadStoredProc("GetAllPlayerDetailsWithTournamentID")
@@ -97,6 +119,25 @@ namespace JSOAuction.Services.Services
             // {
             //    return "No player found";
             //}
+            if (paginationDto != null)
+            {
+                if (!string.IsNullOrEmpty(paginationDto.GlobalSearch))
+                {
+                    players = players.Where(p => p.FirstName.Contains(paginationDto.GlobalSearch, StringComparison.OrdinalIgnoreCase));
+                }
+
+                if (!string.IsNullOrEmpty(paginationDto.OrderBy))
+                {
+                    bool descending = paginationDto.OrderDirection?.ToLower() == "desc";
+                    players = players.OrderByPropertyName(paginationDto.OrderBy, descending);
+                }
+
+                if (paginationDto.PageSize.HasValue && paginationDto.PageIndex.HasValue)
+                {
+                    int skip = (paginationDto.PageIndex.Value - 1) * paginationDto.PageSize.Value;
+                    players = players.Skip(skip).Take(paginationDto.PageSize.Value);
+                }
+            }
             return players.ToList();
         }
 

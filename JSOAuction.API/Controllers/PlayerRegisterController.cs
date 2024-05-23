@@ -37,17 +37,17 @@ namespace JSOAuction.API.Controllers
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
 
-        [HttpGet("GetAllPlayerDetails/{AuctionId}")]
-        public async Task<ActionResult<List<PlayerRegister>>> GetAllPlayerDetails(int AuctionId)
+        [HttpPost("GetAllPlayerDetails")]
+        public async Task<ActionResult<List<PlayerRegister>>> GetAllPlayerDetails([FromBody] AuctionPaginationPlayerRequest request)
         {
-            var result = await _playerRegisterService.GetAllPlayerDetails(AuctionId);
+            var result = await _playerRegisterService.GetAllPlayerDetails(request.AuctionId, request.Pagination);
             return Ok(result);
         }
 
-        [HttpGet("GetAllPlayerDetailsWithTournamentID/{TournamentId}")]
-        public async Task<ActionResult<List<PlayerRegister>>> GetAllPlayerDetailsWithTournamentID(int TournamentId)
+        [HttpPost("GetAllPlayerDetailsWithTournamentID")]
+        public async Task<ActionResult<List<PlayerRegister>>> GetAllPlayerDetailsWithTournamentID([FromBody] TournamentPlayerRequest request)
         {
-            var result = await _playerRegisterService.GetAllPlayerDetailsWithTournamentID(TournamentId);
+            var result = await _playerRegisterService.GetAllPlayerDetailsWithTournamentID(request.TournamentId, request.Pagination);
             return Ok(result);
         }
 
