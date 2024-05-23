@@ -105,7 +105,7 @@ namespace JSOAuction.Services.Services
 
             if (tournamentData.MaxTeams != null && teamData.Count() >= tournamentData.MaxTeams)
             {
-                return "New team cannot be registered as the count exceeds the total team count of the tournament.";
+                return false;
             }
 
             string uploadLogoId = "";
