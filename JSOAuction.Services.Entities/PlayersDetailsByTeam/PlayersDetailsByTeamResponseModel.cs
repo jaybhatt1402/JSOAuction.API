@@ -30,5 +30,6 @@ namespace JSOAuction.Services.Entities.PlayersDetailsByTeam
         public int? FoundedYear { get; set; }
         public string? TeamLogo { get; set; }
         public int? TournamentId { get; set; }
+        public decimal? TotalBalance { get; set; }
     }
 }
