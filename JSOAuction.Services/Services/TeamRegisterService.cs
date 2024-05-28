@@ -249,6 +249,7 @@ namespace JSOAuction.Services.Services
                 data.IsActive = true;
                 data.IsDeleted = false;
                 data.TournamentId = request.TournamentId;
+                data.TotalBalance = request.TotalBalance;
                 await _readWriteUnitOfWork.CommitAsync();
                 return data.TournamentId.Value;
             };
