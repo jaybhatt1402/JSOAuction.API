@@ -22,6 +22,7 @@ namespace JSOAuction.Services.Entities.Team
         public DateTime? CreatedOn { get; set; }
         public IFormFile UploadLogoFile { get; set; }
         public int? TournamentId { get; set; }
+        public decimal? TotalBalance { get; set; }
 
     }
 

@@ -16,6 +16,8 @@ namespace JSOAuction.API.Request.Team
         public string? TeamLogo { get; set; }
         public string? Owner { get; set; }
         public int? TournamentId { get; set; }
+
+        public decimal? TotalBalance { get; set; }
     }
 
     public class DeleteTeamRequest

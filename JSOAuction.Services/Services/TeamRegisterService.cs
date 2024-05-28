@@ -130,7 +130,8 @@ namespace JSOAuction.Services.Services
                 CreatedOn = DateTime.UtcNow,
                 IsActive = true,
                 IsDeleted = false,
-                TournamentId = request.TournamentId
+                TournamentId = request.TournamentId,
+                TotalBalance = request.TotalBalance
             };
             await _readWriteUnitOfWork.TeamRegisterRepository.AddAsync(saveTeam);
             await _readWriteUnitOfWork.CommitAsync();
