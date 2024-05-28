@@ -115,7 +115,8 @@ namespace JSOAuction.Services.Services
                 Amount = request.Amount,
                 CreatedOn = DateTime.UtcNow,
                 IsActive = true,
-                IsDeleted = false
+                IsDeleted = false,
+                BidAmount = request.BidAmount
             };
             await _readWriteUnitOfWork.TournamentRegisterRepository.AddAsync(saveTournament);
             await _readWriteUnitOfWork.CommitAsync();
@@ -267,10 +268,11 @@ namespace JSOAuction.Services.Services
                 data.MaxTeams = request.MaxTeams;
                 data.Gender = request.Gender;
                 data.MinPlayer = request.MinPlayer;
-                data.MaxPlayer = request.MaxPlayer;
+                data.MaxPlayer = request.MaxPlayer; 
                 data.PaymentTerms = request.PaymentTerms;
                 data.Amount = request.Amount;
                 data.UpdatedOn = DateTime.UtcNow;
+                data.BidAmount = request.BidAmount;
                 await _readWriteUnitOfWork.CommitAsync();
                 return data.TournamentName; 
             }
