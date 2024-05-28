@@ -25,7 +25,8 @@ BEGIN
 		,Email
 		,FoundedYear
 		,TeamLogo
-		,TournamentId 
+		,TournamentId
+		,TotalBalance
 	from 
 		TeamRegister 
 	Where 
