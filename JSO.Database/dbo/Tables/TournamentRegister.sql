@@ -39,8 +39,12 @@
     [UpdatedBy]        UNIQUEIDENTIFIER NULL,
     [IsActive]         BIT              NULL,
     [IsDeleted]        BIT              NULL,
+    [PlayerOrderBy]    VARCHAR (50)     NULL,
+    [BidAmount]        DECIMAL (10, 2)  NULL,
     CONSTRAINT [PK_TournamentRegister] PRIMARY KEY CLUSTERED ([TournamentId] ASC)
 );
+
+
 
 
 
