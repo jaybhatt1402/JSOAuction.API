@@ -264,6 +264,7 @@ namespace JSOAuction.Services.Services
                 data.Series = request.Series;
                 data.Other = request.Other;
                 data.BallType = request.BallType;
+                data.PlayerOrderBy = request.PlayerOrderBy;
                 data.Overs = request.Overs;
                 data.Format = request.Format;
                 data.MaxTeams = request.MaxTeams;

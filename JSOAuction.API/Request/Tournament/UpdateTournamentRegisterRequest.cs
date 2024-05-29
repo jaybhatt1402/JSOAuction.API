@@ -40,6 +40,7 @@ namespace JSOAuction.API.Request.Tournament
         [DefaultValue(false)]
         public bool? Other { get; set; }
         public string? BallType { get; set; }
+        public string? PlayerOrderBy { get; set; }
         public int? Overs { get; set; }
         public string? Format { get; set; }
         public int? MaxTeams { get; set; }
