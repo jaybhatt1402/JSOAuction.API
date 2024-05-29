@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE DeleteTournament
+﻿CREATE PROCEDURE [dbo].[DeleteTournament]
 (
     @TournamentId INT,
 	@Success INT OUTPUT
