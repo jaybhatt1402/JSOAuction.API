@@ -105,6 +105,7 @@ namespace JSOAuction.Services.Services
                 Series = request.Series,
                 Other = request.Other,
                 BallType = request.BallType,
+                PlayerOrderBy = request.PlayerOrderBy,
                 Overs = request.Overs,
                 Format = request.Format,
                 MaxTeams = request.MaxTeams,

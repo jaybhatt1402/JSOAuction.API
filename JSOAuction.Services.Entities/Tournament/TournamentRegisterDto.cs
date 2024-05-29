@@ -33,6 +33,7 @@ namespace JSOAuction.Services.Entities.Tournament
         public bool? Series { get; set; }
         public bool? Other { get; set; }
         public string? BallType { get; set; }
+        public string? PlayerOrderBy { get; set; }
         public int? Overs { get; set; }
         public string? Format { get; set; }
         public int? MaxTeams { get; set; }
