@@ -16,6 +16,8 @@ namespace JSOAuction.Domain.Entities.PlayerRegister
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Gender { get; set; }
+        public string? BattingStyle { get; set; }
+        public string? BowlingStyle { get; set; }
         public string? MobileNo { get; set; }
         public string? AlternativePhoneNo { get; set; }
         public string? Email { get; set; }

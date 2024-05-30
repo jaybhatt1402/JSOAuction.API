@@ -293,6 +293,8 @@ namespace JSOAuction.Services.Services
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Gender = request.Gender,
+                BattingStyle = request.BattingStyle,
+                BowlingStyle = request.BowlingStyle,
                 MobileNo = request.MobileNo,
                 AlternativePhoneNo = request.AlternativePhoneNo,
                 Email = request.Email,
@@ -360,6 +362,8 @@ namespace JSOAuction.Services.Services
                 data.FirstName = request.FirstName;
                 data.LastName = request.LastName;
                 data.Gender = request.Gender;
+                data.BattingStyle = request.BattingStyle;
+                data.BowlingStyle = request.BowlingStyle;
                 data.MobileNo = request.MobileNo;
                 data.AlternativePhoneNo = request.AlternativePhoneNo;
                 data.Email = request.Email;
