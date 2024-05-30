@@ -4,7 +4,7 @@ CREATE PROCEDURE [dbo].[GetAllPlayerDetailsWithTournamentID]
 AS
 BEGIN
 	select PlayerRegisterId, FirstName, LastName, Gender, MobileNo, AlternativePhoneNo, Email, DOB, Batsman, Bowler, WicketKeeper, BattingAllRounder, BowlingAllRounder, PreviousTeamId,
-	LastPlayedYear, ProfilePicture, [Password], BasePrice, WinningBid, T0.UpdatedOn, T0.CreatedOn, T0.CreatedBy, T0.UpdatedBy, IsDeleted, IsActive, T0.City, T0.PlayerCategory, T0.PlayerNo
+	LastPlayedYear, ProfilePicture, [Password], BasePrice, WinningBid, T0.UpdatedOn, T0.CreatedOn, T0.CreatedBy, T0.UpdatedBy, IsDeleted, IsActive, T0.City, T0.PlayerCategory, T0.PlayerNo , T0.BattingStyle , T0.BowlingStyle
 	from [dbo].PlayerRegister T0 WITH (NOLOCK)
 	INNER JOIN [dbo].AuctionPlayerMapping T1 WITH (NOLOCK)
 	ON T0.PlayerRegisterId = T1.PlayerId
