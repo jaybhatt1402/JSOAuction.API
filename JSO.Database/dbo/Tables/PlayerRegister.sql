@@ -30,8 +30,12 @@
     [PlayerCategory]     VARCHAR (50)     NULL,
     [PlayerNo]           INT              NULL,
     [PlayerGroupId]      INT              NULL,
+    [BowlingStyle]       VARCHAR (20)     NULL,
+    [BattingStyle]       VARCHAR (20)     NULL,
     CONSTRAINT [PK_PlayerRegister_New] PRIMARY KEY CLUSTERED ([PlayerRegisterId] ASC)
 );
+
+
 
 
 
