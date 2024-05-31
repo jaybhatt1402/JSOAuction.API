@@ -44,6 +44,7 @@ namespace JSOAuction.Services.Entities.Tournament
         public string? PaymentTerms { get; set; }
         public decimal? Amount { get; set; }
         public decimal? BidAmount { get; set; }
+        public decimal? TotalBalance { get; set; }
         public bool? IsActive { get; set; }
         public bool? IsDeleted { get; set; }
         public IFormFile UploadBannerFile { get; set; }

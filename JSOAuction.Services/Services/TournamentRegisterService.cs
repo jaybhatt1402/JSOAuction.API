@@ -117,7 +117,8 @@ namespace JSOAuction.Services.Services
                 CreatedOn = DateTime.UtcNow,
                 IsActive = true,
                 IsDeleted = false,
-                BidAmount = request.BidAmount
+                BidAmount = request.BidAmount,
+                TotalBalance = request.TotalBalance
             };
             await _readWriteUnitOfWork.TournamentRegisterRepository.AddAsync(saveTournament);
             await _readWriteUnitOfWork.CommitAsync();
@@ -275,6 +276,7 @@ namespace JSOAuction.Services.Services
                 data.Amount = request.Amount;
                 data.UpdatedOn = DateTime.UtcNow;
                 data.BidAmount = request.BidAmount;
+                data.TotalBalance = request.TotalBalance;
                 await _readWriteUnitOfWork.CommitAsync();
                 return data.TournamentName; 
             }

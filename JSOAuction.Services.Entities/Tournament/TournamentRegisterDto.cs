@@ -42,6 +42,7 @@ namespace JSOAuction.Services.Entities.Tournament
         public int? MaxPlayer { get; set; }
         public string? PaymentTerms { get; set; }
         public decimal? Amount { get; set; }
+        public decimal? TotalBalance { get; set; }
         public decimal? BidAmount { get; set; }
         public DateTime CreatedOn { get; set; }
         public bool? IsActive { get; set; }
