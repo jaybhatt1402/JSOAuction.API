@@ -41,8 +41,11 @@
     [TournamentGuid]   UNIQUEIDENTIFIER NULL,
     [BidAmount]        DECIMAL (10, 2)  NULL,
     [PlayerOrderBy]    VARCHAR (50)     NULL,
+    [TotalBalance]     DECIMAL (10, 2)  NULL,
     CONSTRAINT [PK_TournamentRegister] PRIMARY KEY CLUSTERED ([TournamentId] ASC)
 );
+
+
 
 
 
