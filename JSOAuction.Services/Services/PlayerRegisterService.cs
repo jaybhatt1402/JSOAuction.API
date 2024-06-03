@@ -233,6 +233,7 @@ namespace JSOAuction.Services.Services
                     .WithSqlParam("@BidId", request.BidId != null ? request.BidId : DBNull.Value, DbType.Int32)
                     .WithSqlParam("@Status", request.Status)
                     .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
+                    .WithSqlParam("@TournamentId", request.TournamentId)
                     .ExecuteStoredProc((handler) =>
                     {
                         isuccess = Convert.ToInt32(handler.GetValue("@Success"));

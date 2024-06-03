@@ -12,7 +12,8 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public int? PlayerId { get; set; }
         public int? TeamId { get; set; }
         public int? BidId { get; set; }
-        public string? Status { get; set; }  
+        public string? Status { get; set; }
+        public int? TournamentId { get; set; }
     }
 
       public class DeletePlayerDto
