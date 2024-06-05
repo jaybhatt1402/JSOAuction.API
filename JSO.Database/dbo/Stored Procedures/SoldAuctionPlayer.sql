@@ -10,7 +10,8 @@ CREATE PROCEDURE [dbo].[SoldAuctionPlayer]
 	@TeamId int,
 	@BidId int,
 	@Status varchar(100),
-	@Success int OUTPUT
+	@Success int OUTPUT,
+	@TournamentId int
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -139,7 +140,7 @@ BEGIN
 		SET @Success = 0;
 	END
 
-	IF EXISTS (SELECT 1 FROM TeamRegister WHERE TeamId = @TeamId AND AuctionId = @AuctionId AND IsDeleted = 0 AND IsActive = 1)
+	IF EXISTS (SELECT 1 FROM TeamRegister WHERE TeamId = @TeamId AND TournamentId = @TournamentId AND IsDeleted = 0 AND IsActive = 1)
     BEGIN
         UPDATE TeamRegister 
         SET TeamSize = ISNULL(TeamSize, 0) + 1,
@@ -161,7 +162,7 @@ BEGIN
 			        AND bid.TeamId = @TeamId 
 			        AND bid.AuctionId = @AuctionId
 			)
-        WHERE TeamId = @TeamId AND AuctionId = @AuctionId
+        WHERE TeamId = @TeamId AND TournamentId = @TournamentId
 
         IF @@ROWCOUNT > 0 AND @Success = 1
         BEGIN

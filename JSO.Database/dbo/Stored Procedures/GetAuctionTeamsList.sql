@@ -10,9 +10,29 @@ BEGIN
     -- interfering with SELECT statements.
     SET NOCOUNT ON;
 
-    DECLARE @RemainingAmount decimal(10, 2)
-    DECLARE @TeamName varchar(50)
-	DECLARE @BasePrice decimal(10, 2) = 300000
+    DECLARE @RemainingAmount decimal(10, 2);
+    DECLARE @TeamName varchar(50);
+	DECLARE @BasePrice decimal(10, 2);
+	DECLARE @TotalTeamSize int;
+	DECLARE @BidAmount int;
+	DECLARE @MinBasePrice int;
+
+	SELECT @BasePrice = BasePrice FROM PlayerRegister WHERE PlayerRegisterId = @PlayerId AND IsActive = 1 AND IsDeleted = 0
+
+	SELECT 
+		@MinBasePrice = MIN(BasePrice) 
+	FROM 
+		PlayerRegister pr
+	JOIN
+		AuctionPlayerMapping au ON au.PlayerId = pr.PlayerRegisterId
+	WHERE 
+		IsActive = 1 
+		AND 
+		IsDeleted = 0 
+		AND 
+		@TournamentId = au.TournamentId
+
+	SELECT @TotalTeamSize = MaxPlayer, @BidAmount = BidAmount FROM TournamentRegister WHERE TournamentId = @TournamentId
 
     CREATE TABLE #tblAuctionTeam (
         Id int,
@@ -35,10 +55,9 @@ BEGIN
         team.TotalBalance,
         team.IsActive,
 		team.TeamLogo,
-		team.TotalBalance - (((15 - 1) - team.TeamSize) * @BasePrice) AS MaximumBid,
+		team.TotalBalance - (((@TotalTeamSize - 1) - ISNULL(team.TeamSize, 0)) * @BasePrice) AS MaximumBid,
         --team.TotalBalance - ISNULL((SELECT TOP 1 BidAmount FROM [dbo].[Bids] WHERE TeamId = team.TeamId AND AuctionId = @AuctionId AND PlayerId = @PlayerId AND Sold = 0 AND IsDeleted = 0 ORDER BY CreatedOn DESC), 0) as RemainingAmount
-		team.TotalBalance - ISNULL((SELECT TOP 1 
-                                    CASE WHEN pr.PlayerCategory != 'I' THEN BidAmount ELSE 0 END 
+		team.TotalBalance - ISNULL((SELECT TOP 1 BidAmount 
                                 FROM [dbo].[Bids] 
                                 WHERE TeamId = team.TeamId 
                                     AND AuctionId = @AuctionId 
@@ -71,7 +90,8 @@ BEGIN
 		team.TeamSize;
 
     -- Insert statements for procedure here
-	DECLARE @BidAmount int = 50000;
+
+	
 
     SELECT
     team.Id as TeamId,
