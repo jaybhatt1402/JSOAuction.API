@@ -18,6 +18,7 @@ namespace JSOAuction.API.Request.Tournament
         public DateTime? EndDate { get; set; }
         public DateTime? DueDate { get; set; }
         public DateTime? DueTime { get; set; }
+        public DateTime? AuctionStartDate { get; set; }
         public string? GroundAddress { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }

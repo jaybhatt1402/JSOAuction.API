@@ -90,6 +90,7 @@ namespace JSOAuction.Services.Services
                 EndDate = request.EndDate,
                 DueDate = request.DueDate,
                 DueTime = request.DueTime,
+                AuctionStartDate = request.AuctionStartDate,
                 GroundAddress = request.GroundAddress,
                 City = request.City,
                 State = request.State,
@@ -243,6 +244,7 @@ namespace JSOAuction.Services.Services
                 data.EndDate = request.EndDate;
                 data.DueDate = request.DueDate;
                 data.DueTime = request.DueTime;
+                data.AuctionStartDate = request.AuctionStartDate;
                 data.GroundAddress = request.GroundAddress;
                 data.City = request.City;
                 data.State = request.State;
