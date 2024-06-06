@@ -43,8 +43,11 @@
     [PlayerOrderBy]    VARCHAR (50)     NULL,
     [TotalBalance]     DECIMAL (10, 2)  NULL,
     [AuctionStartDate] DATETIME         NULL,
+    [AuctionStartTime] DATETIME         NULL,
     CONSTRAINT [PK_TournamentRegister] PRIMARY KEY CLUSTERED ([TournamentId] ASC)
 );
+
+
 
 
 
