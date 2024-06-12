@@ -198,7 +198,15 @@ namespace JSOAuction.Services.Services
             }
             else
             {
-                return auctionPlayer.ToList();
+                //below changes we need to discuss
+                if (auctionPlayer.ToList() != null)
+                {
+                    return auctionPlayer.ToList();
+                }
+                else
+                {
+                    return "Players are empty";
+                }
             }
         }
 
