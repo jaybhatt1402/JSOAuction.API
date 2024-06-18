@@ -12,6 +12,7 @@ using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Infrastructure;
 using JSOAuction.Services.Interfaces;
 using JSOAuction.Utility;
+using JSOAuction.Utility.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
@@ -289,7 +290,7 @@ namespace JSOAuction.Services.Services
 
             if (existingPlayer != null)
             {
-                throw new Exception("Mobile number already registered.");
+                return "Mobile number already registered.";
             }
             //var playerData = _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll().Where(x => x.TournamentId == request.TournamentId);
             var playerData = from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
