@@ -102,5 +102,13 @@ namespace JSOAuction.API.Controllers
             var result = await _tournamentRegisterService.GetTournamentById(getTournamentDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
+
+        [HttpPost("GetTournamentAuctionStartStatus")]
+        public async Task<Dictionary<string, object>> GetTournamentAuctionStartStatus(List<int> request)
+        {
+            //var getTournamentDto = _mapper.Map<GetByTournamentIdRequest, GetByTournamentIdDto>(request);
+            var result = await _tournamentRegisterService.GetTournamentAuctionStartStatus(request);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
     }
 }
