@@ -42,7 +42,7 @@ namespace JSOAuction.Services.Services
         }
         public async Task<int> SavePlayerRegister(SavePlayerRegisterDto request)
         {
-            //Save Data in UserRegister Table.
+
             var hashPassword = GenericMethods.GetHash(request.Password);
             var savePlayerRegister = new PlayerRegister()
             {
@@ -108,6 +108,20 @@ namespace JSOAuction.Services.Services
 
         public async Task<List<PlayerRegister>> GetAllPlayerDetailsWithTournamentID(int? TournamentId, PaginationDto paginationDto)
         {
+            var teamData = _readWriteUnitOfWork.TeamRegisterRepository.GetAll().Where(x => x.TournamentId == TournamentId && x.IsDeleted == false);
+            var playerData = from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
+                             join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll() on player.PlayerRegisterId equals mapping.PlayerId
+                             where mapping.TournamentId == TournamentId && player.IsDeleted == false
+                             select new
+                             {
+                                 PlayerId = player.PlayerRegisterId,
+                                 PlayerName = player.FirstName,
+                                 TournamentId = mapping.TournamentId
+                             };
+            var teamResult = teamData.ToList();
+
+            var result = playerData.ToList();
+
             IEnumerable<PlayerRegister> players = new List<PlayerRegister>();
             _readWriteUnitOfWorkSP.LoadStoredProc("GetAllPlayerDetailsWithTournamentID")
                 .WithSqlParam("@TournamentId", TournamentId)
@@ -143,6 +157,8 @@ namespace JSOAuction.Services.Services
 
         public async Task<byte[]> GetPlayerDetailsFileWithTournamentID(int? TournamentId)
         {
+
+
             DataTable dataTable = new DataTable();
             IEnumerable<PlayerRegister> players = new List<PlayerRegister>();
             _readWriteUnitOfWorkSP.LoadStoredProc("GetAllPlayerDetailsWithTournamentID")
@@ -233,20 +249,30 @@ namespace JSOAuction.Services.Services
         }
         public async Task<bool> SoldPlayer(SoldPlayerDto request)
         {
-            int isuccess = 1;
-            _readWriteUnitOfWorkSP.LoadStoredProc("SoldAuctionPlayer")
-                    .WithSqlParam("@AuctionId", request.AuctionId)
-                    .WithSqlParam("@PlayerId", request.PlayerId)
-                    .WithSqlParam("@TeamId", request.TeamId != null ? request.TeamId : DBNull.Value, DbType.Int32)
-                    .WithSqlParam("@BidId", request.BidId != null ? request.BidId : DBNull.Value, DbType.Int32)
-                    .WithSqlParam("@Status", request.Status)
-                    .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
-                    .WithSqlParam("@TournamentId", request.TournamentId)
-                    .ExecuteStoredProc((handler) =>
-                    {
-                        isuccess = Convert.ToInt32(handler.GetValue("@Success"));
-                    });
+            var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
 
+            var teamData = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.TeamId == request.TeamId);
+
+            int isuccess = 1;
+            if (tournamentData.MaxPlayer > teamData.TeamSize)
+            {
+                _readWriteUnitOfWorkSP.LoadStoredProc("SoldAuctionPlayer")
+                        .WithSqlParam("@AuctionId", request.AuctionId)
+                        .WithSqlParam("@PlayerId", request.PlayerId)
+                        .WithSqlParam("@TeamId", request.TeamId != null ? request.TeamId : DBNull.Value, DbType.Int32)
+                        .WithSqlParam("@BidId", request.BidId != null ? request.BidId : DBNull.Value, DbType.Int32)
+                        .WithSqlParam("@Status", request.Status)
+                        .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
+                        .WithSqlParam("@TournamentId", request.TournamentId)
+                        .ExecuteStoredProc((handler) =>
+                        {
+                            isuccess = Convert.ToInt32(handler.GetValue("@Success"));
+                        });
+            }
+            else
+            {
+                isuccess = 0;
+            }
             if (isuccess > 0)
             {
                 return true;
@@ -259,25 +285,31 @@ namespace JSOAuction.Services.Services
 
         public async Task<object> SavePlayer(SavePlayerRegisterDto request)
         {
+            var existingPlayer = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNo == request.MobileNo);
+
+            if (existingPlayer != null)
+            {
+                throw new Exception("Mobile number already registered.");
+            }
             //var playerData = _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll().Where(x => x.TournamentId == request.TournamentId);
-            var playerData = from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll() 
-                             join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll() on player.PlayerRegisterId equals mapping.PlayerId 
-                             where mapping.TournamentId == request.TournamentId && player.IsDeleted == false 
+            var playerData = from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
+                             join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll() on player.PlayerRegisterId equals mapping.PlayerId
+                             where mapping.TournamentId == request.TournamentId && player.IsDeleted == false
                              select new
                              {
-                                PlayerId = player.PlayerRegisterId,
-                                PlayerName = player.FirstName,
-                                TournamentId = mapping.TournamentId
-                             }; 
+                                 PlayerId = player.PlayerRegisterId,
+                                 PlayerName = player.FirstName,
+                                 TournamentId = mapping.TournamentId
+                             };
 
             var result = playerData.ToList();
 
             var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
 
-            if (tournamentData.MaxPlayer != null && result.Count() >= tournamentData.MaxPlayer)
-            {
-                return false;
-            }
+            //if (tournamentData.MaxPlayer != null && result.Count() >= tournamentData.MaxPlayer)
+            //{
+            //    return false;
+            //}
 
             string uploadId = "";
             //TODO
@@ -514,24 +546,24 @@ namespace JSOAuction.Services.Services
             {
                 foreach (var playerDto in request.Players)
                 {
-                    
-                        var data = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(x => x.PlayerRegisterId ==playerDto.PlayerId);
 
-                        if (data != null)
-                        {
-                            data.PlayerGroupId = request.GroupId;
-                            data.BasePrice = request.Baseprice;
-                            data.UpdatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b");
-                            data.UpdatedOn = DateTime.UtcNow;
+                    var data = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(x => x.PlayerRegisterId == playerDto.PlayerId);
 
-                            await _readWriteUnitOfWork.CommitAsync();
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                    if (data != null)
+                    {
+                        data.PlayerGroupId = request.GroupId;
+                        data.BasePrice = request.Baseprice;
+                        data.UpdatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b");
+                        data.UpdatedOn = DateTime.UtcNow;
+
+                        await _readWriteUnitOfWork.CommitAsync();
                     }
-                
+                    else
+                    {
+                        return false;
+                    }
+                }
+
                 return true;
             }
             catch (Exception ex)

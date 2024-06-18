@@ -57,5 +57,6 @@ namespace JSOAuction.Domain.Entities.Tournament
         public bool? IsDeleted { get; set; }
         public decimal? BidAmount { get; set; }
         public decimal? TotalBalance { get; set; }
+        public bool? IsStart { get; set; }
     }
 }

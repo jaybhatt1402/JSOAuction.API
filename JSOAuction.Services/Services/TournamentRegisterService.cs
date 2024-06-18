@@ -41,6 +41,8 @@ namespace JSOAuction.Services.Services
 
         public async Task<List<TournamentRegister>> GetAllTournamentDetails()
         {
+           
+
             IEnumerable<TournamentRegister> tournament = new List<TournamentRegister>();
             _readWriteUnitOfWorkSP.LoadStoredProc("GetAllTournamentDetails")
                 .ExecuteStoredProc((handler) =>
@@ -301,6 +303,63 @@ namespace JSOAuction.Services.Services
                 throw new Exception("No tournament found");
             }
             return tournament.ToList();
+        }
+
+        public async Task<List<TournamentRegister>> GetTournamentAuctionStartStatus(List<int> request)
+        {
+            if (request == null || !request.Any())
+            {
+                throw new ArgumentException("Request list cannot be null or empty");
+            }
+
+            var tournamentList = new List<TournamentRegister>();
+
+            foreach (var id in request)
+            {
+                // Retrieve team data for the given tournament
+                var teamData =  _readWriteUnitOfWork.TeamRegisterRepository
+                    .GetAll()
+                    .Where(x => x.TournamentId == id && x.IsDeleted == false)
+                    .ToList();
+
+                // Retrieve player data for the given tournament
+                var playerData =  (from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
+                                        join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll()
+                                            on player.PlayerRegisterId equals mapping.PlayerId
+                                        where mapping.TournamentId == id && player.IsDeleted == false
+                                        select new
+                                        {
+                                            PlayerId = player.PlayerRegisterId,
+                                            PlayerName = player.FirstName,
+                                            TournamentId = mapping.TournamentId
+                                        }).ToList();
+
+                // Execute the stored procedure to get tournament details
+                IEnumerable<TournamentRegister> tournament = new List<TournamentRegister>();
+                _readWriteUnitOfWorkSP.LoadStoredProc("GetTournamentById")
+               .WithSqlParam("@Id", id)
+               .ExecuteStoredProc((handler) =>
+               {
+                   tournament = handler.ReadToList<TournamentRegister>();
+               });
+                if (teamData.Any() && playerData.Any() && tournament.Any())
+                {
+                    tournament.First().IsStart = true;
+                }
+                else
+                {
+                    tournament.First().IsStart = false;
+                }
+
+                tournamentList.AddRange(tournament);
+            }
+
+            if (!tournamentList.Any())
+            {
+                throw new Exception("No tournament found");
+            }
+
+            return tournamentList;
         }
     }
 }

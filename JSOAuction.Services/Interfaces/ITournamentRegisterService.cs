@@ -12,5 +12,6 @@ namespace JSOAuction.Services.Interfaces
         Task<bool> DeleteTournament(DeleteTournamentDto request);
         Task<string> UpdateTournament(UpdateTournamentRegisterDto request);
         Task<List<TournamentRegister>> GetTournamentById(GetByTournamentIdDto request);
+        Task<List<TournamentRegister>> GetTournamentAuctionStartStatus(List<int> request);
     }
 }
