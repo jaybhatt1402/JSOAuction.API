@@ -72,6 +72,13 @@ namespace JSOAuction.Services.Services
         {
             var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
 
+            var existingTournamentAuction = await _readWriteUnitOfWork.AuctionRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId && x.IsDeleted == false);
+
+            if (existingTournamentAuction != null)
+            {
+                return 1;
+            }
+
             var saveTournamentAuction = new AuctionRegister()
             {
                 TournamentId = tournamentData.TournamentId,
