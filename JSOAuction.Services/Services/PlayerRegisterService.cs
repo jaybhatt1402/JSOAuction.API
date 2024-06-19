@@ -286,7 +286,7 @@ namespace JSOAuction.Services.Services
 
         public async Task<object> SavePlayer(SavePlayerRegisterDto request)
         {
-            var existingPlayer = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNo == request.MobileNo);
+            var existingPlayer = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNo == request.MobileNo && x.IsDeleted == false);
 
             if (existingPlayer != null)
             {
@@ -374,7 +374,7 @@ namespace JSOAuction.Services.Services
             return savePlayerRegister.PlayerRegisterId;
         }
 
-        public async Task<int> UpdatePlayer(UpdatePlayerDto request)
+        public async Task<object> UpdatePlayer(UpdatePlayerDto request)
         {
             string uploadId = "";
             //TODO
@@ -397,6 +397,13 @@ namespace JSOAuction.Services.Services
             //}
 
             //Save Data in UserRegister Table.
+            var existingPlayer = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNo == request.MobileNo && x.PlayerRegisterId != request.PlayerRegisterId && x.IsDeleted == false);
+
+            if (existingPlayer != null)
+            {
+                return "Mobile number is already in use";
+            }
+
             var hashPassword = GenericMethods.GetHash(request.Password);
             var data = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(x => x.PlayerRegisterId == request.PlayerRegisterId);
             if (data != null)
