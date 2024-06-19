@@ -13,6 +13,10 @@ namespace JSOAuction.API.Request.Auction
         public decimal? NextBid { get; set;}
         public int? TournamentId { get; set; }
     }
+    public class SaveTournamentAuctionRequest
+    {
+        public int? TournamentId { get; set; }
+    }
 
     public class UpdateAuctionRequest
     {

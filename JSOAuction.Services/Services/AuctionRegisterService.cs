@@ -68,6 +68,30 @@ namespace JSOAuction.Services.Services
             return saveAuction.AuctionId;
         }
 
+        public async Task<int> SaveTournamentAuction(SaveTournamentAuctionDto request)
+        {
+            var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
+
+            var saveTournamentAuction = new AuctionRegister()
+            {
+                TournamentId = tournamentData.TournamentId,
+                AuctionName = tournamentData.TournamentName,
+                Location = tournamentData.City,
+                StartDate = tournamentData.StartDate,
+                EndDate = tournamentData.EndDate,
+                IsDeleted = false,
+                IsActive = true,
+                CreatedOn = DateTime.UtcNow,
+                Year = tournamentData.StartDate.Value.Year,
+                CreatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b"),
+            };
+
+            await _readWriteUnitOfWork.AuctionRegisterRepository.AddAsync(saveTournamentAuction);
+            await _readWriteUnitOfWork.CommitAsync();
+
+            return saveTournamentAuction.AuctionId;
+        }
+
         public async Task<int> UpdateAuction(UpdateAuctionDto request)
         {
             var data = await _readWriteUnitOfWork.AuctionRegisterRepository.GetFirstOrDefaultAsync(x => x.AuctionId == request.AuctionId);

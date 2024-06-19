@@ -16,6 +16,7 @@ namespace JSOAuction.API.Infrastructure.Automapper
         public AuctionMappingProfile()
         {
             CreateMap<SaveAuctionRequest, SaveAuctionDto>().ReverseMap();
+            CreateMap<SaveTournamentAuctionRequest, SaveTournamentAuctionDto>().ReverseMap();
             CreateMap<UpdateAuctionRequest, UpdateAuctionDto>().ReverseMap();
             CreateMap<DeleteAuctionRequest, DeleteAuctionDto>().ReverseMap();
         }

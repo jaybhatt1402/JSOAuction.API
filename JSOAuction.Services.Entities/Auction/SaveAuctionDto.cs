@@ -18,6 +18,11 @@ namespace JSOAuction.Services.Entities.Auction
         public int? TournamentId { get; set; }
     }
 
+    public class SaveTournamentAuctionDto
+    {
+        public int? TournamentId { get; set; }
+    }
+
     public class UpdateAuctionDto
     {
         public int AuctionId { get; set; }

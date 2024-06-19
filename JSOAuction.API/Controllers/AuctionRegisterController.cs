@@ -37,6 +37,13 @@ namespace JSOAuction.API.Controllers
             var result = await _auctionRegisterService.SaveAuction(saveAuctionDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
+        [HttpPost("SaveTournamentAuction")]
+        public async Task<Dictionary<string, object>> SaveTournamentAuction([FromBody] SaveTournamentAuctionRequest saveTournamentAuctionRequest)
+        {
+            var saveTournamentAuctionDto = _mapper.Map<SaveTournamentAuctionRequest, SaveTournamentAuctionDto>(saveTournamentAuctionRequest);
+            var result = await _auctionRegisterService.SaveTournamentAuction(saveTournamentAuctionDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
         [HttpPost("UpdateAuction")]
         public async Task<Dictionary<string, object>> UpdateAuction([FromBody] UpdateAuctionRequest updateAuctionRequest)
         {

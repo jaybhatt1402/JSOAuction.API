@@ -9,6 +9,7 @@ namespace JSOAuction.Services.Interfaces
     {
         Task<List<AuctionRegister>> GetAllAuctionDetails();
         Task<int> SaveAuction(SaveAuctionDto saveAuctionRequest);
+        Task<int> SaveTournamentAuction(SaveTournamentAuctionDto saveAuctionRequest);
         Task<int> UpdateAuction(UpdateAuctionDto updateAuctionRequest);
         Task<bool> DeleteAuction(DeleteAuctionDto request);
         Task<List<AuctionRegister>> GetAuctionById(int? AuctionId);
