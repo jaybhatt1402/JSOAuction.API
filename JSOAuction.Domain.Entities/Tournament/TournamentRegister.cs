@@ -58,5 +58,6 @@ namespace JSOAuction.Domain.Entities.Tournament
         public decimal? BidAmount { get; set; }
         public decimal? TotalBalance { get; set; }
         public bool? IsStart { get; set; }
+        public int? CurrentTeamLength { get; set; }
     }
 }

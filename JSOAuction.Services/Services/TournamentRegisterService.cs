@@ -322,6 +322,9 @@ namespace JSOAuction.Services.Services
                     .Where(x => x.TournamentId == id && x.IsDeleted == false)
                     .ToList();
 
+                //Added team data count
+                int currentTeamLength = teamData.Count;
+
                 // Retrieve player data for the given tournament
                 var playerData =  (from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
                                         join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll()
@@ -342,6 +345,9 @@ namespace JSOAuction.Services.Services
                {
                    tournament = handler.ReadToList<TournamentRegister>();
                });
+
+                tournament.First().CurrentTeamLength = currentTeamLength;
+
                 if (teamData.Any() && playerData.Any() && tournament.Any())
                 {
                     tournament.First().IsStart = true;
