@@ -76,7 +76,7 @@ namespace JSOAuction.Services.Services
 
             if (existingTournamentAuction != null)
             {
-                return 1;
+                return existingTournamentAuction.AuctionId;
             }
 
             var saveTournamentAuction = new AuctionRegister()
