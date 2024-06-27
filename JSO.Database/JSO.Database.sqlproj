@@ -105,5 +105,7 @@
     <Build Include="dbo\Stored Procedures\BidSave.sql" />
     <Build Include="dbo\Stored Procedures\GetTournamentById.sql" />
     <Build Include="dbo\Stored Procedures\DeletePlayer.sql" />
+    <Build Include="dbo\Tables\Formats.sql" />
+    <Build Include="dbo\Stored Procedures\GetFormatList.sql" />
   </ItemGroup>
 </Project>

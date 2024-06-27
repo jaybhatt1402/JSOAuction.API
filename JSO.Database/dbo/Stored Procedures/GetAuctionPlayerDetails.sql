@@ -36,7 +36,9 @@ BEGIN
 			FROM
 			PlayerRegister pr WITH(NOLOCK) 
 			JOIN AuctionPlayerMapping pm ON pm.PlayerId = pr.PlayerRegisterId
-            WHERE TournamentId = @TournamentId AND (pr.PlayerNo = @PlayerNo)
+            WHERE TournamentId = @TournamentId
+			AND (@PlayerNo IS NULL OR pr.PlayerNo = @PlayerNo)
+			AND (@PlayerCategory IS NULL OR pr.PlayerGroupId = @PlayerCategory)
             AND PlayerStatus IN ('notdisclosed', 'disclosed', 'unsold')
 			AND pm.UnsoldCount IN (0, 1)
         )
@@ -82,7 +84,7 @@ BEGIN
 				AND
                 (@PlayerNo IS NULL OR pr.PlayerNo = @PlayerNo)
                 AND
-                (@PlayerCategory IS NULL OR pr.PlayerCategory = @PlayerCategory)
+                (@PlayerCategory IS NULL OR pr.PlayerGroupId = @PlayerCategory)
 		END
 		ELSE
 		BEGIN
@@ -129,17 +131,17 @@ BEGIN
 				AND
                 (@PlayerNo IS NULL OR pr.PlayerNo = @PlayerNo)
                 AND
-                (@PlayerCategory IS NULL OR pr.PlayerCategory = @PlayerCategory)
-			ORDER BY 
-				CASE 
-				    WHEN pr.SortByType = 'Batsman' THEN 1
-				    WHEN pr.SortByType = 'Bowl' THEN 2
-				    WHEN pr.SortByType = 'WK' THEN 3
-				    WHEN pr.SortByType = 'Allrounder' THEN 4
-				    ELSE 5 
-				END
-				,pr.SortByIndex ASC
-				,CASE WHEN @AuctionId = 1 THEN 1 ELSE 0 END DESC
+                (@PlayerCategory IS NULL OR pr.PlayerGroupId = @PlayerCategory)
+			--ORDER BY 
+			--	CASE 
+			--	    WHEN pr.SortByType = 'Batsman' THEN 1
+			--	    WHEN pr.SortByType = 'Bowl' THEN 2
+			--	    WHEN pr.SortByType = 'WK' THEN 3
+			--	    WHEN pr.SortByType = 'Allrounder' THEN 4
+			--	    ELSE 5 
+			--	END
+			--	,pr.SortByIndex ASC
+			--	,CASE WHEN @AuctionId = 1 THEN 1 ELSE 0 END DESC
 				
 		END
 	END
@@ -168,11 +170,12 @@ BEGIN
 			tr.TeamName,
 			bid.BidAmount,
 			tr.TeamSize,
-			CASE 
-			    WHEN pr.PlayerCategory <> 'I'
-			    THEN tr.TotalBalance - ISNULL((SELECT TOP 1 BidAmount FROM [dbo].[Bids] WHERE TeamId = tr.TeamId AND AuctionId = @AuctionId AND PlayerId = pr.PlayerRegisterId AND Sold = 0 AND IsDeleted = 0 ORDER BY CreatedOn DESC), 0)
-			    ELSE tr.TotalBalance
-			END AS RemainingBalance,
+			--CASE 
+			--    WHEN pr.PlayerCategory <> 'I'
+			--    THEN tr.TotalBalance - ISNULL((SELECT TOP 1 BidAmount FROM [dbo].[Bids] WHERE TeamId = tr.TeamId AND AuctionId = @AuctionId AND PlayerId = pr.PlayerRegisterId AND Sold = 0 AND IsDeleted = 0 ORDER BY CreatedOn DESC), 0)
+			--    ELSE tr.TotalBalance
+			--END AS RemainingBalance,
+			tr.TotalBalance - ISNULL((SELECT TOP 1 BidAmount FROM [dbo].[Bids] WHERE TeamId = tr.TeamId AND AuctionId = @AuctionId AND PlayerId = pr.PlayerRegisterId AND Sold = 0 AND IsDeleted = 0 ORDER BY CreatedOn DESC), 0) AS RemainingBalance,
 			tr.MaximumBid,
 			pm.PlayerStatus,
 			pm.UnsoldCount,
@@ -180,7 +183,7 @@ BEGIN
 			CAST(1 AS BIT) as IsVideoAvailable,
 			pm.ShowSoldPopup,
 			tm.TeamName AS OldTeamName,
-			pr.PlayerCategory,
+			gr.GroupName,
 			pr.PlayerNo
 		FROM 
 			PlayerRegister pr WITH(NOLOCK)
@@ -192,6 +195,8 @@ BEGIN
 			TeamRegister tr ON tr.TeamId = bid.TeamId
 		LEFT JOIN
 			TeamRegister tm ON tm.TeamId = pr.PreviousTeamId
+		LEFT JOIN
+			Groups gr ON gr.Id = pr.PlayerGroupId
 		WHERE
 			pm.TournamentId = @TournamentId
 			AND

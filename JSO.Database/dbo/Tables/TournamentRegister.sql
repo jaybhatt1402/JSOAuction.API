@@ -46,8 +46,12 @@
     [AuctionStartTime]  DATETIME         NULL,
     [IsStart]           BIT              NULL,
     [CurrentTeamLength] INT              NULL,
-    CONSTRAINT [PK_TournamentRegister] PRIMARY KEY CLUSTERED ([TournamentId] ASC)
+    [FormatId]          INT              NULL,
+    CONSTRAINT [PK_TournamentRegister] PRIMARY KEY CLUSTERED ([TournamentId] ASC),
+    CONSTRAINT [FK_TournamentRegister_Formats] FOREIGN KEY ([FormatId]) REFERENCES [dbo].[Formats] ([Id])
 );
+
+
 
 
 
