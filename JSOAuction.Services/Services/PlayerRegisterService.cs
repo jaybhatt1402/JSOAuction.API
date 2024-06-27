@@ -255,25 +255,45 @@ namespace JSOAuction.Services.Services
             var teamData = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.TeamId == request.TeamId);
 
             int isuccess = 1;
-            if (tournamentData.MaxPlayer > teamData.TeamSize)
+            if(teamData != null)
             {
-                _readWriteUnitOfWorkSP.LoadStoredProc("SoldAuctionPlayer")
-                        .WithSqlParam("@AuctionId", request.AuctionId)
-                        .WithSqlParam("@PlayerId", request.PlayerId)
-                        .WithSqlParam("@TeamId", request.TeamId != null ? request.TeamId : DBNull.Value, DbType.Int32)
-                        .WithSqlParam("@BidId", request.BidId != null ? request.BidId : DBNull.Value, DbType.Int32)
-                        .WithSqlParam("@Status", request.Status)
-                        .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
-                        .WithSqlParam("@TournamentId", request.TournamentId)
-                        .ExecuteStoredProc((handler) =>
-                        {
-                            isuccess = Convert.ToInt32(handler.GetValue("@Success"));
-                        });
+                if (tournamentData.MaxPlayer > teamData.TeamSize)
+                {
+                    _readWriteUnitOfWorkSP.LoadStoredProc("SoldAuctionPlayer")
+                            .WithSqlParam("@AuctionId", request.AuctionId)
+                            .WithSqlParam("@PlayerId", request.PlayerId)
+                            .WithSqlParam("@TeamId", request.TeamId != null ? request.TeamId : DBNull.Value, DbType.Int32)
+                            .WithSqlParam("@BidId", request.BidId != null ? request.BidId : DBNull.Value, DbType.Int32)
+                            .WithSqlParam("@Status", request.Status)
+                            .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
+                            .WithSqlParam("@TournamentId", request.TournamentId)
+                            .ExecuteStoredProc((handler) =>
+                            {
+                                isuccess = Convert.ToInt32(handler.GetValue("@Success"));
+                            });
+                }
+                else
+                {
+                    isuccess = 0;
+                }
             }
             else
             {
-                isuccess = 0;
+                    _readWriteUnitOfWorkSP.LoadStoredProc("SoldAuctionPlayer")
+                            .WithSqlParam("@AuctionId", request.AuctionId)
+                            .WithSqlParam("@PlayerId", request.PlayerId)
+                            .WithSqlParam("@TeamId", request.TeamId != null ? request.TeamId : DBNull.Value, DbType.Int32)
+                            .WithSqlParam("@BidId", request.BidId != null ? request.BidId : DBNull.Value, DbType.Int32)
+                            .WithSqlParam("@Status", request.Status)
+                            .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
+                            .WithSqlParam("@TournamentId", request.TournamentId)
+                            .ExecuteStoredProc((handler) =>
+                            {
+                                isuccess = Convert.ToInt32(handler.GetValue("@Success"));
+                            });
+               
             }
+
             if (isuccess > 0)
             {
                 return true;
@@ -311,6 +331,18 @@ namespace JSOAuction.Services.Services
             //{
             //    return false;
             //}
+
+            var maxPlayerNo = _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
+                   .Join(
+                       _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll(),
+                       player => player.PlayerRegisterId,
+                       mapping => mapping.PlayerId,
+                       (player, mapping) => new { player, mapping }
+                   )
+                   .Where(joined => joined.mapping.TournamentId == request.TournamentId && joined.player.IsDeleted == false)
+                   .Max(joined => (int?)joined.player.PlayerNo) ?? 0;
+
+            int newPlayerNo = maxPlayerNo + 1;
 
             string uploadId = "";
             //TODO
@@ -353,7 +385,8 @@ namespace JSOAuction.Services.Services
                 CreatedOn = DateTime.UtcNow,
                 IsDeleted = false,
                 IsActive = true,
-                City = request.City
+                City = request.City,
+                PlayerNo = newPlayerNo
 
             };
             await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
