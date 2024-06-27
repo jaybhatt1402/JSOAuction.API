@@ -1,5 +1,6 @@
 ﻿using JSOAuction.Domain.Entities.Groups;
 using JSOAuction.Domain.Entities.Tournament;
+using JSOAuction.Services.Entities.Format;
 using JSOAuction.Services.Entities.Groups;
 using JSOAuction.Services.Entities.Tournament;
 
@@ -13,5 +14,7 @@ namespace JSOAuction.Services.Interfaces
         Task<string> UpdateTournament(UpdateTournamentRegisterDto request);
         Task<List<TournamentRegister>> GetTournamentById(GetByTournamentIdDto request);
         Task<List<TournamentRegister>> GetTournamentAuctionStartStatus(List<int> request);
+        Task<List<FormatDetailsResponseModel>> GetTournamentFormatById();
     }
 }
+

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using JSOAuction.API.Request.Bids;
+using JSOAuction.API.Request.Groups;
 using JSOAuction.API.Request.PlayerRegister;
 using JSOAuction.API.Request.Tournament;
 using JSOAuction.Services.Entities.Bids;
+using JSOAuction.Services.Entities.Groups;
 using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Entities.PlayersDetailsByTeam;
 using JSOAuction.Services.Entities.Tournament;
@@ -108,6 +110,12 @@ namespace JSOAuction.API.Controllers
         {
             //var getTournamentDto = _mapper.Map<GetByTournamentIdRequest, GetByTournamentIdDto>(request);
             var result = await _tournamentRegisterService.GetTournamentAuctionStartStatus(request);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
+        [HttpPost("GetTournamentFormatById")]
+        public async Task<Dictionary<string, object>> GetTournamentFormatById()
+        {
+            var result = await _tournamentRegisterService.GetTournamentFormatById();
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
     }

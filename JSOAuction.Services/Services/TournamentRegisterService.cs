@@ -6,6 +6,8 @@ using Google.Apis.Upload;
 using JSOAuction.Data.Contexts;
 using JSOAuction.Data.Infrastructure;
 using JSOAuction.Domain.Entities.Tournament;
+using JSOAuction.Services.Entities.Format;
+using JSOAuction.Services.Entities.Groups;
 using JSOAuction.Services.Entities.Tournament;
 using JSOAuction.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -367,5 +369,27 @@ namespace JSOAuction.Services.Services
 
             return tournamentList;
         }
+
+        public async Task<List<FormatDetailsResponseModel>> GetTournamentFormatById()
+        {
+            IEnumerable<FormatDetailsResponseModel> format = new List<FormatDetailsResponseModel>();
+            try
+            {
+                _readWriteUnitOfWorkSP.LoadStoredProc("GetFormatList")
+                    .ExecuteStoredProc((handler) =>
+                    {
+                        format = handler.ReadToList<FormatDetailsResponseModel>();
+                    });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Invalid TournamentId provided.", ex);
+            }
+
+            var retData = format.ToList();
+
+            return retData;
+        }
+
     }
 }

@@ -57,4 +57,4 @@ namespace JSOAuction.Services.Entities.Tournament
     {
         public int TournamentId { get; set; }
     }
-    }
+}
