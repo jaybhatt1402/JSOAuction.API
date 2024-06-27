@@ -52,6 +52,7 @@ namespace JSOAuction.API.Request.Tournament
         public decimal? Amount { get; set; }
         public decimal? BidAmount { get; set; }
         public decimal? TotalBalance { get; set; }
+        public int? FormatId { get; set; }
 
     }
     public class GetByTournamentIdRequest

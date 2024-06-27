@@ -124,7 +124,8 @@ namespace JSOAuction.Services.Services
                 IsActive = true,
                 IsDeleted = false,
                 BidAmount = request.BidAmount,
-                TotalBalance = request.TotalBalance
+                TotalBalance = request.TotalBalance,
+                FormatId = request.FormatId
             };
             await _readWriteUnitOfWork.TournamentRegisterRepository.AddAsync(saveTournament);
             await _readWriteUnitOfWork.CommitAsync();
