@@ -392,5 +392,25 @@ namespace JSOAuction.Services.Services
             return retData;
         }
 
+        public async Task<bool> MatchTournamentLink(MatchTournamentLinkDto request)
+        {
+                var tournamentRegister = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
+
+                if (tournamentRegister != null)
+                {
+                    var dueTime = tournamentRegister.DueTime.Value.TimeOfDay;
+                    var currentTime = DateTime.Now.TimeOfDay;
+
+                    if (dueTime > currentTime)
+                    {
+                        return true;
+                    }
+                }
+
+            return false;
+        }
+
+
+
     }
 }

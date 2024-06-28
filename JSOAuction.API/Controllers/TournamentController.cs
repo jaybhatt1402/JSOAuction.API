@@ -118,5 +118,12 @@ namespace JSOAuction.API.Controllers
             var result = await _tournamentRegisterService.GetTournamentFormatById();
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
+        [HttpPost("MatchTournamentLink")]
+        public async Task<Dictionary<string, object>> MatchTournamentLink([FromBody] MatchTournamentLinkRequest request)
+        {
+            var matchTournamentLinkDto = _mapper.Map<MatchTournamentLinkRequest, MatchTournamentLinkDto>(request);
+            var result = await _tournamentRegisterService.MatchTournamentLink(matchTournamentLinkDto);
+            return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
+        }
     }
 }

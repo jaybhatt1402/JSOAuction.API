@@ -58,4 +58,8 @@ namespace JSOAuction.Services.Entities.Tournament
     {
         public int TournamentId { get; set; }
     }
+    public class MatchTournamentLinkDto
+    {
+        public int TournamentId { get; set; }
+    }
 }

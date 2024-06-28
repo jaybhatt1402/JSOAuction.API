@@ -15,6 +15,7 @@ namespace JSOAuction.Services.Interfaces
         Task<List<TournamentRegister>> GetTournamentById(GetByTournamentIdDto request);
         Task<List<TournamentRegister>> GetTournamentAuctionStartStatus(List<int> request);
         Task<List<FormatDetailsResponseModel>> GetTournamentFormatById();
+        Task<bool> MatchTournamentLink(MatchTournamentLinkDto request);
     }
 }
 

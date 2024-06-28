@@ -59,4 +59,8 @@ namespace JSOAuction.API.Request.Tournament
     {
         public int TournamentId { get; set; }
     }
+    public class MatchTournamentLinkRequest
+    {
+        public int? TournamentId { get; set; }
     }
+}

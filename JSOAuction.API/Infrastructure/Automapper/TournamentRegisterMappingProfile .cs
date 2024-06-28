@@ -22,6 +22,7 @@ namespace JSOAuction.API.Infrastructure.Automapper
              CreateMap<UpdateTournamentRegisterRequest, UpdateTournamentRegisterDto>();
             CreateMap<DeleteTournamentRequest, DeleteTournamentDto>();
             CreateMap<GetByTournamentIdRequest, GetByTournamentIdDto>();
+            CreateMap<MatchTournamentLinkRequest, MatchTournamentLinkDto>();
             //CreateMap<TournamentRegister, UpdateTournamentRegisterDto>().ReverseMap();
         }
     }
