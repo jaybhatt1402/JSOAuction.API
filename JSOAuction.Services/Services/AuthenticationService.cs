@@ -34,49 +34,59 @@ namespace JSOAuction.Services.Services
             this._readWriteUnitOfWork = readWriteUnitOfWork;
         }
 
-        public async Task<LoginDto> AuthenticateAsync(UserAuthRequestDto request, string ipAddress)
+        public async Task<AuthenticationResult> AuthenticateAsync(UserAuthRequestDto request, string ipAddress)
         {
-            //var hashPassword = GenericMethods.GetHash(request.Password);
-            //var user = await _readOnlyUnitOfWork.UserRegisterRepository.GetFirstOrDefaultAsync(x => x.EmailAddress == request.EmailId && x.Password == hashPassword);
-            //if (user == null)
-            //    throw new BadResultException("Email and Password Not valid");
+            var hashPassword = GenericMethods.GetHash(request.Password);
+            var user = await _readOnlyUnitOfWork.SignUpRepository.GetFirstOrDefaultAsync(x => x.EmailId == request.EmailId && x.ConfirmPassword == hashPassword);
+            if (user == null)
+            {
+                return new AuthenticationResult
+                {
+                    Error = new ErrorAuthentication
+                    {
+                        ErrorMessage = "Email and Password are not valid"
+                    }
+                };
+            }
 
-            //LoginDto loginDto = new LoginDto();
-            //loginDto.Id = user.UserId;
-            //loginDto.FirstName = user.FirstName;
-            //loginDto.LastName = user.LastName;
-            //loginDto.EmailId = user.EmailAddress;
-            //loginDto.Mobile = user.MobileNo;
-            //loginDto.UserType = user.UserType;
-            //loginDto.JwtToken = _jwtService.GenerateSecurityToken(new SessionDetailsDto
-            //{
-            //    FirstName = loginDto.FirstName,
-            //    LastName = loginDto.LastName,
-            //    UserId = loginDto.Id
-            //}, _appSettings, out var expiresOn);
 
-            //var refreshToken = _jwtService.GenerateRefreshToken(ipAddress);
-            //refreshToken.UserId = loginDto.Id;
-            //loginDto.RefreshToken = refreshToken.Token;
-            //var isRefTokenExist = await _readOnlyUnitOfWork.RefreshTokenRepository.AnyAsync(x => x.UserId == user.UserId);
-            //if (isRefTokenExist)
-            //{
-            //    // remove old refresh tokens from user
-            //    RemoveOldRefreshTokens(user.UserId);
-            //    //await _readWriteUnitOfWork.RefreshTokenRepository.AttachUpdateEntity(refreshToken);
-            //}
-            //else
-            //{
-            //    await _readWriteUnitOfWork.RefreshTokenRepository.AddAsync(refreshToken);
-            //}
-            //await _readWriteUnitOfWork.CommitAsync();
+            LoginDto loginDto = new LoginDto();
+            loginDto.Id = user.Id;
+            loginDto.FirstName = user.FirstName;
+            loginDto.LastName = user.LastName;
+            loginDto.EmailId = user.EmailId;
+            loginDto.Mobile = user.Mobile;
+            loginDto.JwtToken = _jwtService.GenerateSecurityToken(new SessionDetailsDto
+            {
+                FirstName = loginDto.FirstName,
+                LastName = loginDto.LastName,
+                UserId = loginDto.Id
+            }, _appSettings, out var expiresOn);
+
+            var refreshToken = _jwtService.GenerateRefreshToken(ipAddress);
+            refreshToken.UserId = loginDto.Id;
+            loginDto.RefreshToken = refreshToken.Token;
+            var isRefTokenExist = await _readOnlyUnitOfWork.RefreshTokenRepository.AnyAsync(x => x.UserId == user.Id);
+            if (isRefTokenExist)
+            {
+                // remove old refresh tokens from user
+                RemoveOldRefreshTokens(user.Id);
+                //await _readWriteUnitOfWork.RefreshTokenRepository.AttachUpdateEntity(refreshToken);
+            }
+            else
+            {
+                await _readWriteUnitOfWork.RefreshTokenRepository.AddAsync(refreshToken);
+            }
+            await _readWriteUnitOfWork.CommitAsync();
             //var account = await _readOnlyUnitOfWork.AccountsRepository.GetFirstOrDefaultAsync(x => x.Name == username);
             //var account = await _masterDBContext.AccountsRepository.GetFirstOrDefaultAsync(x => x.Name == request.EmailId);
-            //return loginDto;
-            return null;
+            return new AuthenticationResult
+            {
+                LoginDto = loginDto
+            };
         }
 
-        private void RemoveOldRefreshTokens(Guid UserId)
+        private void RemoveOldRefreshTokens(int UserId)
         {
             // remove old inactive refresh tokens from user based on TTL in app settings
             var data = _readWriteUnitOfWork.RefreshTokenRepository.GetAll(x => x.UserId == UserId).ToList();

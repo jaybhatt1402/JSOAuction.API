@@ -19,6 +19,7 @@ using JSOAuction.Domain.Entities.AuctionRegister;
 using JSOAuction.Domain.Entities.Bids;
 using JSOAuction.Domain.Entities.Tournament;
 using JSOAuction.Domain.Entities.Groups;
+using JSOAuction.Domain.Entities.SignUps;
 
 namespace JSOAuction.Data.Contexts
 {
@@ -108,6 +109,7 @@ namespace JSOAuction.Data.Contexts
         public DbSet<AuctionPlayerMapping> AuctionPlayerMapping { get; set; }
         public DbSet<TournamentRegister> TournamentRegister { get; set; }
         public DbSet<Groups> Groups { get; set; }
+        public DbSet<SignUp> SignUps { get; set; }
 
     }
 

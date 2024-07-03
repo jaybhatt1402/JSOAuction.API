@@ -10,7 +10,7 @@ namespace JSOAuction.Services.Interfaces
 {
     public interface IAuthenticationService
     {
-        Task<LoginDto> AuthenticateAsync(UserAuthRequestDto request, string ipAddress);
+        Task<AuthenticationResult> AuthenticateAsync(UserAuthRequestDto request, string ipAddress);
 
     }
 }
