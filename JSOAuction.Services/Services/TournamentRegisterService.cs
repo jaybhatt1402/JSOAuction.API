@@ -310,6 +310,7 @@ namespace JSOAuction.Services.Services
 
         public async Task<List<TournamentRegister>> GetTournamentAuctionStartStatus(List<int> request)
         {
+
             if (request == null || !request.Any())
             {
                 throw new ArgumentException("Request list cannot be null or empty");
@@ -327,6 +328,8 @@ namespace JSOAuction.Services.Services
 
                 //Added team data count
                 int currentTeamLength = teamData.Count;
+
+                var groupData = _readWriteUnitOfWork.GroupsRepository.GetAll().Where(x => x.TournamentId == id && x.IsDeleted == false);
 
                 // Retrieve player data for the given tournament
                 var playerData =  (from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
@@ -351,7 +354,7 @@ namespace JSOAuction.Services.Services
 
                 tournament.First().CurrentTeamLength = currentTeamLength;
 
-                if (teamData.Any() && playerData.Any() && tournament.Any())
+                if (teamData.Any() && playerData.Any() && tournament.Any() && groupData.Any())
                 {
                     tournament.First().IsStart = true;
                 }
