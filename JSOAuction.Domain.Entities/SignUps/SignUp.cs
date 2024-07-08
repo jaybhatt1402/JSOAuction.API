@@ -21,7 +21,8 @@ namespace JSOAuction.Domain.Entities.SignUps
         public string? NewPassword { get; set; }
         public string? ConfirmPassword { get; set; }
         public bool? IsDeleted { get; set; }
-        
+        public Guid? ResetPasswordToken { get; set; }
+
     }
 }
 

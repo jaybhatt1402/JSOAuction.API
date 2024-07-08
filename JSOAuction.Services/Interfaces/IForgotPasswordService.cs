@@ -6,5 +6,6 @@ namespace JSOAuction.Services.Interfaces
     public interface IForgotPasswordService
     {
         Task<object> ForgotPassword(ForgotPasswordDto request);
+        Task<object> ResetPassword(ResetPasswordDto request);
     }
 }

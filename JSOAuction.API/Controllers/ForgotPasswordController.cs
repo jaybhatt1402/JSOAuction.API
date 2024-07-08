@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using JSOAuction.API.Request.ForgotPassword;
+using JSOAuction.API.Request.PlayerRegister;
 using JSOAuction.Services.Entities.ForgotPassword;
+using JSOAuction.Services.Entities.PlayerRegister;
 using JSOAuction.Services.Interfaces;
 using JSOAuction.Utility;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +27,17 @@ namespace JSOAuction.API.Controllers
         [HttpPost("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
         {
-            var result = await _forgotPasswordService.ForgotPassword(new ForgotPasswordDto { EmailId = request.EmailId });
+            var saveForgotPassword = _mapper.Map<ForgotPasswordRequest, ForgotPasswordDto>(request);
+
+            var result = await _forgotPasswordService.ForgotPassword(saveForgotPassword);
+            return Ok(result);
+        }
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+        {
+            var saveResetPassword = _mapper.Map<ResetPasswordRequest, ResetPasswordDto>(request);
+
+            var result = await _forgotPasswordService.ResetPassword(saveResetPassword);
             return Ok(result);
         }
 

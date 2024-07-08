@@ -4,4 +4,11 @@
     {
         public string EmailId { get; set; }
     }
+
+    public class ResetPasswordRequest
+    {
+        public string? ConfirmPassword { get; set; }
+        public Guid? ResetPasswordToken { get; set; }
+
+    }
 }

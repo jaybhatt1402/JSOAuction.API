@@ -8,6 +8,7 @@ using MimeKit;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
+using JSOAuction.Utility;
 
 namespace JSOAuction.Services.Services
 {
@@ -45,7 +46,9 @@ namespace JSOAuction.Services.Services
             //var requestHost = _httpContextAccessor.HttpContext.Request.Host.Value;
             //var resetLink = $"https://{requestHost}/Account/ResetPassword?token={resetToken}";
 
-            var resetToken = Guid.NewGuid().ToString();
+            var resetToken = Guid.NewGuid();
+            data.ResetPasswordToken = resetToken;
+            await _readWriteUnitOfWork.CommitAsync();
             var resetLink = $"http://localhost:3000/sign-in?token={resetToken}";
 
             var emailSent = await SendResetEmailAsync(request.EmailId, resetLink);
@@ -83,6 +86,20 @@ namespace JSOAuction.Services.Services
                     return false;
                 }
             }
+        }
+
+        public async Task<object> ResetPassword(ResetPasswordDto request)
+        {
+            var data = await _readWriteUnitOfWork.SignUpRepository.GetFirstOrDefaultAsync(x => x.ResetPasswordToken == request.ResetPasswordToken);
+            if (data == null)
+            {
+                return "Invalid Token";
+            }
+
+            var hashPassword = GenericMethods.GetHash(request.ConfirmPassword);
+            data.ConfirmPassword = hashPassword;
+            await _readWriteUnitOfWork.CommitAsync();
+            return data.Id;
         }
     }
 }

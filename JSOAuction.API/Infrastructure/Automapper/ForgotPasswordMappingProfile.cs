@@ -11,6 +11,7 @@ namespace JSOAuction.API.Infrastructure.Automapper
         public ForgotPasswordMappingProfile()
         {
             CreateMap<ForgotPasswordRequest, ForgotPasswordDto>();
+            CreateMap<ResetPasswordRequest, ResetPasswordDto>();
 
         }
     }
