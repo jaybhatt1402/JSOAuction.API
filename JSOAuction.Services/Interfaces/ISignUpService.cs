@@ -6,6 +6,6 @@ namespace JSOAuction.Services.Interfaces
 {
     public interface ISignUpService
     {
-        Task<int> SignUpUser(SignUpDto request);
+        Task<object> SignUpUser(SignUpDto request);
     }
 }

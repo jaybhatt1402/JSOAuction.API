@@ -23,7 +23,7 @@ namespace JSOAuction.Services.Services
           IUnitOfWork<MasterDbContext> masterDBContext, IMapper mapper,
           IUnitOfWork<ReadWriteApplicationDbContext> readWriteUnitOfWork,
           ReadWriteApplicationDbContext readWriteUnitOfWorkSP)
-        {
+        { 
             _readOnlyUnitOfWork = readOnlyUnitOfWork;
             _masterDBContext = masterDBContext;
             _readWriteUnitOfWork = readWriteUnitOfWork;
@@ -31,8 +31,19 @@ namespace JSOAuction.Services.Services
             _readWriteUnitOfWorkSP = readWriteUnitOfWorkSP;
         }
 
-        public async Task<int> SignUpUser(SignUpDto request)
+        public async Task<object> SignUpUser(SignUpDto request)
         {
+            var existingPlayer = await _readWriteUnitOfWork.SignUpRepository.GetAllAsync();
+
+            var data = existingPlayer.ToList();
+
+            var conditionData = data.Where(x => x.Mobile == request.Mobile && x.IsDeleted == false).ToList();
+
+            if (conditionData.Count > 0)
+            {
+                return "Mobile number already registered.";
+            }
+
             var newPassword = GenericMethods.GetHash(request.NewPassword);
             var confirmPassword = GenericMethods.GetHash(request.ConfirmPassword);
             var signUpUser = new SignUp()
@@ -42,7 +53,8 @@ namespace JSOAuction.Services.Services
                 EmailId = request.EmailId,
                 Mobile = request.Mobile,
                 NewPassword = newPassword,
-                ConfirmPassword = confirmPassword
+                ConfirmPassword = confirmPassword,
+                IsDeleted = false
             };
             await _readWriteUnitOfWork.SignUpRepository.AddAsync(signUpUser);
             await _readWriteUnitOfWork.CommitAsync();

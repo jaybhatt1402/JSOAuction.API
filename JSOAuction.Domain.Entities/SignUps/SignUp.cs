@@ -20,6 +20,8 @@ namespace JSOAuction.Domain.Entities.SignUps
         public string? Mobile { get; set; }
         public string? NewPassword { get; set; }
         public string? ConfirmPassword { get; set; }
+        public bool? IsDeleted { get; set; }
+        
     }
 }
 
