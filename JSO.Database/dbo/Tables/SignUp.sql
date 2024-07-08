@@ -5,6 +5,9 @@
     [EmailId]         NVARCHAR (50)  NULL,
     [Mobile]          NVARCHAR (50)  NULL,
     [NewPassword]     NVARCHAR (MAX) NULL,
-    [ConfirmPassword] NVARCHAR (MAX) NULL
+    [ConfirmPassword] NVARCHAR (MAX) NULL,
+    [IsDeleted]       BIT            NULL
 );
+
+
 

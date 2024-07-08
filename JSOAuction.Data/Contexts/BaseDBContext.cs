@@ -110,7 +110,6 @@ namespace JSOAuction.Data.Contexts
         public DbSet<TournamentRegister> TournamentRegister { get; set; }
         public DbSet<Groups> Groups { get; set; }
         public DbSet<SignUp> SignUps { get; set; }
-
     }
 
     public interface IBaseContext

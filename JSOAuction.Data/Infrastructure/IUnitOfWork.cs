@@ -61,7 +61,7 @@ namespace JSOAuction.Data.Infrastructure
             this.AuctionPlayerMappingRepository = auctionPlayerMappingRepository;
             this.TournamentRegisterRepository = tournamentRegisterRepository;
             this.GroupsRepository = groupsRepository;
-            this.SignUpRepository = signUpRepository;   
+            this.SignUpRepository = signUpRepository;
         }
         public async Task<int> CommitAsync()
         {
