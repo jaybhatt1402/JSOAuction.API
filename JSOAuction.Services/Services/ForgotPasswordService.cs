@@ -49,7 +49,7 @@ namespace JSOAuction.Services.Services
             var resetToken = Guid.NewGuid();
             data.ResetPasswordToken = resetToken;
             await _readWriteUnitOfWork.CommitAsync();
-            var resetLink = $"http://localhost:3000/sign-in?token={resetToken}";
+            var resetLink = $"http://localhost:3000/update-password?token={resetToken}";
 
             var emailSent = await SendResetEmailAsync(request.EmailId, resetLink);
             if (!emailSent)
@@ -57,7 +57,7 @@ namespace JSOAuction.Services.Services
                 return "Error sending email.";
             }
 
-            return "Password reset link has been sent to your email.";
+            return data.ResetPasswordToken;
         }
 
         private async Task<bool> SendResetEmailAsync(string email, string resetLink)
@@ -96,7 +96,9 @@ namespace JSOAuction.Services.Services
                 return "Invalid Token";
             }
 
-            var hashPassword = GenericMethods.GetHash(request.ConfirmPassword);
+                var hashPassword = GenericMethods.GetHash(request.ConfirmPassword);
+            var hash = GenericMethods.GetHash(request.NewPassword);
+            data.NewPassword = hash;
             data.ConfirmPassword = hashPassword;
             await _readWriteUnitOfWork.CommitAsync();
             return data.Id;
