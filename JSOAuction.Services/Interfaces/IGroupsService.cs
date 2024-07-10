@@ -16,10 +16,10 @@ namespace JSOAuction.Services.Interfaces
 {
     public interface IGroupsService
     {
-        Task<int> SaveGroups(SaveGroupsDto request);
+        Task<object> SaveGroups(SaveGroupsDto request);
         Task<List<Groups>> GetAllGroupsDetails();
         Task<bool> DeleteGroup(DeleteGroupsDto request);
-        Task<int> UpdateGroup(UpdateGroupsDto request);
+        Task<object> UpdateGroup(UpdateGroupsDto request);
         Task<List<GroupDetailsResponseModel>> GetGroupListByTournamentId (GroupListDto request);
     }
 }

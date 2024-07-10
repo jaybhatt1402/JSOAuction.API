@@ -27,8 +27,23 @@ namespace JSOAuction.Services.Services
             _mapper = mapper;
             _readWriteUnitOfWorkSP = readWriteUnitOfWorkSP;
         }
-        public async Task<int> SaveGroups(SaveGroupsDto request)
+        public async Task<object> SaveGroups(SaveGroupsDto request)
         {
+            var existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.GroupName == request.GroupName && x.IsDeleted == false);
+            if (existingGroup != null)
+            {
+                return "BasePrice and GroupName already Existing.";
+            }
+            existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.IsDeleted == false);
+            if (existingGroup != null)
+            {
+                return "BasePrice already Existing.";
+            }
+            existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.GroupName == request.GroupName && x.IsDeleted == false);
+            if (existingGroup != null)
+            {
+                return "GroupName already Existing.";
+            }
             var saveGroups = new Groups()
             {
                 GroupName = request.GroupName,
@@ -79,8 +94,24 @@ namespace JSOAuction.Services.Services
             return false;
         }
 
-        public async Task<int> UpdateGroup(UpdateGroupsDto request)
+        public async Task<object> UpdateGroup(UpdateGroupsDto request)
         {
+            var existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.Id != request.Id && x.GroupName == request.GroupName && x.IsDeleted == false);
+            if (existingGroup != null)
+            {
+                return "BasePrice and GroupName already existing.";
+            }
+            existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.Id != request.Id && x.IsDeleted == false);
+            if (existingGroup != null)
+            {
+                return "BasePrice already existing.";
+            }
+            existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.GroupName == request.GroupName && x.Id != request.Id && x.IsDeleted == false);
+            if (existingGroup != null)
+            {
+                return "GroupName already existing.";
+            }
+
             var data = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (data != null)
