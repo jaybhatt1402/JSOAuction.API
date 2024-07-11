@@ -99,17 +99,17 @@ namespace JSOAuction.Services.Services
             var existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.Id != request.Id && x.GroupName == request.GroupName && x.IsDeleted == false);
             if (existingGroup != null)
             {
-                return "BasePrice and GroupName already existing.";
+                return "BasePrice and GroupName already Existing.";
             }
             existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.Id != request.Id && x.IsDeleted == false);
             if (existingGroup != null)
             {
-                return "BasePrice already existing.";
+                return "BasePrice already Existing.";
             }
             existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.GroupName == request.GroupName && x.Id != request.Id && x.IsDeleted == false);
             if (existingGroup != null)
             {
-                return "GroupName already existing.";
+                return "GroupName already Existing.";
             }
 
             var data = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.Id == request.Id);
