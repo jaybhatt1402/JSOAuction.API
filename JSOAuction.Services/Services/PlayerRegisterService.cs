@@ -107,7 +107,7 @@ namespace JSOAuction.Services.Services
             return players.ToList();
         }
 
-        public async Task<List<PlayerRegister>> GetAllPlayerDetailsWithTournamentID(int? TournamentId, PaginationDto paginationDto)
+        public async Task<List<PlayerRegisterResponse>> GetAllPlayerDetailsWithTournamentID(int? TournamentId, PaginationDto paginationDto)
         {
             var teamData = _readWriteUnitOfWork.TeamRegisterRepository.GetAll().Where(x => x.TournamentId == TournamentId && x.IsDeleted == false);
             var playerData = from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
@@ -118,17 +118,18 @@ namespace JSOAuction.Services.Services
                                  PlayerId = player.PlayerRegisterId,
                                  PlayerName = player.FirstName,
                                  TournamentId = mapping.TournamentId
+                                 
                              };
             var teamResult = teamData.ToList();
 
             var result = playerData.ToList();
 
-            IEnumerable<PlayerRegister> players = new List<PlayerRegister>();
+            IEnumerable<PlayerRegisterResponse> players = new List<PlayerRegisterResponse>();
             _readWriteUnitOfWorkSP.LoadStoredProc("GetAllPlayerDetailsWithTournamentID")
                 .WithSqlParam("@TournamentId", TournamentId)
                 .ExecuteStoredProc((handler) =>
                 {
-                    players = handler.ReadToList<PlayerRegister>();
+                    players = handler.ReadToList<PlayerRegisterResponse>();
                 });
             // if (players == null || !players.Any())
             // {

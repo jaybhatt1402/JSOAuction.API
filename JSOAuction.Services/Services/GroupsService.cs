@@ -29,17 +29,17 @@ namespace JSOAuction.Services.Services
         }
         public async Task<object> SaveGroups(SaveGroupsDto request)
         {
-            var existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.GroupName == request.GroupName && x.IsDeleted == false);
+            var existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.GroupName == request.GroupName && x.TournamentId == request.TournamentId && x.IsDeleted == false);
             if (existingGroup != null)
             {
                 return "BasePrice and GroupName already Existing.";
             }
-            existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.IsDeleted == false);
+            existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.TournamentId == request.TournamentId  && x.IsDeleted == false);
             if (existingGroup != null)
             {
                 return "BasePrice already Existing.";
             }
-            existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.GroupName == request.GroupName && x.IsDeleted == false);
+            existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.GroupName == request.GroupName && x.TournamentId == request.TournamentId && x.IsDeleted == false);
             if (existingGroup != null)
             {
                 return "GroupName already Existing.";
