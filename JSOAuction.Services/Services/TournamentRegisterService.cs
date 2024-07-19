@@ -397,22 +397,27 @@ namespace JSOAuction.Services.Services
 
         public async Task<bool> MatchTournamentLink(MatchTournamentLinkDto request)
         {
-                var tournamentRegister = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
+            var tournamentRegister = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
 
-                if (tournamentRegister != null)
+            if (tournamentRegister != null)
+            {
+                var dueDate = tournamentRegister.DueDate.Value;
+                var dueTime = tournamentRegister.DueTime.Value.TimeOfDay;
+                var currentDate = DateTime.Now.Date;
+                var currentTime = DateTime.Now.TimeOfDay;
+
+                if (dueDate > currentDate)
                 {
-                    var dueTime = tournamentRegister.DueTime.Value.TimeOfDay;
-                    var currentTime = DateTime.Now.TimeOfDay;
-
-                    if (dueTime > currentTime)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
+                else if (dueDate == currentDate && dueTime > currentTime)
+                {
+                    return true;
+                }
+            }
 
             return false;
         }
-
 
 
     }
