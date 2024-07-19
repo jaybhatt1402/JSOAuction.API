@@ -106,17 +106,17 @@ namespace JSOAuction.Services.Services
 
         public async Task<object> SaveTeam(TeamRegisterDto request)
         {
-            var existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TeamName == request.TeamName && x.IsDeleted == false);
+            var existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TournamentId == request.TournamentId && x.TeamName == request.TeamName && x.IsDeleted == false);
             if (existingPlayer != null)
             {
                 return "Mobile number and team name already registered.";
             }
-            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.IsDeleted == false);
+            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TournamentId == request.TournamentId && x.IsDeleted == false);
             if (existingPlayer != null)
             {
                 return "Mobile number already registered.";
             }
-            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.TeamName == request.TeamName && x.IsDeleted == false);
+            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.TeamName == request.TeamName && x.TournamentId == request.TournamentId && x.IsDeleted == false);
             if (existingPlayer != null)
             {
                 return "Team name already registered.";
@@ -240,17 +240,17 @@ namespace JSOAuction.Services.Services
 
         public async Task<object> UpdateTeam(UpdateTeamDto request)
         {
-            var existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TeamId != request.TeamId && x.TeamName == request.TeamName && x.IsDeleted == false);
+            var existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TeamId != request.TeamId &&  x.TournamentId == request.TournamentId && x.TeamName == request.TeamName && x.IsDeleted == false);
             if (existingPlayer != null)
             {
                 return "Mobile number and team name already registered.";
             }
-            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TeamId != request.TeamId && x.IsDeleted == false);
+            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TeamId != request.TeamId && x.TournamentId == request.TournamentId && x.IsDeleted == false);
             if (existingPlayer != null)
             {
                 return "Mobile number already registered.";
             }
-            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.TeamName == request.TeamName && x.TeamId != request.TeamId && x.IsDeleted == false);
+            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.TeamName == request.TeamName && x.TeamId != request.TeamId && x.TournamentId == request.TournamentId && x.IsDeleted == false);
             if (existingPlayer != null)
             {
                 return "Team name already registered.";

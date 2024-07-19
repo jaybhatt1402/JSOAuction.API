@@ -96,17 +96,17 @@ namespace JSOAuction.Services.Services
 
         public async Task<object> UpdateGroup(UpdateGroupsDto request)
         {
-            var existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.Id != request.Id && x.GroupName == request.GroupName && x.IsDeleted == false);
+            var existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.Id != request.Id && x.TournamentId == request.TournamentId && x.GroupName == request.GroupName && x.IsDeleted == false);
             if (existingGroup != null)
             {
                 return "BasePrice and GroupName already Existing.";
             }
-            existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.Id != request.Id && x.IsDeleted == false);
+            existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.BasePrice == request.BasePrice && x.TournamentId == request.TournamentId && x.Id != request.Id && x.IsDeleted == false);
             if (existingGroup != null)
             {
                 return "BasePrice already Existing.";
             }
-            existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.GroupName == request.GroupName && x.Id != request.Id && x.IsDeleted == false);
+            existingGroup = await _readWriteUnitOfWork.GroupsRepository.GetFirstOrDefaultAsync(x => x.GroupName == request.GroupName && x.TournamentId == request.TournamentId && x.Id != request.Id && x.IsDeleted == false);
             if (existingGroup != null)
             {
                 return "GroupName already Existing.";
