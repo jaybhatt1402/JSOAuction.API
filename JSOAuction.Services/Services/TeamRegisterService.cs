@@ -94,8 +94,16 @@ namespace JSOAuction.Services.Services
             {
                 throw new Exception("No teams found");
             }
-            return teamDetails.ToList();
+
+            var currentYear = DateTime.UtcNow.Year;
+
+            var teams = await _readWriteUnitOfWork.TeamRegisterRepository.GetAllAsync(x => x.TournamentId == request.TournamentId && x.IsDeleted == false);
+            var filteredTeams = teams.Where(t => t.FoundedYear < currentYear).Select(t => t.TeamId).ToList();
+            var filteredTeamDetails = teamDetails.Where(td => filteredTeams.Contains(td.TeamId)).ToList();
+
+            return filteredTeamDetails;
         }
+
         public async Task<object> SaveTeam(TeamRegisterDto request)
         {
             var existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TeamName == request.TeamName && x.IsDeleted == false);
