@@ -326,10 +326,13 @@ namespace JSOAuction.Services.Services
                     .Where(x => x.TournamentId == id && x.IsDeleted == false)
                     .ToList();
 
+
                 //Added team data count
                 int currentTeamLength = teamData.Count;
 
-                var groupData = _readWriteUnitOfWork.GroupsRepository.GetAll().Where(x => x.TournamentId == id && x.IsDeleted == false);
+                var groupData = _readWriteUnitOfWork.GroupsRepository.GetAll().Where(x => x.TournamentId == id && x.IsDeleted == false).ToList();
+
+                int currentGroupLength = groupData.Count;
 
                 // Retrieve player data for the given tournament
                 var playerData =  (from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
@@ -353,6 +356,7 @@ namespace JSOAuction.Services.Services
                });
 
                 tournament.First().CurrentTeamLength = currentTeamLength;
+                tournament.First().CurrentGroupLength = currentGroupLength;
 
                 if (teamData.Any() && playerData.Any() && tournament.Any() && groupData.Any())
                 {

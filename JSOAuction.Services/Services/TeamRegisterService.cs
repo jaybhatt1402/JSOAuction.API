@@ -106,26 +106,30 @@ namespace JSOAuction.Services.Services
 
         public async Task<object> SaveTeam(TeamRegisterDto request)
         {
+
             var existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TournamentId == request.TournamentId && x.TeamName == request.TeamName && x.IsDeleted == false);
             if (existingPlayer != null)
             {
-                return "Mobile number and team name already registered.";
+                return("Mobile number and team name already registered.");
             }
+
             existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TournamentId == request.TournamentId && x.IsDeleted == false);
             if (existingPlayer != null)
             {
-                return "Mobile number already registered.";
+                return ("Mobile number already registered.");
             }
+
             existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.TeamName == request.TeamName && x.TournamentId == request.TournamentId && x.IsDeleted == false);
             if (existingPlayer != null)
             {
-                return "Team name already registered.";
+                return ("Team name already registered.");
             }
+
             var teamData = _readWriteUnitOfWork.TeamRegisterRepository.GetAll().Where(x => x.TournamentId == request.TournamentId && x.IsDeleted == false);
             var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
             if (tournamentData.MaxTeams != null && teamData.Count() >= tournamentData.MaxTeams)
             {
-                return false;
+                return ("Maximum number of teams already registered.");
             }
 
             string uploadLogoId = "";
@@ -157,6 +161,7 @@ namespace JSOAuction.Services.Services
             await _readWriteUnitOfWork.CommitAsync();
             return saveTeam.TeamId;
         }
+
         public void DriveUploadBasic(IFormFile file, ref string uploadId)
         {
             string credentialsPath = "credentials.json";
@@ -243,17 +248,21 @@ namespace JSOAuction.Services.Services
             var existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TeamId != request.TeamId &&  x.TournamentId == request.TournamentId && x.TeamName == request.TeamName && x.IsDeleted == false);
             if (existingPlayer != null)
             {
-                return "Mobile number and team name already registered.";
+                return ("Mobile number and team name already registered.");
             }
-            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TeamId != request.TeamId && x.TournamentId == request.TournamentId && x.IsDeleted == false);
+            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync( x => x.MobileNumber == request.MobileNumber &&  x.TeamId != request.TeamId && x.TournamentId == request.TournamentId && x.IsDeleted == false);
             if (existingPlayer != null)
             {
-                return "Mobile number already registered.";
+                return ("Mobile number already registered.");
             }
-            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.TeamName == request.TeamName && x.TeamId != request.TeamId && x.TournamentId == request.TournamentId && x.IsDeleted == false);
+            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(
+                x => x.TeamName == request.TeamName &&
+                     x.TeamId != request.TeamId &&
+                     x.TournamentId == request.TournamentId &&
+                     x.IsDeleted == false);
             if (existingPlayer != null)
             {
-                return "Team name already registered.";
+                return ("Team name already registered.");
             }
             string uploadLogoId = "";
             string webViewLinkLogo = string.Empty;
