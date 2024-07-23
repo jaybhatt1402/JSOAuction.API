@@ -60,6 +60,7 @@ namespace JSOAuction.Domain.Entities.Tournament
         public bool? IsStart { get; set; }
         public int? CurrentTeamLength { get; set; }
         public int? CurrentGroupLength { get; set; }
+        public int? CurrentPlayerLength { get; set; }
         public int? FormatId { get; set; }
     }
 }

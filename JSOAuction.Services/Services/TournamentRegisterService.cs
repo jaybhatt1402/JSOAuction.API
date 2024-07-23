@@ -334,6 +334,7 @@ namespace JSOAuction.Services.Services
 
                 int currentGroupLength = groupData.Count;
 
+
                 // Retrieve player data for the given tournament
                 var playerData =  (from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
                                         join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll()
@@ -346,6 +347,8 @@ namespace JSOAuction.Services.Services
                                             TournamentId = mapping.TournamentId
                                         }).ToList();
 
+                int currentPlayerLength = playerData.Count;
+
                 // Execute the stored procedure to get tournament details
                 IEnumerable<TournamentRegister> tournament = new List<TournamentRegister>();
                 _readWriteUnitOfWorkSP.LoadStoredProc("GetTournamentById")
@@ -357,6 +360,7 @@ namespace JSOAuction.Services.Services
 
                 tournament.First().CurrentTeamLength = currentTeamLength;
                 tournament.First().CurrentGroupLength = currentGroupLength;
+                tournament.First().CurrentPlayerLength = currentPlayerLength;
 
                 if (teamData.Any() && playerData.Any() && tournament.Any() && groupData.Any())
                 {
