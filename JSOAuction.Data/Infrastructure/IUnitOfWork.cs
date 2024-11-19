@@ -20,6 +20,8 @@ namespace JSOAuction.Data.Infrastructure
         ITournamentRegisterRepository<TContext>  TournamentRegisterRepository { get; }
         IGroupsRepository<TContext> GroupsRepository { get; }
         ISignUpRepository<TContext> SignUpRepository { get; }
+        IPaymentRepository<TContext> PaymentRepository { get; }
+        ISendLinkPaymentRepository<TContext> SendLinkPaymentRepository { get; }
         Task<int> CommitAsync();
 
     }
@@ -36,6 +38,8 @@ namespace JSOAuction.Data.Infrastructure
         public ITournamentRegisterRepository<TContext> TournamentRegisterRepository { get; }
         public IGroupsRepository<TContext> GroupsRepository { get; }
         public ISignUpRepository<TContext> SignUpRepository { get; }
+        public IPaymentRepository <TContext> PaymentRepository { get; }
+        public ISendLinkPaymentRepository <TContext> SendLinkPaymentRepository { get; }
 
 
 
@@ -48,7 +52,9 @@ namespace JSOAuction.Data.Infrastructure
             IAuctionPlayerMappingRepository<TContext> auctionPlayerMappingRepository,
             ITournamentRegisterRepository<TContext> tournamentRegisterRepository,
             IGroupsRepository<TContext> groupsRepository,
-            ISignUpRepository<TContext> signUpRepository
+            ISignUpRepository<TContext> signUpRepository,
+            IPaymentRepository<TContext> paymentRepository,
+            ISendLinkPaymentRepository<TContext> sendLinkPaymentRepository
             )
         {
             this.Context = context;
@@ -62,6 +68,8 @@ namespace JSOAuction.Data.Infrastructure
             this.TournamentRegisterRepository = tournamentRegisterRepository;
             this.GroupsRepository = groupsRepository;
             this.SignUpRepository = signUpRepository;
+            this.PaymentRepository = paymentRepository;
+            this.SendLinkPaymentRepository = sendLinkPaymentRepository;
         }
         public async Task<int> CommitAsync()
         {

@@ -20,6 +20,7 @@ using JSOAuction.Domain.Entities.Bids;
 using JSOAuction.Domain.Entities.Tournament;
 using JSOAuction.Domain.Entities.Groups;
 using JSOAuction.Domain.Entities.SignUps;
+using JSOAuction.Domain.Entities.Payments;
 
 namespace JSOAuction.Data.Contexts
 {
@@ -110,6 +111,9 @@ namespace JSOAuction.Data.Contexts
         public DbSet<TournamentRegister> TournamentRegister { get; set; }
         public DbSet<Groups> Groups { get; set; }
         public DbSet<SignUp> SignUps { get; set; }
+        public DbSet<Payments> Payments { get; set; }
+        public DbSet<SendLinkPayments> SendLinkPayments { get; set; }
+
     }
 
     public interface IBaseContext
