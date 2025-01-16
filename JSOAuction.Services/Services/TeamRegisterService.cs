@@ -106,27 +106,41 @@ namespace JSOAuction.Services.Services
 
         public async Task<object> SaveTeam(TeamRegisterDto request)
         {
-
-            var existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TournamentId == request.TournamentId && x.TeamName == request.TeamName && x.IsDeleted == false);
+            var existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(
+                x => x.MobileNumber == request.MobileNumber &&
+                     x.TournamentId == request.TournamentId &&
+                     x.TeamName == request.TeamName &&
+                     x.IsDeleted == false);
             if (existingPlayer != null)
             {
-                return("Mobile number and team name already registered.");
+                return ("Mobile number and team name already registered.");
             }
 
-            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber && x.TournamentId == request.TournamentId && x.IsDeleted == false);
+            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(
+                x => x.MobileNumber == request.MobileNumber &&
+                     x.TournamentId == request.TournamentId &&
+                     x.IsDeleted == false);
             if (existingPlayer != null)
             {
                 return ("Mobile number already registered.");
             }
 
-            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(x => x.TeamName == request.TeamName && x.TournamentId == request.TournamentId && x.IsDeleted == false);
+            existingPlayer = await _readWriteUnitOfWork.TeamRegisterRepository.GetFirstOrDefaultAsync(
+                x => x.TeamName == request.TeamName &&
+                     x.TournamentId == request.TournamentId &&
+                     x.IsDeleted == false);
             if (existingPlayer != null)
             {
                 return ("Team name already registered.");
             }
 
-            var teamData = _readWriteUnitOfWork.TeamRegisterRepository.GetAll().Where(x => x.TournamentId == request.TournamentId && x.IsDeleted == false);
-            var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
+            var teamData = _readWriteUnitOfWork.TeamRegisterRepository
+                .GetAll()
+                .Where(x => x.TournamentId == request.TournamentId && x.IsDeleted == false);
+
+            var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository
+                .GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
+
             if (tournamentData.MaxTeams != null && teamData.Count() >= tournamentData.MaxTeams)
             {
                 return ("Maximum number of teams already registered.");
@@ -157,9 +171,26 @@ namespace JSOAuction.Services.Services
                 TournamentId = request.TournamentId,
                 TotalBalance = tournamentData.TotalBalance
             };
+
             await _readWriteUnitOfWork.TeamRegisterRepository.AddAsync(saveTeam);
             await _readWriteUnitOfWork.CommitAsync();
-            return saveTeam.TeamId;
+
+            // Create a response object
+            var response = new
+            {
+                TeamId = saveTeam.TeamId,
+                TeamName = saveTeam.TeamName,
+                OwnerName = saveTeam.Owner,
+                MobileNumber = saveTeam.MobileNumber,
+                Email = saveTeam.Email,
+                TeamLogo = saveTeam.TeamLogo,
+                CoachName = saveTeam.CoachName,
+                FoundedYear = saveTeam.FoundedYear,
+                TournamentId = saveTeam.TournamentId,
+                TotalBalance = saveTeam.TotalBalance
+            };
+
+            return response;
         }
 
         public void DriveUploadBasic(IFormFile file, ref string uploadId)

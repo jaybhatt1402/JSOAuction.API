@@ -27,39 +27,46 @@ namespace JSOAuction.Services.Services
             _mapper = mapper;
         }
 
-        public async Task<dynamic> SavePaymentDataAsync(PaymentDto request)
+        public async Task<object> SavePaymentDataAsync(PaymentDto request)
         {
             try
             {
-              
-                var payment = _mapper.Map<Payments>(request);
-                var savepayment = new Payments()
-                {
-                    PaymentId = request.PaymentId,
-                    OrderId = request.OrderId,
-                    Name = request.Name,
-                    CreatedOn = DateTime.UtcNow, 
-                    Amount = request.Amount,
-                    Status = request.Status,
-                    Contact = request.Contact,
-                    Email = request.Email,
-                };
+                // Validate the status field
+                //if (string.IsNullOrEmpty(request.Status) ||
+                //    (!request.Status.Equals("success", StringComparison.OrdinalIgnoreCase) &&
+                //     !request.Status.Equals("failed", StringComparison.OrdinalIgnoreCase)))
+                //{
+                //    return new
+                //    {
+                //        Message = "Invalid payment status provided",
+                //        Status = "failed"
+                //    };
+                //}
 
-                await _readWriteUnitOfWork.PaymentRepository.AddAsync(savepayment);
+                // Map the DTO to the Domain Entity
+                var payment = _mapper.Map<Payments>(request);
+                payment.CreatedOn = DateTime.UtcNow;
+
+                // Save the payment entity to the database
+                await _readWriteUnitOfWork.PaymentRepository.AddAsync(payment);
                 await _readWriteUnitOfWork.CommitAsync();
+
+                // Return success response
                 return new
                 {
                     PaymentId = payment.PaymentId,
-                    Status = payment.Status
+                    Status = payment.Status,
+                    Message = payment.Status == "success" ? "Payment saved successfully" : "Payment marked as failed"
                 };
             }
             catch (Exception ex)
             {
-                // Return error message if exception occurs
+                // Log the exception and return a failure response
                 return new
                 {
                     Message = "Error saving payment",
-                    Error = ex.Message
+                    Error = ex.Message,
+                    Status = "failed"
                 };
             }
         }

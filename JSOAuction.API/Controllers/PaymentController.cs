@@ -23,11 +23,13 @@ namespace JSOAuction.API.Controllers
         [HttpPost("SavePaymentData")]
         public async Task<IActionResult> SavePaymentData([FromBody] PaymentsRequest request)
         {
+            if (request == null)
+            {
+                return BadRequest(new { Message = "Request body cannot be null" });
+            }
             var paymentDto = _mapper.Map<PaymentsRequest, PaymentDto>(request);
             var result = await _paymentService.SavePaymentDataAsync(paymentDto);
-
-            return Ok(new { ResponseData = result });
+            return Ok(result);
         }
-        
     }
 }

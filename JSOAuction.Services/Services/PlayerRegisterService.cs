@@ -307,15 +307,17 @@ namespace JSOAuction.Services.Services
 
         public async Task<object> SavePlayer(SavePlayerRegisterDto request)
         {
-            var existingPlayer = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(x => x.MobileNo == request.MobileNo && x.IsDeleted == false);
+            var existingPlayer = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(
+                x => x.MobileNo == request.MobileNo && x.IsDeleted == false);
 
             if (existingPlayer != null)
             {
-                return "Mobile number already registered.";
+                return new { Success = false, Message = "Mobile number already registered." };
             }
-            //var playerData = _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll().Where(x => x.TournamentId == request.TournamentId);
+
             var playerData = from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
-                             join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll() on player.PlayerRegisterId equals mapping.PlayerId
+                             join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll()
+                             on player.PlayerRegisterId equals mapping.PlayerId
                              where mapping.TournamentId == request.TournamentId && player.IsDeleted == false
                              select new
                              {
@@ -326,42 +328,26 @@ namespace JSOAuction.Services.Services
 
             var result = playerData.ToList();
 
-            var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
-
-            //if (tournamentData.MaxPlayer != null && result.Count() >= tournamentData.MaxPlayer)
-            //{
-            //    return false;
-            //}
+            var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(
+                x => x.TournamentId == request.TournamentId);
 
             var maxPlayerNo = _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
-                   .Join(
-                       _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll(),
-                       player => player.PlayerRegisterId,
-                       mapping => mapping.PlayerId,
-                       (player, mapping) => new { player, mapping }
-                   )
-                   .Where(joined => joined.mapping.TournamentId == request.TournamentId && joined.player.IsDeleted == false)
-                   .Max(joined => (int?)joined.player.PlayerNo) ?? 0;
+                .Join(
+                    _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll(),
+                    player => player.PlayerRegisterId,
+                    mapping => mapping.PlayerId,
+                    (player, mapping) => new { player, mapping }
+                )
+                .Where(joined => joined.mapping.TournamentId == request.TournamentId && joined.player.IsDeleted == false)
+                .Max(joined => (int?)joined.player.PlayerNo) ?? 0;
 
             int newPlayerNo = maxPlayerNo + 1;
 
             string uploadId = "";
-            //TODO
-            //if (request.UploadFile == null)
-            //{
-            //    throw new Exception("Please Upload File.");
-            //}
-
             DriveUploadBasic(request.UploadFile, ref uploadId);
-            //TODO
-            //if (string.IsNullOrEmpty(uploadId))
-            //{
-            //    throw new Exception("File upload failed.");
-            //}
 
             string webViewLink = "https://drive.google.com/thumbnail?id=" + uploadId + "&sz=w1000";
 
-            //Save Data in UserRegister Table.
             var hashPassword = GenericMethods.GetHash(request.Password);
             var savePlayerRegister = new PlayerRegister()
             {
@@ -388,8 +374,8 @@ namespace JSOAuction.Services.Services
                 IsActive = true,
                 City = request.City,
                 PlayerNo = newPlayerNo
-
             };
+
             await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
             await _readWriteUnitOfWork.CommitAsync();
 
@@ -402,11 +388,42 @@ namespace JSOAuction.Services.Services
                 CreatedOn = DateTime.UtcNow,
                 TournamentId = request.TournamentId,
             };
+
             await _readWriteUnitOfWork.AuctionPlayerMappingRepository.AddAsync(auctionPlayerMapping);
             await _readWriteUnitOfWork.CommitAsync();
 
-            return savePlayerRegister.PlayerRegisterId;
+            // Construct the response object with full data
+            var response = new
+            {
+                Success = true,
+                Message = "Player registered successfully.",
+                Player = new
+                {
+                    savePlayerRegister.PlayerRegisterId,
+                    savePlayerRegister.FirstName,
+                    savePlayerRegister.LastName,
+                    savePlayerRegister.Gender,
+                    savePlayerRegister.BattingStyle,
+                    savePlayerRegister.BowlingStyle,
+                    savePlayerRegister.MobileNo,
+                    savePlayerRegister.Email,
+                    savePlayerRegister.DOB,
+                    savePlayerRegister.City,
+                    savePlayerRegister.PlayerNo,
+                    savePlayerRegister.ProfilePicture,
+                    savePlayerRegister.CreatedOn
+                },
+                Tournament = new
+                {
+                    tournamentData.TournamentId,
+                    tournamentData.TournamentName,
+                    tournamentData.MaxPlayer
+                }
+            };
+
+            return response;
         }
+
 
         public async Task<object> UpdatePlayer(UpdatePlayerDto request)
         {
