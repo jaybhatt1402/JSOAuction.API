@@ -1,14 +1,13 @@
 ﻿using System;
+using System.Data;
 using System.Threading.Tasks;
-using JSOAuction.Data.Repositories.Interfaces;
-using JSOAuction.Services.Entities.Payments;
-using JSOAuction.Services.Interfaces;
-using JSOAuction.Domain.Entities.Payments;
 using AutoMapper;
 using JSOAuction.Data.Contexts;
 using JSOAuction.Data.Infrastructure;
-using JSOAuction.Domain.Entities.Groups;
-using MailKit.Search;
+using JSOAuction.Data.Repositories.Interfaces;
+using JSOAuction.Domain.Entities.Payments;
+using JSOAuction.Services.Entities.Payments;
+using JSOAuction.Services.Interfaces;
 
 namespace JSOAuction.Services.Services
 {
@@ -16,52 +15,55 @@ namespace JSOAuction.Services.Services
     {
         private readonly IUnitOfWork<ReadOnlyApplicationDbContext> _readOnlyUnitOfWork;
         private readonly IUnitOfWork<ReadWriteApplicationDbContext> _readWriteUnitOfWork;
+        private readonly ReadWriteApplicationDbContext _readWriteUnitOfWorkSP;
+        private readonly IUnitOfWork<MasterDbContext> _masterDBContext;
         private readonly IMapper _mapper;
 
-        public PaymentService(IUnitOfWork<ReadOnlyApplicationDbContext> readOnlyUnitOfWork,
-           IUnitOfWork<ReadWriteApplicationDbContext> readWriteUnitOfWork,
-           IMapper mapper)
+        public PaymentService(
+            IUnitOfWork<ReadOnlyApplicationDbContext> readOnlyUnitOfWork,
+            IUnitOfWork<MasterDbContext> masterDBContext,
+            IMapper mapper,
+            IUnitOfWork<ReadWriteApplicationDbContext> readWriteUnitOfWork,
+            ReadWriteApplicationDbContext readWriteUnitOfWorkSP)
         {
             _readOnlyUnitOfWork = readOnlyUnitOfWork;
+            _masterDBContext = masterDBContext;
             _readWriteUnitOfWork = readWriteUnitOfWork;
             _mapper = mapper;
+            _readWriteUnitOfWorkSP = readWriteUnitOfWorkSP;
         }
 
         public async Task<object> SavePaymentDataAsync(PaymentDto request)
         {
+
             try
             {
-                // Validate the status field
-                //if (string.IsNullOrEmpty(request.Status) ||
-                //    (!request.Status.Equals("success", StringComparison.OrdinalIgnoreCase) &&
-                //     !request.Status.Equals("failed", StringComparison.OrdinalIgnoreCase)))
-                //{
-                //    return new
-                //    {
-                //        Message = "Invalid payment status provided",
-                //        Status = "failed"
-                //    };
-                //}
-
-                // Map the DTO to the Domain Entity
                 var payment = _mapper.Map<Payments>(request);
                 payment.CreatedOn = DateTime.UtcNow;
 
-                // Save the payment entity to the database
                 await _readWriteUnitOfWork.PaymentRepository.AddAsync(payment);
                 await _readWriteUnitOfWork.CommitAsync();
 
-                // Return success response
-                return new
+                int isuccess = 1;
+
+                _readWriteUnitOfWorkSP.LoadStoredProc("UpdatePlayerPaymentStatus")
+                    .WithSqlParam("@PlayerRegisterId", request.PlayerRegisterId)
+                    .WithSqlParam("@PaymentStatus", request.Status)
+                      .WithSqlParam("@Success", 0, DbType.Int32, ParameterDirection.Output)
+                   .ExecuteStoredProc((handler) =>
+                   {
+                       isuccess = Convert.ToInt32(handler.GetValue("@Success"));
+                   });
+
+                if (isuccess > 0)
                 {
-                    PaymentId = payment.PaymentId,
-                    Status = payment.Status,
-                    Message = payment.Status == "success" ? "Payment saved successfully" : "Payment marked as failed"
-                };
+                    return payment.Status;
+                }
+                return null;
+
             }
             catch (Exception ex)
             {
-                // Log the exception and return a failure response
                 return new
                 {
                     Message = "Error saving payment",

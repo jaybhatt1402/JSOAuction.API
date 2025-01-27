@@ -66,6 +66,7 @@ namespace JSOAuction.Services.Services
                 CreatedOn = DateTime.UtcNow,
                 IsDeleted = false,
                 IsActive = true,
+                PaymentStatus = "Pending"
 
             };
             await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
@@ -373,7 +374,8 @@ namespace JSOAuction.Services.Services
                 IsDeleted = false,
                 IsActive = true,
                 City = request.City,
-                PlayerNo = newPlayerNo
+                PlayerNo = newPlayerNo,
+                PaymentStatus = "Pending"
             };
 
             await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);

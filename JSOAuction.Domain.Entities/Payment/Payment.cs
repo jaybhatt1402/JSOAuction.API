@@ -11,5 +11,7 @@
         public string Status { get; set; }
         public string Contact { get; set; }
         public string Email { get; set; }
+        public int? PlayerRegisterId { get; set; }
+
     }
 }
