@@ -59,10 +59,17 @@ namespace JSOAuction.Services.Services
         }
 
 
-        public async Task<int> SaveTournament(TournamentRegisterDto request)
+        public async Task<string> SaveTournament(TournamentRegisterDto request)
         {
-            string uploadBannerId = "";
+            var existingTournament = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(
+            x => x.OrganizerContact == request.OrganizerContact && x.IsDeleted == false);
 
+            if (existingTournament != null)
+            {
+                return "Mobile number is already in use";
+            }
+
+            string uploadBannerId = "";
             string uploadLogoId = "";
             string webViewLinkLogo = string.Empty;
             string webViewLinkBanner = string.Empty;
@@ -129,7 +136,7 @@ namespace JSOAuction.Services.Services
             };
             await _readWriteUnitOfWork.TournamentRegisterRepository.AddAsync(saveTournament);
             await _readWriteUnitOfWork.CommitAsync();
-            return saveTournament.TournamentId;
+            return saveTournament.TournamentId.ToString();
         }
 
         public void DriveUploadBasic(IFormFile file, ref string uploadId)
@@ -215,6 +222,14 @@ namespace JSOAuction.Services.Services
 
         public async Task<string> UpdateTournament(UpdateTournamentRegisterDto request)
         {
+
+            var existingTournament = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(x => x.OrganizerContact == request.OrganizerContact && x.TournamentId != request.TournamentId && x.IsDeleted == false);
+
+            if (existingTournament != null)
+            {
+                return "Mobile number is already in use";
+            }
+
             int isuccess = 1;
 
             string success = null;

@@ -8,7 +8,7 @@ namespace JSOAuction.Services.Interfaces
 {
     public interface ITournamentRegisterService
     {
-        Task<int> SaveTournament(TournamentRegisterDto request);
+        Task<string> SaveTournament(TournamentRegisterDto request);
         Task<List<TournamentRegister>> GetAllTournamentDetails();
         Task<bool> DeleteTournament(DeleteTournamentDto request);
         Task<string> UpdateTournament(UpdateTournamentRegisterDto request);
