@@ -34,5 +34,6 @@
         public int? PlayerNo { get; set; }
         public int? PlayerGroupId { get; set; }
         public string? TeamName { get; set; }
+
     }
 }

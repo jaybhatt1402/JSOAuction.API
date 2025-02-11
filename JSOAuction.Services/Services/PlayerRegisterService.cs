@@ -347,7 +347,12 @@ namespace JSOAuction.Services.Services
             string uploadId = "";
             DriveUploadBasic(request.UploadFile, ref uploadId);
 
+            string identityId = "";
+            DriveUploadBasic(request.IdentityProof, ref identityId);
+
+
             string webViewLink = "https://drive.google.com/thumbnail?id=" + uploadId + "&sz=w1000";
+            string identityProofLink = "https://drive.google.com/thumbnail?id=" + identityId + "&sz=w1000";
 
             var hashPassword = GenericMethods.GetHash(request.Password);
             var savePlayerRegister = new PlayerRegister()
@@ -375,7 +380,8 @@ namespace JSOAuction.Services.Services
                 IsActive = true,
                 City = request.City,
                 PlayerNo = newPlayerNo,
-                PaymentStatus = "Pending"
+                PaymentStatus = "Pending",
+                IdentityProof = identityProofLink
             };
 
             await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
@@ -430,6 +436,7 @@ namespace JSOAuction.Services.Services
         public async Task<object> UpdatePlayer(UpdatePlayerDto request)
         {
             string uploadId = "";
+            string identityId = "";
             //TODO
             //if (request.UploadFile == null)
             //{
@@ -437,11 +444,17 @@ namespace JSOAuction.Services.Services
             //}
 
             string webViewLink = string.Empty;
+            string identityLink = string.Empty;
 
             if (request.UploadFile != null)
             {
                 DriveUploadBasic(request.UploadFile, ref uploadId);
                 webViewLink = "https://drive.google.com/thumbnail?id=" + uploadId + "&sz=w1000";
+            }
+            if (request.IdentityProof != null)
+            {
+                DriveUploadBasic(request.IdentityProof, ref identityId);
+                identityLink = "https://drive.google.com/thumbnail?id=" + identityId + "&sz=w1000";
             }
             //TODO
             //if (string.IsNullOrEmpty(uploadId))
@@ -480,6 +493,10 @@ namespace JSOAuction.Services.Services
                 if (!string.IsNullOrEmpty(webViewLink))
                 {
                     data.ProfilePicture = webViewLink;
+                }
+                if (!string.IsNullOrEmpty(identityLink))
+                {
+                    data.IdentityProof = identityLink;
                 }
                 data.Password = hashPassword;
                 data.CreatedOn = DateTime.UtcNow;

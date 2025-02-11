@@ -44,6 +44,7 @@ namespace JSOAuction.Domain.Entities.PlayerRegister
         public int? PlayerNo { get; set;}
         public int? PlayerGroupId { get; set; }
         public string? PaymentStatus { get; set; }
+        public string? IdentityProof { get; set; }
 
     }
 }

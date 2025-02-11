@@ -12,6 +12,7 @@ using JSOAuction.Services.Entities.Tournament;
 using JSOAuction.Services.Interfaces;
 using JSOAuction.Services.Services;
 using JSOAuction.Utility;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -87,6 +88,7 @@ namespace JSOAuction.API.Controllers
         {
             var savePlayerRegisterDto = _mapper.Map<SavePlayerRegisterRequest, SavePlayerRegisterDto>(request);
             IFormFile uploadFile = null;
+            IFormFile identityFile = null;
             if (!string.IsNullOrEmpty(request.LastPlayedYear))
             {
                 savePlayerRegisterDto.LastPlayedYear = new DateTime(Convert.ToInt32(request.LastPlayedYear), 1, 1);
@@ -105,9 +107,25 @@ namespace JSOAuction.API.Controllers
             }
             if (Request.Form.Files.Count > 0)
             {
-                uploadFile = Request.Form.Files[0];
+                if (Request.Form.Files.Where(x => x.Name == "file").Count() > 0)
+                {
+                    uploadFile = Request.Form.Files.Where(x => x.Name == "file").FirstOrDefault();
+                }
+                else
+                {
+                    uploadFile = null;
+                }
+                if (Request.Form.Files.Where(x => x.Name == "identity").Count() > 0)
+                {
+                    identityFile = Request.Form.Files.Where(x => x.Name == "identity").FirstOrDefault();
+                }
+                else
+                {
+                    identityFile = null;
+                }
             }
             savePlayerRegisterDto.UploadFile = uploadFile;
+            savePlayerRegisterDto.IdentityProof = identityFile;
             var result = await _playerRegisterService.SavePlayer(savePlayerRegisterDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }
@@ -134,6 +152,7 @@ namespace JSOAuction.API.Controllers
 
             var updatePlayerDto = _mapper.Map<UpdatePlayerRequest, UpdatePlayerDto>(request);
             IFormFile uploadFile = null;
+            IFormFile identityFile = null;
             if (!string.IsNullOrEmpty(request.LastPlayedYear))
             {
                 updatePlayerDto.LastPlayedYear = new DateTime(Convert.ToInt32(request.LastPlayedYear), 1, 1);
@@ -152,10 +171,27 @@ namespace JSOAuction.API.Controllers
             }
             if (Request.Form.Files.Count > 0)
             {
-                uploadFile = Request.Form.Files[0];
+                //var identityfile = Request.Form.Files.Where(x => x.Name == "identity").FirstOrDefault();
+                if (Request.Form.Files.Where(x => x.Name == "file").Count() > 0)
+                {
+                    uploadFile = Request.Form.Files.Where(x => x.Name == "file").FirstOrDefault();
+                }
+                else
+                {
+                    uploadFile = null;
+                }
+                if (Request.Form.Files.Where(x => x.Name == "identity").Count() > 0)
+                {
+                    identityFile = Request.Form.Files.Where(x => x.Name == "identity").FirstOrDefault();
+                }
+                else
+                {
+                    identityFile = null;
+                }
             }
 
             updatePlayerDto.UploadFile = uploadFile;
+            updatePlayerDto.IdentityProof = identityFile;
             var result = await _playerRegisterService.UpdatePlayer(updatePlayerDto);
             return new Dictionary<string, object>() { { Constants.ResponseDataField, result } };
         }

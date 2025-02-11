@@ -31,6 +31,7 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public int? AuctionId { get; set; }
         public string? City {  get; set; }
         public int? TournamentId { get; set; }
+        public IFormFile IdentityProof { get; set; }
     }
 
     public class UpdatePlayerDto
@@ -58,6 +59,7 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public int? AuctionId { get; set; }
         public string? City { get; set; }
         public int? TournamentId { get; set; }
+        public IFormFile IdentityProof { get; set; }
     }
 
     public class PlayerRequestDto
