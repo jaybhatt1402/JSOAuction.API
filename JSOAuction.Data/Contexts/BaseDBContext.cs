@@ -21,6 +21,7 @@ using JSOAuction.Domain.Entities.Tournament;
 using JSOAuction.Domain.Entities.Groups;
 using JSOAuction.Domain.Entities.SignUps;
 using JSOAuction.Domain.Entities.Payments;
+using JSOAuction.Domain.Entities;
 
 namespace JSOAuction.Data.Contexts
 {
@@ -113,6 +114,8 @@ namespace JSOAuction.Data.Contexts
         public DbSet<SignUp> SignUps { get; set; }
         public DbSet<Payments> Payments { get; set; }
         public DbSet<SendLinkPayments> SendLinkPayments { get; set; }
+        public DbSet<VerifyOtp> VerifyOtp { get; set; }
+        public DbSet<TShirtSize> TShirtSize { get; set; }
 
     }
 

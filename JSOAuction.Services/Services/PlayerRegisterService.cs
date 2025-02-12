@@ -381,8 +381,11 @@ namespace JSOAuction.Services.Services
                 City = request.City,
                 PlayerNo = newPlayerNo,
                 PaymentStatus = "Pending",
-                IdentityProof = identityProofLink
-            };
+                IdentityProof = identityProofLink,
+                OccupationDetails = request.OccupationDetails,
+                OccupationTypes = request.OccupationTypes,
+                TShirtSizeId = request.TShirtSizeId
+    };
 
             await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
             await _readWriteUnitOfWork.CommitAsync();
@@ -503,6 +506,9 @@ namespace JSOAuction.Services.Services
                 data.IsDeleted = false;
                 data.IsActive = true;
                 data.City = request.City;
+                data.OccupationDetails = request.OccupationDetails;
+                data.OccupationTypes = request.OccupationTypes;
+                data.TShirtSizeId = request.TShirtSizeId;
                 data.UpdatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b");
                 data.UpdatedOn = DateTime.UtcNow;
                 await _readWriteUnitOfWork.CommitAsync();

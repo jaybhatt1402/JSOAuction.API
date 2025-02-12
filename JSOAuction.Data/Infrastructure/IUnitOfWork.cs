@@ -22,6 +22,8 @@ namespace JSOAuction.Data.Infrastructure
         ISignUpRepository<TContext> SignUpRepository { get; }
         IPaymentRepository<TContext> PaymentRepository { get; }
         ISendLinkPaymentRepository<TContext> SendLinkPaymentRepository { get; }
+        IVerifyOtpRepository<TContext> VerifyOtpRepository { get; }
+        ITShirtSizeRepository<TContext> TShirtSizeRepository { get; }
         Task<int> CommitAsync();
 
     }
@@ -40,6 +42,8 @@ namespace JSOAuction.Data.Infrastructure
         public ISignUpRepository<TContext> SignUpRepository { get; }
         public IPaymentRepository <TContext> PaymentRepository { get; }
         public ISendLinkPaymentRepository <TContext> SendLinkPaymentRepository { get; }
+        public IVerifyOtpRepository<TContext> VerifyOtpRepository { get; }
+        public ITShirtSizeRepository<TContext> TShirtSizeRepository { get; }
 
 
 
@@ -54,7 +58,9 @@ namespace JSOAuction.Data.Infrastructure
             IGroupsRepository<TContext> groupsRepository,
             ISignUpRepository<TContext> signUpRepository,
             IPaymentRepository<TContext> paymentRepository,
-            ISendLinkPaymentRepository<TContext> sendLinkPaymentRepository
+            ISendLinkPaymentRepository<TContext> sendLinkPaymentRepository,
+            IVerifyOtpRepository<TContext> verifyOtpRepository,
+            ITShirtSizeRepository<TContext> tShirtSizeRepository
             )
         {
             this.Context = context;
@@ -70,6 +76,8 @@ namespace JSOAuction.Data.Infrastructure
             this.SignUpRepository = signUpRepository;
             this.PaymentRepository = paymentRepository;
             this.SendLinkPaymentRepository = sendLinkPaymentRepository;
+            this.VerifyOtpRepository = verifyOtpRepository;
+            this.TShirtSizeRepository = tShirtSizeRepository;
         }
         public async Task<int> CommitAsync()
         {

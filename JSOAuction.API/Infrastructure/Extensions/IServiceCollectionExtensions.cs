@@ -37,6 +37,8 @@ namespace JSOAuction.API.Infrastructure.Extensions
             services.AddTransient(typeof(ISignUpRepository<>), typeof(SignUpRepository<>));
             services.AddTransient(typeof(IPaymentRepository<>), typeof(PaymentRepository<>));
             services.AddTransient(typeof(ISendLinkPaymentRepository<>), typeof(SendLinkPaymentRepository<>));
+            services.AddTransient(typeof(IVerifyOtpRepository<>), typeof(VerifyOtpRepository<>));
+            services.AddTransient(typeof(ITShirtSizeRepository<>), typeof(TShirtSizeRepository<>));
 
         }
 

@@ -33,6 +33,9 @@ namespace JSOAuction.API.Request.PlayerRegister
         public int? AuctionId { get; set; }
         public string? City { get; set; }
         public int? TournamentId { get; set; }
+        public string OccupationDetails { get; set; }
+        public string OccupationTypes { get; set; }
+        public int TShirtSizeId { get; set; }
     }
 
     [ModelBinder(typeof(JsonWithFilesFormDataModelBinder), Name = "json")]
@@ -65,6 +68,9 @@ namespace JSOAuction.API.Request.PlayerRegister
         public int? AuctionId { get; set; }
         public string? City { get; set; }
         public int? TournamentId { get; set; }
+        public string OccupationDetails { get; set; }
+        public string OccupationTypes { get; set; }
+        public int TShirtSizeId { get; set; }
     }
 
     public class PlayerRequest

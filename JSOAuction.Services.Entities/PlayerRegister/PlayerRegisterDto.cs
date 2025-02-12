@@ -32,6 +32,9 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public string? City {  get; set; }
         public int? TournamentId { get; set; }
         public IFormFile IdentityProof { get; set; }
+        public string OccupationDetails { get; set; }
+        public string OccupationTypes { get; set; }
+        public int TShirtSizeId { get; set; }
     }
 
     public class UpdatePlayerDto
@@ -60,6 +63,9 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public string? City { get; set; }
         public int? TournamentId { get; set; }
         public IFormFile IdentityProof { get; set; }
+        public string OccupationDetails { get; set; }
+        public string OccupationTypes { get; set; }
+        public int TShirtSizeId { get; set; }
     }
 
     public class PlayerRequestDto
