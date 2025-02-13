@@ -422,8 +422,13 @@ namespace JSOAuction.Services.Services
                     savePlayerRegister.City,
                     savePlayerRegister.PlayerNo,
                     savePlayerRegister.ProfilePicture,
-                    savePlayerRegister.CreatedOn
-                },
+                    savePlayerRegister.CreatedOn,
+                    savePlayerRegister.OccupationDetails,
+					savePlayerRegister.OccupationTypes,
+					savePlayerRegister.IdentityProof,
+					savePlayerRegister.TShirtSizeId,
+
+				},
                 Tournament = new
                 {
                     tournamentData.TournamentId,
