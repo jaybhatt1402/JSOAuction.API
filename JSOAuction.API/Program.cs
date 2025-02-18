@@ -22,7 +22,10 @@ builder.Services.Configure<FormOptions>(opt =>
     opt.MultipartBodyLengthLimit = long.MaxValue;
 });
 
-
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = long.MaxValue; // Increase the limit for all POST requests
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -67,7 +70,6 @@ builder.Services.ConfigureDatabases(builder.Configuration);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-
 builder.Services.AddSignalR();
 
 
@@ -86,6 +88,8 @@ builder.Services.AddAuthorization(options =>
     });
 
 });
+builder.Services.AddLogging();
+
 builder.Services.AddScoped<IAuthorizationHandler, CommercialAuthorizationHandler>();
 //var facebookAuthSettings = new FacebookAuthSettings();
 //builder.Configuration.Bind(key: nameof(FacebookAuthSettings), facebookAuthSettings);

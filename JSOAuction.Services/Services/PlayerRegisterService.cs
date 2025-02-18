@@ -15,6 +15,7 @@ using JSOAuction.Utility;
 using JSOAuction.Utility.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
 using System.Data;
 using System.Diagnostics;
@@ -30,16 +31,19 @@ namespace JSOAuction.Services.Services
         private readonly ReadWriteApplicationDbContext _readWriteUnitOfWorkSP;
         private readonly IUnitOfWork<MasterDbContext> _masterDBContext;
         private readonly IMapper _mapper;
+        private readonly ILogger<PlayerRegisterService> _logger;
         public PlayerRegisterService(IUnitOfWork<ReadOnlyApplicationDbContext> readOnlyUnitOfWork,
            IUnitOfWork<MasterDbContext> masterDBContext, IMapper mapper,
            IUnitOfWork<ReadWriteApplicationDbContext> readWriteUnitOfWork,
-           ReadWriteApplicationDbContext readWriteUnitOfWorkSP)
+           ReadWriteApplicationDbContext readWriteUnitOfWorkSP,
+           ILogger<PlayerRegisterService> logger)
         {
             _readOnlyUnitOfWork = readOnlyUnitOfWork;
             _masterDBContext = masterDBContext;
             _readWriteUnitOfWork = readWriteUnitOfWork;
             _mapper = mapper;
             _readWriteUnitOfWorkSP = readWriteUnitOfWorkSP;
+            _logger = logger;
         }
         public async Task<int> SavePlayerRegister(SavePlayerRegisterDto request)
         {
@@ -306,133 +310,286 @@ namespace JSOAuction.Services.Services
             }
         }
 
+        //    public async Task<object> SavePlayer(SavePlayerRegisterDto request)
+        //    {
+        //        var existingPlayer = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(
+        //            x => x.MobileNo == request.MobileNo && x.IsDeleted == false);
+
+        //        if (existingPlayer != null)
+        //        {
+        //            return new { Success = false, Message = "Mobile number already registered." };
+        //        }
+
+        //        var playerData = from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
+        //                         join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll()
+        //                         on player.PlayerRegisterId equals mapping.PlayerId
+        //                         where mapping.TournamentId == request.TournamentId && player.IsDeleted == false
+        //                         select new
+        //                         {
+        //                             PlayerId = player.PlayerRegisterId,
+        //                             PlayerName = player.FirstName,
+        //                             TournamentId = mapping.TournamentId
+        //                         };
+
+        //        var result = playerData.ToList();
+
+        //        var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(
+        //            x => x.TournamentId == 1);
+
+        //        var maxPlayerNo = _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
+        //            .Join(
+        //                _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll(),
+        //                player => player.PlayerRegisterId,
+        //                mapping => mapping.PlayerId,
+        //                (player, mapping) => new { player, mapping }
+        //            )
+        //            .Where(joined => joined.mapping.TournamentId == request.TournamentId && joined.player.IsDeleted == false)
+        //            .Max(joined => (int?)joined.player.PlayerNo) ?? 0;
+
+        //        int newPlayerNo = maxPlayerNo + 1;
+
+        //        string uploadId = "";
+        //        DriveUploadBasic(request.UploadFile, ref uploadId);
+
+        //        string identityId = "";
+        //        DriveUploadBasic(request.IdentityProof, ref identityId);
+
+
+        //        string webViewLink = "https://drive.google.com/thumbnail?id=" + uploadId + "&sz=w1000";
+        //        string identityProofLink = "https://drive.google.com/thumbnail?id=" + identityId + "&sz=w1000";
+
+        //        var hashPassword = GenericMethods.GetHash(request.Password);
+        //        var savePlayerRegister = new PlayerRegister()
+        //        {
+        //            FirstName = request.FirstName,
+        //            LastName = request.LastName,
+        //            Gender = request.Gender,
+        //            BattingStyle = request.BattingStyle,
+        //            BowlingStyle = request.BowlingStyle,
+        //            MobileNo = request.MobileNo,
+        //            AlternativePhoneNo = request.AlternativePhoneNo,
+        //            Email = request.Email,
+        //            DOB = request.DOB,
+        //            Batsman = request.Batsman,
+        //            Bowler = request.Bowler,
+        //            WicketKeeper = request.WicketKeeper,
+        //            BattingAllRounder = request.BattingAllRounder,
+        //            BowlingAllRounder = request.BowlingAllRounder,
+        //            PreviousTeamId = request.PreviousTeamId,
+        //            LastPlayedYear = request.LastPlayedYear,
+        //            ProfilePicture = webViewLink,
+        //            Password = hashPassword,
+        //            CreatedOn = DateTime.UtcNow,
+        //            IsDeleted = false,
+        //            IsActive = true,
+        //            City = request.City,
+        //            PlayerNo = newPlayerNo,
+        //            PaymentStatus = "Pending",
+        //            IdentityProof = identityProofLink,
+        //            OccupationDetails = request.OccupationDetails,
+        //            OccupationTypes = request.OccupationTypes,
+        //            TShirtSizeId = request.TShirtSizeId
+        //};
+
+        //        await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
+        //        await _readWriteUnitOfWork.CommitAsync();
+
+        //        var auctionPlayerMapping = new AuctionPlayerMapping()
+        //        {
+        //            PlayerId = savePlayerRegister.PlayerRegisterId,
+        //            AuctionId = request.AuctionId,
+        //            PlayerStatus = "notdisclosed",
+        //            CreatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b"),
+        //            CreatedOn = DateTime.UtcNow,
+        //            TournamentId = 1,
+        //        };
+
+        //        await _readWriteUnitOfWork.AuctionPlayerMappingRepository.AddAsync(auctionPlayerMapping);
+        //        await _readWriteUnitOfWork.CommitAsync();
+
+        //        // Construct the response object with full data
+        //        var response = new
+        //        {
+        //            Success = true,
+        //            Message = "Player registered successfully.",
+        //            Player = new
+        //            {
+        //                savePlayerRegister.PlayerRegisterId,
+        //                savePlayerRegister.FirstName,
+        //                savePlayerRegister.LastName,
+        //                savePlayerRegister.Gender,
+        //                savePlayerRegister.BattingStyle,
+        //                savePlayerRegister.BowlingStyle,
+        //                savePlayerRegister.MobileNo,
+        //                savePlayerRegister.Email,
+        //                savePlayerRegister.DOB,
+        //                savePlayerRegister.City,
+        //                savePlayerRegister.PlayerNo,
+        //                savePlayerRegister.ProfilePicture,
+        //                savePlayerRegister.CreatedOn
+        //            },
+        //            Tournament = new
+        //            {
+        //                tournamentData.TournamentId,
+        //                tournamentData.TournamentName,
+        //                tournamentData.MaxPlayer
+        //            }
+        //        };
+        //        catch (Exception ex)
+        //        {
+        //        _logger.LogError(ex, "Error in SavePlayer method.");
+        //        return new
+        //        {
+        //            Success = false,
+        //            Message = "An error occurred while processing the request.",
+        //            Error = ex.Message, // Returns the exception message in JSON response
+        //            StackTrace = ex.StackTrace // (Optional) Stack trace for debugging
+        //        };
+        //    }
+
+        //    return response;
+        //    }
+
         public async Task<object> SavePlayer(SavePlayerRegisterDto request)
         {
-            var existingPlayer = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(
-                x => x.MobileNo == request.MobileNo && x.IsDeleted == false);
-
-            if (existingPlayer != null)
+            try
             {
-                return new { Success = false, Message = "Mobile number already registered." };
-            }
+                var existingPlayer = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(
+                    x => x.MobileNo == request.MobileNo && x.IsDeleted == false);
 
-            var playerData = from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
-                             join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll()
-                             on player.PlayerRegisterId equals mapping.PlayerId
-                             where mapping.TournamentId == request.TournamentId && player.IsDeleted == false
-                             select new
-                             {
-                                 PlayerId = player.PlayerRegisterId,
-                                 PlayerName = player.FirstName,
-                                 TournamentId = mapping.TournamentId
-                             };
-
-            var result = playerData.ToList();
-
-            var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(
-                x => x.TournamentId == request.TournamentId);
-
-            var maxPlayerNo = _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
-                .Join(
-                    _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll(),
-                    player => player.PlayerRegisterId,
-                    mapping => mapping.PlayerId,
-                    (player, mapping) => new { player, mapping }
-                )
-                .Where(joined => joined.mapping.TournamentId == request.TournamentId && joined.player.IsDeleted == false)
-                .Max(joined => (int?)joined.player.PlayerNo) ?? 0;
-
-            int newPlayerNo = maxPlayerNo + 1;
-
-            string uploadId = "";
-            DriveUploadBasic(request.UploadFile, ref uploadId);
-
-            string identityId = "";
-            DriveUploadBasic(request.IdentityProof, ref identityId);
-
-
-            string webViewLink = "https://drive.google.com/thumbnail?id=" + uploadId + "&sz=w1000";
-            string identityProofLink = "https://drive.google.com/thumbnail?id=" + identityId + "&sz=w1000";
-
-            var hashPassword = GenericMethods.GetHash(request.Password);
-            var savePlayerRegister = new PlayerRegister()
-            {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Gender = request.Gender,
-                BattingStyle = request.BattingStyle,
-                BowlingStyle = request.BowlingStyle,
-                MobileNo = request.MobileNo,
-                AlternativePhoneNo = request.AlternativePhoneNo,
-                Email = request.Email,
-                DOB = request.DOB,
-                Batsman = request.Batsman,
-                Bowler = request.Bowler,
-                WicketKeeper = request.WicketKeeper,
-                BattingAllRounder = request.BattingAllRounder,
-                BowlingAllRounder = request.BowlingAllRounder,
-                PreviousTeamId = request.PreviousTeamId,
-                LastPlayedYear = request.LastPlayedYear,
-                ProfilePicture = webViewLink,
-                Password = hashPassword,
-                CreatedOn = DateTime.UtcNow,
-                IsDeleted = false,
-                IsActive = true,
-                City = request.City,
-                PlayerNo = newPlayerNo,
-                PaymentStatus = "Pending",
-                IdentityProof = identityProofLink,
-                OccupationDetails = request.OccupationDetails,
-                OccupationTypes = request.OccupationTypes,
-                TShirtSizeId = request.TShirtSizeId
-    };
-
-            await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
-            await _readWriteUnitOfWork.CommitAsync();
-
-            var auctionPlayerMapping = new AuctionPlayerMapping()
-            {
-                PlayerId = savePlayerRegister.PlayerRegisterId,
-                AuctionId = request.AuctionId,
-                PlayerStatus = "notdisclosed",
-                CreatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b"),
-                CreatedOn = DateTime.UtcNow,
-                TournamentId = request.TournamentId,
-            };
-
-            await _readWriteUnitOfWork.AuctionPlayerMappingRepository.AddAsync(auctionPlayerMapping);
-            await _readWriteUnitOfWork.CommitAsync();
-
-            // Construct the response object with full data
-            var response = new
-            {
-                Success = true,
-                Message = "Player registered successfully.",
-                Player = new
+                if (existingPlayer != null)
                 {
-                    savePlayerRegister.PlayerRegisterId,
-                    savePlayerRegister.FirstName,
-                    savePlayerRegister.LastName,
-                    savePlayerRegister.Gender,
-                    savePlayerRegister.BattingStyle,
-                    savePlayerRegister.BowlingStyle,
-                    savePlayerRegister.MobileNo,
-                    savePlayerRegister.Email,
-                    savePlayerRegister.DOB,
-                    savePlayerRegister.City,
-                    savePlayerRegister.PlayerNo,
-                    savePlayerRegister.ProfilePicture,
-                    savePlayerRegister.CreatedOn
-                },
-                Tournament = new
-                {
-                    tournamentData.TournamentId,
-                    tournamentData.TournamentName,
-                    tournamentData.MaxPlayer
+                    return new { Success = false, Message = "Mobile number already registered." };
                 }
-            };
 
-            return response;
+                var playerData = from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
+                                 join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll()
+                                 on player.PlayerRegisterId equals mapping.PlayerId
+                                 where mapping.TournamentId == request.TournamentId && player.IsDeleted == false
+                                 select new
+                                 {
+                                     PlayerId = player.PlayerRegisterId,
+                                     PlayerName = player.FirstName,
+                                     TournamentId = mapping.TournamentId
+                                 };
+
+                var result = playerData.ToList();
+
+                var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(
+                    x => x.TournamentId == 1);
+
+                var maxPlayerNo = _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
+                    .Join(
+                        _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll(),
+                        player => player.PlayerRegisterId,
+                        mapping => mapping.PlayerId,
+                        (player, mapping) => new { player, mapping }
+                    )
+                    .Where(joined => joined.mapping.TournamentId == request.TournamentId && joined.player.IsDeleted == false)
+                    .Max(joined => (int?)joined.player.PlayerNo) ?? 0;
+
+                int newPlayerNo = maxPlayerNo + 1;
+
+                string uploadId = "";
+                DriveUploadBasic(request.UploadFile, ref uploadId);
+
+                string identityId = "";
+                DriveUploadBasic(request.IdentityProof, ref identityId);
+
+                string webViewLink = $"https://drive.google.com/thumbnail?id={uploadId}&sz=w1000";
+                string identityProofLink = $"https://drive.google.com/thumbnail?id={identityId}&sz=w1000";
+
+                //var hashPassword = GenericMethods.GetHash(request.Password);
+                var savePlayerRegister = new PlayerRegister()
+                {
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    Gender = request.Gender,
+                    BattingStyle = request.BattingStyle,
+                    BowlingStyle = request.BowlingStyle,
+                    MobileNo = request.MobileNo,
+                    AlternativePhoneNo = request.AlternativePhoneNo,
+                    Email = request.Email,
+                    DOB = request.DOB,
+                    Batsman = request.Batsman,
+                    Bowler = request.Bowler,
+                    WicketKeeper = request.WicketKeeper,
+                    BattingAllRounder = request.BattingAllRounder,
+                    BowlingAllRounder = request.BowlingAllRounder,
+                    PreviousTeamId = request.PreviousTeamId,
+                    LastPlayedYear = request.LastPlayedYear,
+                    ProfilePicture = webViewLink,
+                    Password = null,
+                    CreatedOn = DateTime.UtcNow,
+                    IsDeleted = false,
+                    IsActive = true,
+                    City = request.City,
+                    PlayerNo = newPlayerNo,
+                    PaymentStatus = "Pending",
+                    IdentityProof = identityProofLink,
+                    OccupationDetails = request.OccupationDetails,
+                    OccupationTypes = request.OccupationTypes,
+                    TShirtSizeId = request.TShirtSizeId
+                };
+
+                await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
+                await _readWriteUnitOfWork.CommitAsync();
+
+                var auctionPlayerMapping = new AuctionPlayerMapping()
+                {
+                    PlayerId = savePlayerRegister.PlayerRegisterId,
+                    AuctionId = request.AuctionId,
+                    PlayerStatus = "notdisclosed",
+                    CreatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b"),
+                    CreatedOn = DateTime.UtcNow,
+                    TournamentId = 1,
+                };
+
+                await _readWriteUnitOfWork.AuctionPlayerMappingRepository.AddAsync(auctionPlayerMapping);
+                await _readWriteUnitOfWork.CommitAsync();
+
+                // Construct the response object with full data
+                var response = new
+                {
+                    Success = true,
+                    Message = "Player registered successfully.",
+                    Player = new
+                    {
+                        savePlayerRegister.PlayerRegisterId,
+                        savePlayerRegister.FirstName,
+                        savePlayerRegister.LastName,
+                        savePlayerRegister.Gender,
+                        savePlayerRegister.BattingStyle,
+                        savePlayerRegister.BowlingStyle,
+                        savePlayerRegister.MobileNo,
+                        savePlayerRegister.Email,
+                        savePlayerRegister.DOB,
+                        savePlayerRegister.City,
+                        savePlayerRegister.PlayerNo,
+                        savePlayerRegister.ProfilePicture,
+                        savePlayerRegister.CreatedOn
+                    },
+                    Tournament = tournamentData != null ? new
+                    {
+                        tournamentData.TournamentId,
+                        tournamentData.TournamentName,
+                        tournamentData.MaxPlayer
+                    } : null
+                };
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in SavePlayer method.");
+                return new
+                {
+                    Success = false,
+                    Message = "An error occurred while processing the request.",
+                    Error = ex.Message, // Returns the exception message in JSON response
+                    StackTrace = ex.StackTrace // (Optional) Stack trace for debugging
+                };
+            }
         }
 
 
@@ -615,7 +772,7 @@ namespace JSOAuction.Services.Services
                 .WithSqlParam("@Id", PlayerRegisterId)
                 .ExecuteStoredProc((handler) =>
                 {
-                    players = handler.ReadToList<PlayerRegister>();
+                    players = handler.ReadToList<PlayerRegister>(); 
                 });
             if (players == null || !players.Any())
             {
