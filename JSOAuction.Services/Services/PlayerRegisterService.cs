@@ -450,10 +450,157 @@ namespace JSOAuction.Services.Services
         //    return response;
         //    }
 
+        //    public async Task<object> SavePlayer(SavePlayerRegisterDto request)
+        //    {
+        //        try
+        //        {
+        //            var existingPlayer = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(
+        //                x => x.MobileNo == request.MobileNo && x.IsDeleted == false);
+
+        //            if (existingPlayer != null)
+        //            {
+        //                return new { Success = false, Message = "Mobile number already registered." };
+        //            }
+
+        //            var playerData = from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
+        //                             join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll()
+        //                             on player.PlayerRegisterId equals mapping.PlayerId
+        //                             where mapping.TournamentId == request.TournamentId && player.IsDeleted == false
+        //                             select new
+        //                             {
+        //                                 PlayerId = player.PlayerRegisterId,
+        //                                 PlayerName = player.FirstName,
+        //                                 TournamentId = mapping.TournamentId
+        //                             };
+
+        //            var result = playerData.ToList();
+
+        //            var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(
+        //                x => x.TournamentId == 1);
+
+        //            var maxPlayerNo = _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
+        //                .Join(
+        //                    _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll(),
+        //                    player => player.PlayerRegisterId,
+        //                    mapping => mapping.PlayerId,
+        //                    (player, mapping) => new { player, mapping }
+        //                )
+        //                .Where(joined => joined.mapping.TournamentId == request.TournamentId && joined.player.IsDeleted == false)
+        //                .Max(joined => (int?)joined.player.PlayerNo) ?? 0;
+
+        //            int newPlayerNo = maxPlayerNo + 1;
+
+        //            string uploadId = "";
+        //            DriveUploadBasic(request.UploadFile, ref uploadId);
+
+        //            string identityId = "";
+        //            DriveUploadBasic(request.IdentityProof, ref identityId);
+
+        //            string webViewLink = $"https://drive.google.com/thumbnail?id={uploadId}&sz=w1000";
+        //            string identityProofLink = $"https://drive.google.com/thumbnail?id={identityId}&sz=w1000";
+
+        //            //var hashPassword = GenericMethods.GetHash(request.Password);
+        //            var savePlayerRegister = new PlayerRegister()
+        //            {
+        //                FirstName = request.FirstName,
+        //                LastName = request.LastName,
+        //                Gender = request.Gender,
+        //                BattingStyle = request.BattingStyle,
+        //                BowlingStyle = request.BowlingStyle,
+        //                MobileNo = request.MobileNo,
+        //                AlternativePhoneNo = request.AlternativePhoneNo,
+        //                Email = request.Email,
+        //                DOB = request.DOB,
+        //                Batsman = request.Batsman,
+        //                Bowler = request.Bowler,
+        //                WicketKeeper = request.WicketKeeper,
+        //                BattingAllRounder = request.BattingAllRounder,
+        //                BowlingAllRounder = request.BowlingAllRounder,
+        //                PreviousTeamId = request.PreviousTeamId,
+        //                LastPlayedYear = request.LastPlayedYear,
+        //                ProfilePicture = webViewLink,
+        //                Password = null,
+        //                CreatedOn = DateTime.UtcNow,
+        //                IsDeleted = false,
+        //                IsActive = true,
+        //                City = request.City,
+        //                PlayerNo = newPlayerNo,
+        //                PaymentStatus = "Pending",
+        //                IdentityProof = identityProofLink,
+        //                OccupationDetails = request.OccupationDetails,
+        //                OccupationTypes = request.OccupationTypes,
+        //                TShirtSizeId = request.TShirtSizeId
+        //            };
+
+        //            await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
+        //            await _readWriteUnitOfWork.CommitAsync();
+
+        //            var auctionPlayerMapping = new AuctionPlayerMapping()
+        //            {
+        //                PlayerId = savePlayerRegister.PlayerRegisterId,
+        //                AuctionId = request.AuctionId,
+        //                PlayerStatus = "notdisclosed",
+        //                CreatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b"),
+        //                CreatedOn = DateTime.UtcNow,
+        //                TournamentId = 1,
+        //            };
+
+        //            await _readWriteUnitOfWork.AuctionPlayerMappingRepository.AddAsync(auctionPlayerMapping);
+        //            await _readWriteUnitOfWork.CommitAsync();
+
+        //        // Construct the response object with full data
+        //        var response = new
+        //        {
+        //            Success = true,
+        //            Message = "Player registered successfully.",
+        //            Player = new
+        //            {
+        //                savePlayerRegister.PlayerRegisterId,
+        //                savePlayerRegister.FirstName,
+        //                savePlayerRegister.LastName,
+        //                savePlayerRegister.Gender,
+        //                savePlayerRegister.BattingStyle,
+        //                savePlayerRegister.BowlingStyle,
+        //                savePlayerRegister.MobileNo,
+        //                savePlayerRegister.Email,
+        //                savePlayerRegister.DOB,
+        //                savePlayerRegister.City,
+        //                savePlayerRegister.PlayerNo,
+        //                savePlayerRegister.ProfilePicture,
+        //                savePlayerRegister.CreatedOn,
+        //                savePlayerRegister.OccupationDetails,
+        //	savePlayerRegister.OccupationTypes,
+        //	savePlayerRegister.IdentityProof,
+        //	savePlayerRegister.TShirtSizeId,
+
+        //},
+        //            Tournament = new
+        //            {
+        //                tournamentData.TournamentId,
+        //                tournamentData.TournamentName,
+        //                tournamentData.MaxPlayer
+        //            }
+        //        };
+
+
+
+        //            return response;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            _logger.LogError(ex, "Error in SavePlayer method.");
+        //            return new
+        //            {
+        //                Success = false,
+        //                Message = "An error occurred while processing the request.",
+        //                Error = ex.Message, // Returns the exception message in JSON response
+        //                StackTrace = ex.StackTrace // (Optional) Stack trace for debugging
+        //            };
+        //        }
+        //    }
+
         public async Task<object> SavePlayer(SavePlayerRegisterDto request)
         {
-            try
-            {
                 var existingPlayer = await _readWriteUnitOfWork.PlayerRegisterRepository.GetFirstOrDefaultAsync(
                     x => x.MobileNo == request.MobileNo && x.IsDeleted == false);
 
@@ -567,7 +714,12 @@ namespace JSOAuction.Services.Services
                         savePlayerRegister.City,
                         savePlayerRegister.PlayerNo,
                         savePlayerRegister.ProfilePicture,
-                        savePlayerRegister.CreatedOn
+                        savePlayerRegister.CreatedOn,
+                        savePlayerRegister.OccupationDetails,
+                        savePlayerRegister.OccupationTypes,
+                        savePlayerRegister.IdentityProof,
+                        savePlayerRegister.TShirtSizeId,
+
                     },
                     Tournament = tournamentData != null ? new
                     {
@@ -579,18 +731,7 @@ namespace JSOAuction.Services.Services
 
                 return response;
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in SavePlayer method.");
-                return new
-                {
-                    Success = false,
-                    Message = "An error occurred while processing the request.",
-                    Error = ex.Message, // Returns the exception message in JSON response
-                    StackTrace = ex.StackTrace // (Optional) Stack trace for debugging
-                };
-            }
-        }
+
 
 
         public async Task<object> UpdatePlayer(UpdatePlayerDto request)
