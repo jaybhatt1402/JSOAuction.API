@@ -24,6 +24,8 @@ builder.Services.Configure<FormOptions>(opt =>
 
 builder.WebHost.ConfigureKestrel(options =>
 {
+    options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(5);
+    options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(2);
     options.Limits.MaxRequestBodySize = long.MaxValue; // Increase the limit for all POST requests
 });
 
