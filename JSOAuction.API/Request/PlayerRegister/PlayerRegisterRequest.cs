@@ -37,7 +37,7 @@ namespace JSOAuction.API.Request.PlayerRegister
         public string OccupationTypes { get; set; }
         public string TShirtNumber { get; set; }
         public string TShirtName { get; set; }
-        public double? DonationAmount { get; set; }
+        public decimal? DonationAmount { get; set; }
         public int TShirtSizeId { get; set; }
     }
 
@@ -75,7 +75,7 @@ namespace JSOAuction.API.Request.PlayerRegister
         public string OccupationTypes { get; set; }
         public string TShirtNumber { get; set; }
         public string TShirtName { get; set; }
-        public double? DonationAmount { get; set; }
+        public decimal? DonationAmount { get; set; }
         public int TShirtSizeId { get; set; }
     }
 
