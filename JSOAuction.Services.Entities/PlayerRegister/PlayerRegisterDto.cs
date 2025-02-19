@@ -36,7 +36,7 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public string OccupationTypes { get; set; }
         public string TShirtNumber { get; set; }
         public string TShirtName { get; set; }
-        public int DonationAmount { get; set; }
+        public double? DonationAmount { get; set; }
         public int TShirtSizeId { get; set; }
     }
 
@@ -70,7 +70,7 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public string OccupationTypes { get; set; }
         public string TShirtNumber { get; set; }
         public string TShirtName { get; set; }
-        public int DonationAmount { get; set; }
+        public double? DonationAmount { get; set; }
         public int TShirtSizeId { get; set; }
     }
 
