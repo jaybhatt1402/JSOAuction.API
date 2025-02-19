@@ -34,6 +34,9 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public IFormFile IdentityProof { get; set; }
         public string OccupationDetails { get; set; }
         public string OccupationTypes { get; set; }
+        public string TShirtNumber { get; set; }
+        public string TShirtName { get; set; }
+        public int DonationAmount { get; set; }
         public int TShirtSizeId { get; set; }
     }
 
@@ -65,6 +68,9 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public IFormFile IdentityProof { get; set; }
         public string OccupationDetails { get; set; }
         public string OccupationTypes { get; set; }
+        public string TShirtNumber { get; set; }
+        public string TShirtName { get; set; }
+        public int DonationAmount { get; set; }
         public int TShirtSizeId { get; set; }
     }
 

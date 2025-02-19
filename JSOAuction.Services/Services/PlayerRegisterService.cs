@@ -609,33 +609,37 @@ namespace JSOAuction.Services.Services
                     return new { Success = false, Message = "Mobile number already registered." };
                 }
 
-                var playerData = from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
-                                 join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll()
-                                 on player.PlayerRegisterId equals mapping.PlayerId
-                                 where mapping.TournamentId == request.TournamentId && player.IsDeleted == false
-                                 select new
-                                 {
-                                     PlayerId = player.PlayerRegisterId,
-                                     PlayerName = player.FirstName,
-                                     TournamentId = mapping.TournamentId
-                                 };
+            //    var playerData = from player in _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
+            //                     join mapping in _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll()
+            //                     on player.PlayerRegisterId equals mapping.PlayerId
+            //                     where mapping.TournamentId == request.TournamentId && player.IsDeleted == false
+            //                     select new
+            //                     {
+            //                         PlayerId = player.PlayerRegisterId,
+            //                         PlayerName = player.FirstName,
+            //                         TournamentId = mapping.TournamentId
+            //                     };
+                
+            //    if (playerData.Count.)
+            //{
+            //        var result = playerData.ToList();
 
-                var result = playerData.ToList();
+            //}
 
                 var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(
                     x => x.TournamentId == 1);
 
-                var maxPlayerNo = _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
-                    .Join(
-                        _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll(),
-                        player => player.PlayerRegisterId,
-                        mapping => mapping.PlayerId,
-                        (player, mapping) => new { player, mapping }
-                    )
-                    .Where(joined => joined.mapping.TournamentId == request.TournamentId && joined.player.IsDeleted == false)
-                    .Max(joined => (int?)joined.player.PlayerNo) ?? 0;
+                //var maxPlayerNo = _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
+                //    .Join(
+                //        _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll(),
+                //        player => player.PlayerRegisterId,
+                //        mapping => mapping.PlayerId,
+                //        (player, mapping) => new { player, mapping }
+                //    )
+                //    .Where(joined => joined.mapping.TournamentId == 1 && joined.player.IsDeleted == false)
+                //    .Max(joined => (int?)joined.player.PlayerNo) ?? 0;
 
-                int newPlayerNo = maxPlayerNo + 1;
+                //int newPlayerNo = maxPlayerNo + 1;
 
                 string uploadId = "";
                 DriveUploadBasic(request.UploadFile, ref uploadId);
@@ -671,12 +675,15 @@ namespace JSOAuction.Services.Services
                     IsDeleted = false,
                     IsActive = true,
                     City = request.City,
-                    PlayerNo = newPlayerNo,
+                    //PlayerNo = newPlayerNo,
                     PaymentStatus = "Pending",
                     IdentityProof = identityProofLink,
                     OccupationDetails = request.OccupationDetails,
                     OccupationTypes = request.OccupationTypes,
-                    TShirtSizeId = request.TShirtSizeId
+                    TShirtSizeId = request.TShirtSizeId,
+                    TShirtNumber = request.TShirtNumber,
+                    TShirtName = request.TShirtName,
+                    DonationAmount = request.DonationAmount
                 };
 
                 await _readWriteUnitOfWork.PlayerRegisterRepository.AddAsync(savePlayerRegister);
@@ -718,7 +725,10 @@ namespace JSOAuction.Services.Services
                         savePlayerRegister.OccupationDetails,
                         savePlayerRegister.OccupationTypes,
                         savePlayerRegister.IdentityProof,
+                        savePlayerRegister.TShirtName,
+                        savePlayerRegister.TShirtNumber,
                         savePlayerRegister.TShirtSizeId,
+                        savePlayerRegister.DonationAmount
 
                     },
                     Tournament = tournamentData != null ? new
@@ -806,6 +816,9 @@ namespace JSOAuction.Services.Services
                 data.City = request.City;
                 data.OccupationDetails = request.OccupationDetails;
                 data.OccupationTypes = request.OccupationTypes;
+                data.TShirtName = request.TShirtName;
+                data.TShirtNumber = request.TShirtNumber;
+                data.DonationAmount = request.DonationAmount;
                 data.TShirtSizeId = request.TShirtSizeId;
                 data.UpdatedBy = new Guid("e39f47a6-1c9b-4bb7-8ab1-67d6b8bb541b");
                 data.UpdatedOn = DateTime.UtcNow;
