@@ -45,12 +45,12 @@ namespace JSOAuction.Domain.Entities.PlayerRegister
         public int? PlayerGroupId { get; set; }
         public string? PaymentStatus { get; set; }
         public string? IdentityProof { get; set; }
-        public string OccupationDetails { get; set; }
-        public string OccupationTypes { get; set; }
-        public string TShirtNumber { get; set; }
-        public string TShirtName { get; set; }
+        public string? OccupationDetails { get; set; }
+        public string? OccupationTypes { get; set; }
+        public string? TShirtNumber { get; set; }
+        public string? TShirtName { get; set; }
         public decimal? DonationAmount { get; set; }
-        public int TShirtSizeId { get; set; }
+        public int? TShirtSizeId { get; set; }
 
     }
 }
