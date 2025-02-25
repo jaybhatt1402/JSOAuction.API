@@ -629,25 +629,33 @@ namespace JSOAuction.Services.Services
                 var tournamentData = await _readWriteUnitOfWork.TournamentRegisterRepository.GetFirstOrDefaultAsync(
                     x => x.TournamentId == 1);
 
-                //var maxPlayerNo = _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
-                //    .Join(
-                //        _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll(),
-                //        player => player.PlayerRegisterId,
-                //        mapping => mapping.PlayerId,
-                //        (player, mapping) => new { player, mapping }
-                //    )
-                //    .Where(joined => joined.mapping.TournamentId == 1 && joined.player.IsDeleted == false)
-                //    .Max(joined => (int?)joined.player.PlayerNo) ?? 0;
+            //var maxPlayerNo = _readWriteUnitOfWork.PlayerRegisterRepository.GetAll()
+            //    .Join(
+            //        _readWriteUnitOfWork.AuctionPlayerMappingRepository.GetAll(),
+            //        player => player.PlayerRegisterId,
+            //        mapping => mapping.PlayerId,
+            //        (player, mapping) => new { player, mapping }
+            //    )
+            //    .Where(joined => joined.mapping.TournamentId == 1 && joined.player.IsDeleted == false)
+            //    .Max(joined => (int?)joined.player.PlayerNo) ?? 0;
 
-                //int newPlayerNo = maxPlayerNo + 1;
+            //int newPlayerNo = maxPlayerNo + 1;
 
-                string uploadId = "";
+
+            string uploadId = "";
+            string identityId = ""; // Declare identityId before using it
+
+            if (request.UploadFile != null)
+            {
                 DriveUploadBasic(request.UploadFile, ref uploadId);
+            }
 
-                string identityId = "";
+            if (request.IdentityProof != null)
+            {
                 DriveUploadBasic(request.IdentityProof, ref identityId);
+            }
 
-                string webViewLink = $"https://drive.google.com/thumbnail?id={uploadId}&sz=w1000";
+            string webViewLink = $"https://drive.google.com/thumbnail?id={uploadId}&sz=w1000";
                 string identityProofLink = $"https://drive.google.com/thumbnail?id={identityId}&sz=w1000";
 
                 //var hashPassword = GenericMethods.GetHash(request.Password);
