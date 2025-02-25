@@ -266,7 +266,7 @@ namespace JSOAuction.Services.Services
                 if (tournamentData.MaxPlayer > teamData.TeamSize)
                 {
                     _readWriteUnitOfWorkSP.LoadStoredProc("SoldAuctionPlayer")
-                            .WithSqlParam("@AuctionId", request.AuctionId)
+                            .WithSqlParam("@AuctionId",request.AuctionId)
                             .WithSqlParam("@PlayerId", request.PlayerId)
                             .WithSqlParam("@TeamId", request.TeamId != null ? request.TeamId : DBNull.Value, DbType.Int32)
                             .WithSqlParam("@BidId", request.BidId != null ? request.BidId : DBNull.Value, DbType.Int32)
@@ -286,7 +286,7 @@ namespace JSOAuction.Services.Services
             else
             {
                     _readWriteUnitOfWorkSP.LoadStoredProc("SoldAuctionPlayer")
-                            .WithSqlParam("@AuctionId", request.AuctionId)
+                            .WithSqlParam("@AuctionId",request.AuctionId)
                             .WithSqlParam("@PlayerId", request.PlayerId)
                             .WithSqlParam("@TeamId", request.TeamId != null ? request.TeamId : DBNull.Value, DbType.Int32)
                             .WithSqlParam("@BidId", request.BidId != null ? request.BidId : DBNull.Value, DbType.Int32)
