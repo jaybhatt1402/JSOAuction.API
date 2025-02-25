@@ -38,6 +38,8 @@ namespace JSOAuction.Services.Entities.PlayerRegister
         public string TShirtName { get; set; }
         public decimal? DonationAmount { get; set; }
         public int TShirtSizeId { get; set; }
+        public string? IdentityProofUrl { get; set; }
+        public string? ProfilePictureUrl { get; set; }
     }
 
     public class UpdatePlayerDto
