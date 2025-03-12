@@ -11,6 +11,7 @@ using JSOAuction.API.Infrastructure.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using JSOAuction.API.Infrastructure.Middlewares;
+using JSOAuction.API.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -123,12 +124,13 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("CorsPolicy",
-		builder => builder
-			.AllowAnyOrigin()
-			.AllowAnyMethod()
-			.AllowAnyHeader()
-			.WithExposedHeaders("Content-Disposition"));
+    options.AddPolicy("CorsPolicy", builder =>
+    {
+        builder.WithOrigins("http://localhost:3000", "https://jso.dcswith.com/")
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials();
+    });
 });
 
 builder.Services.AddAuthorization();
@@ -152,6 +154,7 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+    endpoints.MapHub<AuctionHub>("/auctionHub");
 });
 
 app.UseHttpsRedirection();
